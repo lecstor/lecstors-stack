@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "workspaces": [
+    "apps/*", "tools/*", "libs/*"
+  ],
+  "scripts": {
+    "gateway": "cd apps/gateway && yarn"
+  }
+}
