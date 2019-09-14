@@ -1,12 +1,18 @@
 import styled from "styled-components";
 
-const Button = styled.button`
+type CustomProps = {
+  mode?: string;
+};
+
+const Button = styled.button.attrs<CustomProps>(({ mode }) => ({
+  mode: mode || "primary"
+}))<CustomProps>`
   position: relative;
   display: inline-block;
-  padding: 6px 12px;
-  font-size: 14px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1.6rem;
   font-weight: 600;
-  line-height: 20px;
+  line-height: 2rem;
   white-space: nowrap;
   vertical-align: middle;
   cursor: pointer;
@@ -27,13 +33,21 @@ const Button = styled.button`
   line-height: 20px; */
 
   /* primary */
-  /* ${p =>
+  ${p =>
     p.mode === "primary" &&
     `
     color: #fff;
-    background-color: #28a745;
-    background-image: linear-gradient(-180deg, #34d058, #28a745 90%);
-  `} */
+    background-color: #0366d6;
+    background-image: linear-gradient(-180deg, #2196f3, #0366d6 90%);
+  `}
+
+  ${p =>
+    p.mode === "secondary" &&
+    `
+    color: inherit;
+    background-color: none;
+    background-image: none;
+  `}
 `;
 
 export default Button;

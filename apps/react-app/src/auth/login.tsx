@@ -1,11 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { useMutation } from "urql";
 
-import Button from "@lecstor/react-kit/ui/form/button";
-import Input from "@lecstor/react-kit/ui/form/input";
-import Label from "@lecstor/react-kit/ui/form/label";
+import {
+  Button,
+  ButtonLayout,
+  FieldLayout,
+  FormLayout,
+  Input,
+  Label
+} from "@lecstor/react-kit";
 
 import { loginUser } from "./queries";
 
@@ -21,7 +25,7 @@ type Props = {
 const TextField = ({ label, formik, ...props }: Props) => {
   const [field, meta] = formik.getFieldProps(props);
   return (
-    <>
+    <FieldLayout>
       <Label>
         {label}
         <Input {...field} {...props} />
@@ -29,7 +33,7 @@ const TextField = ({ label, formik, ...props }: Props) => {
       {meta.touched && meta.error ? (
         <div className="error">{meta.error}</div>
       ) : null}
-    </>
+    </FieldLayout>
   );
 };
 
@@ -47,30 +51,33 @@ const Login = () => {
   return (
     <>
       <h1>Login</h1>
-      <Link to="/a">App</Link>
       {res.error && res.error.message}
 
-      <form onSubmit={formik.handleSubmit}>
-        <div>
-          <TextField
-            formik={formik}
-            name="username"
-            type="text"
-            label="Username"
-          />
-        </div>
-        <div>
-          <TextField
-            formik={formik}
-            name="password"
-            type="password"
-            label="Password"
-          />
-        </div>
-        <Button mode="primary" type="submit">
-          Submit
-        </Button>
-      </form>
+      <FormLayout>
+        <form onSubmit={formik.handleSubmit}>
+          <div>
+            <TextField
+              formik={formik}
+              name="username"
+              type="text"
+              label="Username"
+            />
+          </div>
+          <div>
+            <TextField
+              formik={formik}
+              name="password"
+              type="password"
+              label="Password"
+            />
+          </div>
+          <ButtonLayout>
+            <Button mode="" type="submit">
+              Submit
+            </Button>
+          </ButtonLayout>
+        </form>
+      </FormLayout>
     </>
   );
 };
