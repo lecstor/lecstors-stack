@@ -6,10 +6,10 @@
       {
         "useBuiltIns": "entry",
         "targets": "> 0.25%, not dead",
-        "modules": false,
+        "modules": false
       }
     ],
     "@babel/preset-react"
   ],
-  "plugins": ["@loadable/babel-plugin"]
+  "plugins": ["react-hot-loader/babel", "@loadable/babel-plugin"]
 }

@@ -1,3 +1,4 @@
+import { hot } from "react-hot-loader/root";
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
@@ -48,4 +49,4 @@ const Shell = () => (
   </BrowserRouter>
 );
 
-export default Shell;
+export default hot(Shell);
