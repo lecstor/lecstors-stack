@@ -1,0 +1,8 @@
+{
+  knex:{
+    // database connection
+    connection:{
+      host: "localhost",
+    },
+  }
+}

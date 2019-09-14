@@ -1,0 +1,16 @@
+{
+  "name": "gql2ts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "generate": "graphql-codegen"
+  },
+  "dependencies": {
+    "graphql": "^14.5.4"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.7.0",
+    "@graphql-codegen/typescript": "^1.7.0"
+  }
+}

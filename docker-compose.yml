@@ -1,0 +1,46 @@
+version: "3.7"
+services:
+  gateway:
+    build:
+      context: ./
+      dockerfile: ./apps/gateway/Dockerfile
+      target: development
+    volumes:
+      - ./apps/gateway:/usr/src/apps/gateway
+      - /usr/src/.yarn/unplugged
+    ports: 
+      - 3000:3000
+  react:
+    build:
+      context: ./
+      dockerfile: ./apps/react-app/Dockerfile
+      target: development
+    volumes:
+      - ./apps/react-app:/usr/src/apps/react-app
+      - ./libs/react-kit:/usr/src/libs/react-kit
+      - /usr/src/.yarn/unplugged
+    ports: 
+      - 4321:4321
+  postgres:
+    image: "postgres:11"
+    container_name: "postgres"
+    environment:
+      POSTGRES_PASSWORD: fooBar
+      POSTGRES_USER: lecstor
+      POSTGRES_DB: lecstor
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+  rabbitmq:
+    image: "rabbitmq:alpine"
+    hostname: "rabbit"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    labels:
+      NAME: "rabbitmq"
+    volumes:
+      - ./rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
+volumes:
+  dbdata:

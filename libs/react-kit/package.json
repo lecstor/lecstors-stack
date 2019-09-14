@@ -1,0 +1,17 @@
+{
+  "name": "@lecstor/react-kit",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "16.9.2",
+    "@types/react-dom": "16.9.0",
+    "@types/styled-components": "4.1.19",
+    "styled-components": "^4.3.0"
+  },
+  "peerDependencies": {
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "styled-components": ">= 4"
+  }
+}
