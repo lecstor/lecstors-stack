@@ -1,11 +1,12 @@
 {
   "name": "@lecstor/react-kit",
   "version": "0.1.0",
-  "main": "umd/react-kit.js",
+  "main": "cjs/index.js",
   "module": "esm/index.js",
   "source": "src/index.ts",
-  "typings": "dist/index.d.ts",
+  "typings": "esm/src/index.d.ts",
   "files": [
+    "cjs/*",
     "esm/*",
     "umd/*"
   ],

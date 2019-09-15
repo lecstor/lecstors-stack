@@ -6,31 +6,11 @@ export default [
     input: "src/index.ts",
     output: [
       {
-        file: pkg.main,
-        format: "cjs"
-      },
-      {
-        file: pkg.module,
-        format: "es" // the preferred format
-      },
-      {
         file: "umd/react-kit.js",
         format: "umd",
         name: "reactKit",
         esModule: false
       }
-      // {
-      //   input: "src/main.js",
-      //   output: {
-      //     file: "esm/index.js",
-      //     format: "esm"
-      //   }
-      // }
-      // {
-      //   file: pkg.browser,
-      //   format: "iife",
-      //   name: "MyPackage" // the global which can be used in a browser
-      // }
     ],
     external: [...Object.keys(pkg.dependencies || {})],
     plugins: [
@@ -41,15 +21,21 @@ export default [
     ]
   },
   {
-    input: "src/index.ts",
-    output: {
-      file: "esm/index.js",
-      format: "esm"
-    }, // {
-    //   file: pkg.browser,
-    //   format: "iife",
-    //   name: "MyPackage" // the global which can be used in a browser
-    // }
+    input: {
+      index: "src/index.ts",
+      form: "src/ui/form/index.ts",
+      lorem: "src/lorem.tsx"
+    },
+    output: [
+      {
+        dir: "esm",
+        format: "esm"
+      },
+      {
+        dir: "cjs",
+        format: "cjs"
+      }
+    ],
     external: [...Object.keys(pkg.dependencies || {})],
     plugins: [
       typescript({
