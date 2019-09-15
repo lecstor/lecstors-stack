@@ -1,3 +1,5 @@
+# WIP! - not fully functional
+
 # Lecstor's Stack
 
 ## Create a database
