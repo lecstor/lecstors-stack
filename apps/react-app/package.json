@@ -10,7 +10,8 @@
     "start": "yarn react:dev",
     "build": "webpack-cli --env.production",
     "build-stats": "webpack-cli --env.production --profile --json > build-stats.json",
-    "bundles": "yarn webpack-bundle-analyzer ./build-stats.json ./dist"
+    "bundles": "yarn webpack-bundle-analyzer ./build-stats.json ./dist",
+    "opt": "yarn build-stats && yarn bundles"
   },
   "dependencies": {
     "@hot-loader/react-dom": "^16.9.0",
@@ -36,6 +37,7 @@
     "@loadable/babel-plugin": "^5.10.0",
     "@types/eslint": "6.1.1",
     "@types/loadable__component": "^5.10.0",
+    "@types/lodash.kebabcase": "4.1.6",
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.8.5",
     "@types/react-hot-loader": "4.1.0",
@@ -45,6 +47,7 @@
     "@typescript-eslint/parser": "^2.2.0",
     "@yarnpkg/pnpify": "^2.0.0-rc.3",
     "babel-loader": "^8.0.6",
+    "babel-plugin-transform-imports": "^2.0.0",
     "clean-webpack-plugin": "^3.0.0",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.0.0",
@@ -52,6 +55,7 @@
     "eslint-plugin-react": "^7.14.3",
     "graphql-tools": "^4.0.5",
     "html-webpack-plugin": "^3.2.0",
+    "lodash.kebabcase": "^4.1.1",
     "parcel-bundler": "^1.12.3",
     "pnp-webpack-plugin": "^1.5.0",
     "prettier": "1.18.2",
