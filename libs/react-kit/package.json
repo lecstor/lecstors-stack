@@ -4,11 +4,8 @@
   "module": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "start": "pnpify tsdx watch",
     "build": "yarn rm-build && pnpify rollup -c",
     "prepare": "pnpify rollup -c",
-    "test": "pnpify tsdx test --env=jsdom",
-    "lint": "pnpify tsdx lint",
     "rm-build": "yarn node rm-build.js"
   },
   "peerDependencies": {
