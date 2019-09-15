@@ -1,8 +1,8 @@
 {
   "name": "@lecstor/react-kit",
   "version": "0.1.0",
-  "module": "index.js",
-  "types": "index.d.ts",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
   "scripts": {
     "start": "pnpify tsdx watch",
     "build": "yarn rm-build && pnpify rollup -c",

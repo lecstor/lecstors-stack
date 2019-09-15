@@ -9,7 +9,7 @@ import {
   FormLayout,
   Input,
   Label
-} from "@lecstor/react-kit/ui/form";
+} from "@lecstor/react-kit";
 
 import { loginUser } from "./queries";
 

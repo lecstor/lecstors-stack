@@ -13,11 +13,12 @@ const traverseFileSystem = function(currentPath) {
     const currentFile = currentPath + "/" + files[i];
     const stats = fs.statSync(currentFile);
     if (stats.isFile()) {
-      const newName = currentFile
-        .replace(/^\.\/src\//, "")
-        .replace(/\.tsx?/, "");
-      input[newName] = currentFile;
-      console.log(newName, currentFile);
+      if (!/\.test\./.test(currentFile)) {
+        // not a test file
+        const newName = currentFile.replace(/^.*\//, "").replace(/\.tsx?/, "");
+        input[newName] = currentFile;
+        console.log(newName, currentFile);
+      }
     } else if (stats.isDirectory()) {
       traverseFileSystem(currentFile);
     }
@@ -31,7 +32,7 @@ export default [
     input,
     output: [
       {
-        dir: ".",
+        dir: "esm",
         format: "esm"
       }
     ],
