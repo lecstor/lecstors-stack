@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@hot-loader/react-dom": "^16.9.0",
-    "@lecstor/react-kit": "workspace:libs/react-kit",
+    "@lecstor/react-ui": "workspace:libs/react-ui",
     "@loadable/component": "^5.10.2",
     "eslint": "^6.3.0",
     "formik": "next",

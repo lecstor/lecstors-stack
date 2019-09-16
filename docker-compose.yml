@@ -17,7 +17,7 @@ services:
       target: development
     volumes:
       - ./apps/react-app:/usr/src/apps/react-app
-      - ./libs/react-kit:/usr/src/libs/react-kit
+      - ./libs/react-ui:/usr/src/libs/react-ui
       - /usr/src/.yarn/unplugged
     ports: 
       - 4321:4321

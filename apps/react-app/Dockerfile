@@ -9,7 +9,7 @@ WORKDIR /usr/src
 RUN mkdir apps
 COPY apps/react-app apps/react-app
 RUN mkdir libs
-COPY libs/react-kit libs/react-kit
+COPY libs/react-ui libs/react-ui
 COPY .yarn .yarn
 COPY ["package.json", "tsconfig.json", "yarn.lock", ".yarnrc", ".yarnrc.yml", "./"]
 # don't need to copy .pnp.js as we run install

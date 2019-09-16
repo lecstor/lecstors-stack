@@ -20,9 +20,9 @@ module.exports = api => {
       [
         "transform-imports",
         {
-          "@lecstor/react-kit": {
+          "@lecstor/react-ui": {
             transform: importName => {
-              return `@lecstor/react-kit/esm/${kebabCase(importName)}`;
+              return `@lecstor/react-ui/esm/${kebabCase(importName)}`;
             },
             preventFullImport: false
           }
