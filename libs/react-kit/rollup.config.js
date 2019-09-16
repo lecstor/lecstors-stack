@@ -1,39 +1,39 @@
+import fs from "fs";
+
 import typescript from "rollup-plugin-typescript2";
 import pkg from "./package.json";
-import { terser } from "rollup-plugin-terser";
+// import { terser } from "rollup-plugin-terser";
+
+const input = {};
+
+const traverseFileSystem = function(currentPath) {
+  // console.log(currentPath);
+  const files = fs.readdirSync(currentPath);
+  for (const i in files) {
+    const currentFile = currentPath + "/" + files[i];
+    const stats = fs.statSync(currentFile);
+    if (stats.isFile()) {
+      if (!/\.test\./.test(currentFile)) {
+        // not a test file
+        const newName = currentFile.replace(/^.*\//, "").replace(/\.tsx?/, "");
+        input[newName] = currentFile;
+        console.log(newName, currentFile);
+      }
+    } else if (stats.isDirectory()) {
+      traverseFileSystem(currentFile);
+    }
+  }
+};
+traverseFileSystem("./src");
+
+console.log({ input });
 export default [
   {
-    input: "src/index.ts",
-    output: [
-      {
-        file: "umd/react-kit.js",
-        format: "umd",
-        name: "reactKit",
-        esModule: false
-      }
-    ],
-    external: [...Object.keys(pkg.dependencies || {})],
-    plugins: [
-      typescript({
-        typescript: require("typescript")
-      }),
-      terser() // minifies generated bundles
-    ]
-  },
-  {
-    input: {
-      index: "src/index.ts",
-      form: "src/ui/form/index.ts",
-      lorem: "src/lorem.tsx"
-    },
+    input,
     output: [
       {
         dir: "esm",
         format: "esm"
-      },
-      {
-        dir: "cjs",
-        format: "cjs"
       }
     ],
     external: [...Object.keys(pkg.dependencies || {})],

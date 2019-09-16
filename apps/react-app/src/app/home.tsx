@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import useAuth from "../auth/use-auth";
 
-import Lorem from "@lecstor/react-kit/esm/lorem";
+import { Lorem } from "@lecstor/react-kit";
 
 const H1 = styled.h1``;
 
