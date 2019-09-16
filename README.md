@@ -2,6 +2,27 @@
 
 # Lecstor's Stack
 
+## Prerequisites
+
+- Docker for ..
+- [Yarn](https://yarnpkg.com/en/docs/install) >= 1.17.1 (we'll run it as [Yarn 2](https://github.com/yarnpkg/berry))
+
+## Clone it
+
+```
+git clone git@github.com:lecstor/lecstors-stack.git
+```
+
+## Load up
+
+this *will* take a few minutes..
+
+```
+cd lecstors-stack
+yarn
+docker-compose pull
+```
+
 ## Create a database
 
 ```

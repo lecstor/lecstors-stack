@@ -6,8 +6,8 @@ FROM node:12.10.0-alpine AS base
 
 WORKDIR /usr/src
 
-RUN mkdir apps
-COPY apps/gateway apps/gateway
+RUN mkdir services
+COPY services/gateway services/gateway
 COPY .yarn .yarn
 COPY ["package.json", "yarn.lock", ".yarnrc", ".yarnrc.yml", "./"]
 # COPY .pnp.js ./ # don't need to copy as we run install
@@ -39,7 +39,7 @@ WORKDIR /usr/src
 RUN yarn gateway:build
 
 # remove devDeps from package.json
-RUN yarn remove -A $(echo 'console.log(Object.keys(require("./apps/gateway/package.json").devDependencies).join(" "))' | node -)
+RUN yarn remove -A $(echo 'console.log(Object.keys(require("./services/gateway/package.json").devDependencies).join(" "))' | node -)
 
 #---
 FROM node:12.10.0-alpine AS production
@@ -50,9 +50,9 @@ ENV NODE_ENV development
 WORKDIR /usr/src
 
 COPY ["yarn.lock",".yarnrc",".yarnrc.yml","./"]
-COPY --from=prodbuild /usr/src/apps/gateway/package.json .
-COPY --from=prodbuild /usr/src/apps/gateway/config config
-COPY --from=prodbuild /usr/src/apps/gateway/dist dist
+COPY --from=prodbuild /usr/src/services/gateway/package.json .
+COPY --from=prodbuild /usr/src/services/gateway/config config
+COPY --from=prodbuild /usr/src/services/gateway/dist dist
 COPY --from=prodbuild /usr/src/.yarn .yarn
 RUN yarn install
 

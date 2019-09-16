@@ -2,12 +2,10 @@
   "private": true,
   "workspaces": [
     "apps/*",
-    "tools/*",
-    "libs/*"
+    "libs/*",
+    "services/*",
+    "tools/*"
   ],
-  "scripts": {
-    "gateway": "cd apps/gateway && yarn"
-  },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^2.1.0",
     "@yarnpkg/pnpify": "^2.0.0-rc.3",

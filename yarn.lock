@@ -7415,9 +7415,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gateway@workspace:apps/gateway":
+"gateway@workspace:services/gateway":
   version: 0.0.0-use.local
-  resolution: "gateway@workspace:apps/gateway"
+  resolution: "gateway@workspace:services/gateway"
   dependencies:
     "@types/amqplib": "npm:^0.5.13"
     "@types/compression": "npm:^1.0.1"
