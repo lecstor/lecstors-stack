@@ -35,14 +35,12 @@ would be if we were running in a docker container.
 
 We can seed the database with a user too with..
 ```
-NODE_ENV=localhost yarn db:migrate
+NODE_ENV=localhost yarn db:seed
 ```
 You can find the username and password in the db.. the password isn't even
 being hashed yet.. shh.
 
 Ah, right, we're not validating the password either..
-
-## create
 
 ## Up and Running
 
@@ -62,7 +60,15 @@ Brings up:
 The gateway service and react app will both watch your code for changes and
 update automatically.
 
-You can run production builds by overriding the compose config.
+### Run the [Cypress](https://www.cypress.io/) end to end testing framework
+
+```
+yarn cypress:open
+```
+
+### Run production builds
+
+You can run production builds for testing by overriding the compose config.
 
 Open `docker-compose.override.yml.example` and save it as `docker-compose.override.yml`.
 
@@ -72,7 +78,6 @@ Docker-compose will read this file and apply the overrides to the base config.
 dc stop gateway react-app
 dc up
 ```
-
 
 ## Run the gateway service on your local machine
 
