@@ -1,8 +1,17 @@
-import fs from "fs";
-
 import typescript from "rollup-plugin-typescript2";
 import pkg from "./package.json";
-// import { terser } from "rollup-plugin-terser";
+import { terser } from "rollup-plugin-terser";
+
+import fs from "fs-extra";
+
+// clean up first
+try {
+  fs.removeSync("./cjs");
+  fs.removeSync("./esm");
+  // fs.removeSync("./node_modules");
+} catch (e) {
+  console.log(e.message);
+}
 
 const input = {};
 
@@ -41,6 +50,20 @@ export default [
       typescript({
         typescript: require("typescript")
       })
+    ]
+  },
+  {
+    input,
+    output: {
+      dir: "cjs",
+      format: "cjs"
+    },
+    external: [...Object.keys(pkg.dependencies || {})],
+    plugins: [
+      typescript({
+        typescript: require("typescript")
+      }),
+      terser()
     ]
   }
 ];

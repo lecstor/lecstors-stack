@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const kebabCase = require("lodash.kebabcase");
 
 module.exports = api => {
@@ -20,15 +21,13 @@ module.exports = api => {
         "transform-imports",
         {
           "@lecstor/react-kit": {
-            transform: (importName, matches) => {
-              console.log({ importName, matches });
+            transform: importName => {
               return `@lecstor/react-kit/esm/${kebabCase(importName)}`;
             },
             preventFullImport: false
           }
         }
       ],
-
       "react-hot-loader/babel",
       "@loadable/babel-plugin"
     ]
