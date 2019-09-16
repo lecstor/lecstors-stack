@@ -11,10 +11,10 @@
     "gateway:start": "yarn node ./dist/src/server.js",
     "gateway:start:local": "NODE_CONFIG_ENV=localhost yarn node ./dist/src/server.js",
     "make-migration": "pnpify knex migrate:make -x ts",
-    "migrate": "pnpify knex migrate:latest",
-    "migrate-rollback": "pnpify knex migrate:rollback",
-    "make-seed": "pnpify knex seed:make",
-    "seed": "pnpify knex seed:run",
+    "db:migrate": "pnpify knex migrate:latest",
+    "db:migrate-rollback": "pnpify knex migrate:rollback",
+    "db:make-seed": "pnpify knex seed:make",
+    "db:seed": "pnpify knex seed:run",
     "gateway:test": "NODE_CONFIG_ENV=${NODE_CONFIG_ENV:-localhost} echo ${NODE_CONFIG_ENV:-blah}"
   },
   "dependencies": {

@@ -23,11 +23,26 @@ yarn
 docker-compose pull
 ```
 
-## Create a database
+## Create a database and add tables
 
 ```
 docker exec -it postgres psql -U postgres -c "create database lecstor"
+NODE_ENV=localhost yarn db:migrate
 ```
+`NODE_ENV=localhost` tells the knex migration that we're running locally
+so the db host will be `localhost` rather than `postgres` which is what it
+would be if we were running in a docker container.
+
+We can seed the database with a user too with..
+```
+NODE_ENV=localhost yarn db:migrate
+```
+You can find the username and password in the db.. the password isn't even
+being hashed yet.. shh.
+
+Ah, right, we're not validating the password either..
+
+## create
 
 ## Up and Running
 
