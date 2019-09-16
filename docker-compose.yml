@@ -10,7 +10,7 @@ services:
       - /usr/src/.yarn/unplugged
     ports: 
       - 3000:3000
-  react:
+  react-app:
     build:
       context: ./
       dockerfile: ./apps/react-app/Dockerfile
