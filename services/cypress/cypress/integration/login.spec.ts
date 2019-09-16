@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 describe("Login", function() {
   it("Visits the React App", function() {
     cy.visit("http://localhost:4321");
