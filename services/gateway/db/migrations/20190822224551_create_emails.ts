@@ -5,7 +5,11 @@ exports.up = function(knex: Knex): Promise<any> {
     table.uuid("id").primary();
     table.string("email").unique();
     table.boolean("verified").defaultTo(false);
-    table.uuid("userId").references("users.id");
+    table
+      .uuid("userId")
+      .references("users.id")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
   });
 };
 
