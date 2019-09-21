@@ -1,8 +1,10 @@
-export { default as Button } from "./ui/form/button";
-export { default as Input } from "./ui/form/input";
-export { default as Label } from "./ui/form/label";
-export { default as ButtonLayout } from "./ui/form/button-layout";
-export { default as FieldLayout } from "./ui/form/field-layout";
-export { default as FormLayout } from "./ui/form/form-layout";
+export { default as Button } from "./form/button";
+export { default as Input } from "./form/input";
+export { default as Label } from "./form/label";
+export { default as ButtonLayout } from "./form/button-layout";
+export { default as FieldLayout } from "./form/field-layout";
+export { default as FormLayout } from "./form/form-layout";
+
+export { default as Layout } from "./layout";
 
 export { default as Lorem } from "./lorem";
