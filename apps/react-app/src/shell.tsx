@@ -3,7 +3,7 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import loadable from "@loadable/component";
-import { Provider, createClient } from "urql";
+import { Provider, createClient } from "./lib/gql-client";
 import { schemaExchange } from "urql-exchange-schema";
 
 import { AuthProvider } from "./auth/context";
@@ -23,17 +23,11 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Login = loadable(() => import("./auth/login"));
+const Register = loadable(() => import("./auth/register"));
+
 const App = loadable(() => import("./app"));
 
-const client = createClient({
-  url: "http://localhost:3000/graphql",
-  // exchanges: [schemaExchange(newMockSchema())]
-  fetchOptions: {
-    mode: "cors", // no-cors, cors, *same-origin
-    // credentials: "same-origin"
-    credentials: "include"
-  }
-});
+const client = createClient();
 
 const Shell = () => (
   <BrowserRouter>
@@ -41,7 +35,8 @@ const Shell = () => (
       <GlobalStyle />
       <AuthProvider>
         <Switch>
-          <Route path="/login" component={Login} />
+          <Route path="/p/login" component={Login} />
+          <Route path="/p/register" component={Register} />
           <Route path="/" component={App} />
         </Switch>
       </AuthProvider>

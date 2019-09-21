@@ -14,22 +14,27 @@ const authContext = React.createContext<AuthContext>({});
 const { Provider } = authContext;
 
 export const AuthProvider = withRouter((props: RouteComponentProps) => {
-  const [res] = useQuery({ query: getAuth, requestPolicy: "network-only" });
+  const [res] = useQuery({
+    query: getAuth,
+    requestPolicy: "network-only"
+  });
   console.log(res);
   if (res.fetching) return null;
   console.log({ res, props });
 
   if (res.data && res.data.auth && res.data.auth.user) {
-    if (props.location.pathname === "/login") {
-      console.log("Redirect to home");
+    // user is logged in
+    if (/^\/p\//.test(props.location.pathname)) {
+      // location is public so redirect to home
       return <Redirect to="/" />;
     }
     return <Provider value={res.data.auth} {...props} />;
   }
 
-  if (props.location.pathname !== "/login") {
-    console.log("Redirect to login");
-    return <Redirect to="/login" />;
+  // user is not logged in
+  if (!/^\/p\//.test(props.location.pathname)) {
+    // location is not public so redirect to login
+    return <Redirect to="/p/login" />;
   }
 
   return <Provider value={{ user: undefined }} {...props} />;

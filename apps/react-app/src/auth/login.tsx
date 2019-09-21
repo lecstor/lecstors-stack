@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { useMutation } from "urql";
+import { Link } from "react-router-dom";
 
 import {
   Button,
@@ -8,7 +9,8 @@ import {
   FieldLayout,
   FormLayout,
   Input,
-  Label
+  Label,
+  Layout
 } from "@lecstor/react-ui";
 
 import { loginUser } from "./queries";
@@ -51,6 +53,12 @@ const Login = () => {
   return (
     <>
       <h1>Login</h1>
+      <Layout pad="0.5 1">
+        or{" "}
+        <Link data-testid="link-register" to="/p/register">
+          Register a new account
+        </Link>
+      </Layout>
       {res.error && res.error.message}
 
       <FormLayout>

@@ -23,3 +23,11 @@ export const loginUser = gql`
     }
   }
 `;
+
+export const registerUser = gql`
+  mutation RegisterUser($firstname: String, $surname: String, $email: String!) {
+    createUser(firstname: $firstname, surname: $surname, email: $email) {
+      ${user}
+    }
+  }
+`;
