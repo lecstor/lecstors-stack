@@ -5,6 +5,8 @@ services:
       context: ./
       dockerfile: ./services/gateway/Dockerfile
       target: development
+    depends_on:
+      - postgres
     volumes:
       - ./services/gateway:/usr/src/services/gateway
       - /usr/src/.yarn/unplugged
@@ -15,6 +17,8 @@ services:
       context: ./
       dockerfile: ./apps/react-app/Dockerfile
       target: development
+    depends_on:
+      - gateway
     volumes:
       - ./apps/react-app:/usr/src/apps/react-app
       - ./libs/react-ui:/usr/src/libs/react-ui
@@ -42,5 +46,18 @@ services:
       NAME: "rabbitmq"
     volumes:
       - ./rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
+  cypress:
+    image: "cypress/included:3.4.1"
+    depends_on:
+      - react-app
+    environment:
+      # pass base url with internal docker app url
+      - CYPRESS_baseUrl=http://react-app:4321
+      # - DEBUG=cypress:*
+
+    # share the current folder as volume to avoid copying
+    working_dir: /e2e
+    volumes:
+      - ./services/cypress:/e2e
 volumes:
   dbdata:
