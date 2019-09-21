@@ -1,1 +1,4 @@
 *.png
+/cypress/videos
+/cypress/screenshots
+

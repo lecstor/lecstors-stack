@@ -2,7 +2,8 @@
   "name": "@lecstor/cypress",
   "version": "0.0.1",
   "scripts": {
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "devDependencies": {
     "@types/cypress": "1.1.3",

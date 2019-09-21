@@ -1,10 +1,12 @@
 /// <reference types="Cypress" />
 
-describe("Login", function() {
-  it("Visits the React App", function() {
-    cy.visit("http://localhost:4321");
+describe("Login", () => {
+  const { baseUrl } = Cypress.config();
+
+  it("Visits the React App", () => {
+    cy.visit("/");
     cy.contains("Submit").click();
-    cy.url().should("include", "/login");
+    cy.url().should("eq", `${baseUrl}/p/login`);
     cy.get("#root").should("contain", "User not found");
 
     cy.get('input[name="username"]')
@@ -16,6 +18,8 @@ describe("Login", function() {
       .should("have.value", "fooBar");
 
     cy.contains("Submit").click();
-    cy.get("h2").should("contain", "Hi Jason");
+    cy.url().should("eq", `${baseUrl}/`);
+    cy.get("h1").should("contain", "Home");
+    cy.get("#root").should("contain", "Jason");
   });
 });
