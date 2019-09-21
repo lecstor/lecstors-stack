@@ -21,8 +21,8 @@ export default class User extends BaseModel {
 
     properties: {
       id: { type: "uuid" },
-      firstname: { type: "string", minLength: 1, maxLength: 255 },
-      surname: { type: "string", minLength: 1, maxLength: 255 }
+      firstname: { type: "string", minLength: 1, maxLength: 100 },
+      surname: { type: "string", minLength: 1, maxLength: 100 }
     }
   };
 

@@ -42,7 +42,7 @@ app.use(session(sessionOptions));
 app.use(
   "*",
   cors({
-    origin: ["http://localhost:4321", "http://localhost:3000"],
+    origin: ["http://localhost:4321", "http://react-app:4321"],
     credentials: true
   })
 );
@@ -54,36 +54,23 @@ const server = new ApolloServer({
   schema,
   debug: !isProd,
   // validationRules: [depthLimit(7)],
-  // context: ({ req }: { req: Request }): { req: Request } => ({ req }),
-  context: getContext
+  context: getContext,
 
-  // formatError: err => {
-  //   if (err.originalError && (err.originalError as any).public) {
-  //     const gqlErr: OkError = err.originalError;
-  //     console.log(`${gqlErr.name}: ${gqlErr.message}`);
-  //     return {
-  //       message: gqlErr.message,
-  //       extensions: {
-  //         code: gqlErr.name,
-  //         data: gqlErr.data
-  //       }
-  //     };
-  //   }
-  //   const {
-  //     message,
-  //     path,
-  //     extensions: {
-  //       code,
-  //       exception: { stacktrace }
-  //     }
-  //   } = err;
-  //   console.log(
-  //     `${code}\n  ${message}\n  GQL Path: ${path}\n  ${stacktrace.join("\n")}`
-  //   );
+  formatError: error => {
+    if (!isProd) {
+      console.log("Error", JSON.stringify(error));
+    }
+    return error;
+  },
 
-  //   return new Error("Internal server error");
-  // }
+  formatResponse: response => {
+    if (!isProd) {
+      console.log("Response", JSON.stringify(response));
+    }
+    return response;
+  }
 });
+
 server.applyMiddleware({ app, path: "/graphql", cors: false });
 
 const httpServer = createServer(app);

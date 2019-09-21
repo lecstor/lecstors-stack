@@ -2,6 +2,8 @@ import { Model, RelationMappings } from "objection";
 
 import User from "../user/user.model";
 
+import jsonSchema from "./session.schema.json";
+
 export default class Session extends Model {
   readonly id!: string;
   userId?: string;
@@ -12,15 +14,7 @@ export default class Session extends Model {
   static tableName = "sessions";
 
   // validation schema
-  static jsonSchema = {
-    type: "object",
-
-    properties: {
-      id: { type: "string" },
-      userId: { type: "uuid" },
-      data: { type: "object" }
-    }
-  };
+  static jsonSchema = jsonSchema;
 
   static relationMappings: RelationMappings = {
     user: {

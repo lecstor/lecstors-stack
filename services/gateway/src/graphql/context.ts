@@ -1,6 +1,18 @@
 import { Request } from "express";
-
 import passport from "passport";
+
+import User from "../models/user/user.model";
+
+export type Context = {
+  auth: {
+    authenticate: () => Promise<void>;
+    isAuthenticated: boolean;
+    isUnauthenticated: boolean;
+    login: (user: User, options?: any) => Promise<void>;
+    logout: () => void;
+  };
+  user: User;
+};
 
 const promisifiedAuthenticate = (req, res, name, options) =>
   new Promise((resolve, reject) =>

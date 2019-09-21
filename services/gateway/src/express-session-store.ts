@@ -23,9 +23,7 @@ export default function connectObjection(appSession: typeof session) {
    */
 
   PGStore.prototype.get = async function(id: string, fn: Function) {
-    console.log("get", id);
     const session = await Sessions.query().findById(id);
-    console.log(JSON.stringify({ session }));
     if (session) {
       const { userId, data } = session;
       return fn(null, { ...data, userId });
@@ -47,10 +45,6 @@ export default function connectObjection(appSession: typeof session) {
     sess: Record<string, any>,
     fn: Function
   ) {
-    console.log("set", id, sess);
-    Error.stackTraceLimit = 1000;
-    console.log(new Error().stack);
-
     const { userId, ...data } = sess;
     const updated = await Sessions.query()
       .findById(id)
