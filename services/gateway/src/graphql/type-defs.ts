@@ -12,6 +12,14 @@ export const typeDefs = gql`
     email: String
     verified: Boolean
     userId: String
+    verificationTokens: [EmailVerificationToken]
+  }
+
+  type EmailVerificationToken {
+    id: String
+    emailId: String
+    status: String
+    email: Email
   }
 
   type User {
@@ -30,6 +38,7 @@ export const typeDefs = gql`
     auth: Auth
     currentUser: User
     user(id: String): User
+    tokens(email: String): [EmailVerificationToken]
   }
 
   input CredentialsInput {
@@ -38,10 +47,12 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    # createUser(firstname: String, surname: String, email: String!, credentials: CredentialsInput): User
     createUser(firstname: String, surname: String, email: String!): Auth
-    deleteUser: Auth
     login(username: String!, password: String!): Auth
-    logout: Boolean
+    verifyEmail(token: String!): Auth
+
+    deleteUser: Auth
+
+    logout: Auth
   }
 `;

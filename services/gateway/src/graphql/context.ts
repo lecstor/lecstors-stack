@@ -5,7 +5,10 @@ import User from "../models/user/user.model";
 
 export type Context = {
   auth: {
-    authenticate: () => Promise<void>;
+    authenticate: (
+      strategy: string,
+      credentials: { username: string; password: string }
+    ) => Promise<{ user: User; info: any }>;
     isAuthenticated: boolean;
     isUnauthenticated: boolean;
     login: (user: User, options?: any) => Promise<void>;

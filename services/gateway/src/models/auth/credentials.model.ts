@@ -20,7 +20,7 @@ export default class Credentials extends BaseModel {
   // validation schema
   static jsonSchema = jsonSchema;
 
-  static relationMappings: RelationMappings = {
+  static relationMappings = (): RelationMappings => ({
     user: {
       relation: Model.BelongsToOneRelation,
       modelClass: User,
@@ -29,5 +29,5 @@ export default class Credentials extends BaseModel {
         to: "users.id"
       }
     }
-  };
+  });
 }

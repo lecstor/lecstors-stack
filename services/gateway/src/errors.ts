@@ -1,22 +1,31 @@
-type Info = {
+
+export { ApolloError } from "apollo-server-express";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ErrorResp = [string, string, Record<string, any>];
+
+export type ErrorInfo = {
   userId?: string;
   username?: string;
   email?: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ErrorResp = [string, string, Record<string, any>];
+/*
+  Throw ApolloErrors from reducer code for accurate stacktrace
+  ```
+  throw new ApolloError(...emailExists({ email }));
+  ```
+*/
 
-export function userNotFound(info: Info): ErrorResp {
+export function userNotFound(info: ErrorInfo): ErrorResp {
   return ["User not found", "USER_NOT_FOUND", info];
 }
 
-export function emailExists(info: Info): ErrorResp {
+export function emailExists(info: ErrorInfo): ErrorResp {
   return ["Email already registered", "EMAIL_EXISTS", info];
 }
 
-export function wrongPassword(info: Info): ErrorResp {
+export function wrongPassword(info: ErrorInfo): ErrorResp {
   return ["Password is incorrect", "WRONG_PASSWORD", info];
 }
 
-export { ApolloError } from "apollo-server-express";

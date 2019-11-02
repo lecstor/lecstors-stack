@@ -12,9 +12,10 @@ import bodyParser from "body-parser";
 import cors from "cors";
 
 import sessionStore from "./express-session-store";
-import passport from "./passport";
 import schema from "./graphql/schema";
 import { getContext } from "./graphql/context";
+import initUserTask from "./models/auth/tasks/user-created";
+import passport from "./passport";
 
 const app = express();
 const isProd = app.get("env") === "production";
@@ -75,8 +76,9 @@ server.applyMiddleware({ app, path: "/graphql", cors: false });
 
 const httpServer = createServer(app);
 
-httpServer.listen({ port: 3000 }, (): void =>
+httpServer.listen({ port: 3000 }, (): void => {
+  initUserTask();
   console.log(
     `\n🚀      GraphQL is now running on http://localhost:3000/graphql`
-  )
-);
+  );
+});

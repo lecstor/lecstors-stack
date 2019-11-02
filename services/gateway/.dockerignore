@@ -1,7 +1,0 @@
-# *
-# !.yarn/
-# !config/
-# !db/
-# !package.json
-# !src/
-# !tsconfig.json

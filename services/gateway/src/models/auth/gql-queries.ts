@@ -1,13 +1,6 @@
-import User from "../user/user.model";
+import { Context } from "../../graphql/context";
+import { Auth } from "./types";
 
-export function currentUser(
-  _: void,
-  _args: {},
-  context: { user: User }
-): User | void {
-  return context.user;
-}
-
-export function auth(_: void, _args: {}, context: { user: User }) {
+export function auth(_: void, _args: {}, context: Context): Auth {
   return { user: context.user };
 }

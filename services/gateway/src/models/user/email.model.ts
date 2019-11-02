@@ -3,6 +3,7 @@ import { Model, RelationMappings } from "objection";
 import BaseModel from "../base/base.model";
 
 import User from "./user.model";
+import VerificationToken from "./email-verification-token.model";
 
 export default class Email extends BaseModel {
   readonly id!: string;
@@ -11,6 +12,7 @@ export default class Email extends BaseModel {
   userId!: string;
 
   user?: User;
+  verificationTokens!: VerificationToken[];
 
   static tableName = "emails";
 
@@ -27,14 +29,22 @@ export default class Email extends BaseModel {
     }
   };
 
-  static relationMappings: RelationMappings = {
-    credentials: {
+  static relationMappings = (): RelationMappings => ({
+    user: {
       relation: Model.BelongsToOneRelation,
       modelClass: User,
       join: {
         from: "emails.userId",
         to: "users.id"
       }
+    },
+    verificationTokens: {
+      relation: Model.HasManyRelation,
+      modelClass: VerificationToken,
+      join: {
+        from: "emails.id",
+        to: "email_verification_tokens.emailId"
+      }
     }
-  };
+  });
 }
