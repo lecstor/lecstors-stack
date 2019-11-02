@@ -63,7 +63,7 @@ update automatically.
 ### Run the [Cypress](https://www.cypress.io/) end to end testing framework
 
 ```
-yarn cypress:open
+yarn workspace @lecstor/cypress open
 ```
 
 ### Run production builds
@@ -88,17 +88,22 @@ dc stop gateway
 ### in dev mode
 
 ```
-yarn gateway:local
+yarn workspace @lecstor/gateway start:local:dev
 ```
 
 ### with a production build
 
 ```
-yarn gateway:build
-yarn gateway:start:local
+yarn workspace @lecstor/gateway build
+yarn workspace @lecstor/gateway start:local:dist
 ```
 
 start - dev build, localhost
 build:prod - prod build, localhost
 start:prod - prod build, localhost
 
+# React UI
+
+```bash
+yarn workspace @lecstor/react-ui storybook
+```
