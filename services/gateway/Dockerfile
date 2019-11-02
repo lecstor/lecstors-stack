@@ -9,12 +9,9 @@ WORKDIR /usr/src
 RUN mkdir services
 COPY services/gateway services/gateway
 COPY .yarn .yarn
-COPY ["package.json", "yarn.lock", ".yarnrc", ".yarnrc.yml", "./"]
-# COPY .pnp.js ./ # don't need to copy as we run install
+COPY ["package.json", "yarn.lock", ".yarnrc", "./"]
 
-# install not required but it removes unused npm modules from the cache
-# yarn cache clean # doesn't seem to work in this instance..?
-RUN yarn
+RUN yarn --frozen-lockfile
 
 #---
 # keep development image slim
@@ -29,17 +26,17 @@ WORKDIR /usr/src
 
 COPY --from=base /usr/src .
 
-CMD ["yarn", "run", "gateway:dev"]
+CMD ["yarn", "workspace", "@lecstor/gateway", "start:docker:dev"]
 
 #---
 FROM development AS prodbuild
 
 WORKDIR /usr/src
 
-RUN yarn gateway:build
+RUN yarn workspace @lecstor/gateway build
 
 # remove devDeps from package.json
-RUN yarn remove -A $(echo 'console.log(Object.keys(require("./services/gateway/package.json").devDependencies).join(" "))' | node -)
+RUN yarn workspace @lecstor/gateway remove -A $(echo 'console.log(Object.keys(require("./services/gateway/package.json").devDependencies).join(" "))' | node -)
 
 #---
 FROM node:12.10.0-alpine AS production
@@ -49,12 +46,12 @@ ENV NODE_ENV development
 
 WORKDIR /usr/src
 
-COPY ["yarn.lock",".yarnrc",".yarnrc.yml","./"]
+COPY ["yarn.lock",".yarnrc","./"]
+COPY --from=prodbuild /usr/src/services/gateway/tsconfig.json .
 COPY --from=prodbuild /usr/src/services/gateway/package.json .
 COPY --from=prodbuild /usr/src/services/gateway/config config
 COPY --from=prodbuild /usr/src/services/gateway/dist dist
 COPY --from=prodbuild /usr/src/.yarn .yarn
-RUN yarn install
+RUN yarn --production --frozen-lockfile
 
-CMD ["yarn", "gateway:start"]
-
+CMD ["yarn", "start:docker:dist"]
