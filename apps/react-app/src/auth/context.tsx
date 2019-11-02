@@ -6,7 +6,7 @@ import { useQuery } from "urql";
 import { getAuth } from "./queries";
 
 export type AuthContext = {
-  user?: { id: string; firstname: string; surname: string };
+  user?: { id: string; firstname: string; surname: string; emails: any[] };
 };
 
 const authContext = React.createContext<AuthContext>({});
