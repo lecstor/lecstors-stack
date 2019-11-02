@@ -6,9 +6,11 @@
     "services/*",
     "tools/*"
   ],
+  "scripts": {
+    "nuke": "rm -r node_modules; for d in {apps,libs,services,tools}/*/node_modules; do echo $d; rm -r $d; done"
+  },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^2.1.0",
-    "@yarnpkg/pnpify": "^2.0.0-rc.3",
     "eslint": "^6.3.0",
     "typescript": "^3.6.2"
   },
@@ -20,9 +22,12 @@
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "regenerator-runtime": "^0.13.3"
   },
-  "resolutions": {
-    "styled-components": "4.3.2"
+  "dependenciesMeta": {
+    "@storybook/core": {
+      "unplugged": true
+    }
   }
 }

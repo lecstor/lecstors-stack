@@ -1,10 +1,10 @@
 {
-  "name": "@lecstor/puppeteer",
+  "name": "@lecstor/perf-watch",
+  "version": "1.0.0",
   "scripts": {
-    "record": "pnpify ts-node record.ts"
+    "record": "ts-node record.ts"
   },
   "dependencies": {
-    "@yarnpkg/pnpify": "^2.0.0-rc.4",
     "node-gzip": "^1.1.2",
     "puppeteer": "^1.20.0",
     "ts-node": "^8.4.1",
@@ -12,7 +12,6 @@
   },
   "devDependencies": {
     "@types/node-gzip": "1.1.0",
-    "@types/puppeteer": "1.19.1",
-    "@types/typescript": "2.0.0"
+    "@types/puppeteer": "1.19.1"
   }
 }

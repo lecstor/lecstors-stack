@@ -11,12 +11,8 @@ COPY apps/react-app apps/react-app
 RUN mkdir libs
 COPY libs/react-ui libs/react-ui
 COPY .yarn .yarn
-COPY ["package.json", "tsconfig.json", "yarn.lock", ".yarnrc", ".yarnrc.yml", "./"]
-# don't need to copy .pnp.js as we run install
-# COPY .pnp.js ./
+COPY ["package.json", "tsconfig.json", "yarn.lock", ".yarnrc", "./"]
 
-# install not required but it removes unused npm modules from the cache
-# yarn cache clean # doesn't seem to work in this instance..?
 RUN yarn
 
 #---
@@ -32,7 +28,7 @@ WORKDIR /usr/src
 
 COPY --from=base /usr/src .
 
-CMD ["yarn", "run", "react:dev"]
+CMD ["yarn", "workspace", "@lecstor/react-app", "run", "dev"]
 
 # #---
 # FROM development AS prodbuild
