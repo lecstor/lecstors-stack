@@ -104,6 +104,21 @@ start:prod - prod build, localhost
 
 # React UI
 
+## Storybook
 ```bash
 yarn workspace @lecstor/react-ui storybook
+```
+
+## Run Tests
+
+```bash
+yarn workspace @lecstor/react-ui test
+```
+
+# Run a command in all packages
+
+[wsrun](https://github.com/hfour/wsrun)
+
+```
+yarn wsrun test
 ```

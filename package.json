@@ -9,21 +9,21 @@
   "scripts": {
     "nuke": "rm -r node_modules; for d in {apps,libs,services,tools}/*/node_modules; do echo $d; rm -r $d; done"
   },
-  "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.1.0",
-    "eslint": "^6.3.0",
-    "typescript": "^3.6.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/eslint-plugin-prettier": "2.2.0",
     "@types/morgan": "^1.7.37",
     "@types/prettier": "1.18.2",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
     "@typescript-eslint/parser": "^2.2.0",
+    "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
     "prettier": "^1.18.2",
-    "regenerator-runtime": "^0.13.3"
+    "regenerator-runtime": "^0.13.3",
+    "typescript": "^3.7.2",
+    "wsrun": "^5.1.0"
   },
   "dependenciesMeta": {
     "@storybook/core": {
