@@ -4,13 +4,16 @@ import { useMutation } from "urql";
 import { Link } from "react-router-dom";
 
 import {
+  Body,
   Button,
   ButtonLayout,
   FieldLayout,
   FormLayout,
+  Heading,
   Input,
   Label,
-  Layout
+  Layout,
+  SignInIcon
 } from "@lecstor/react-ui";
 
 import { loginUser } from "./queries";
@@ -25,16 +28,16 @@ type Props = {
 };
 
 const TextField = ({ label, formik, ...props }: Props) => {
-  const [field, meta] = formik.getFieldProps(props);
+  const field = formik.getFieldProps(props);
   return (
     <FieldLayout>
       <Label>
-        {label}
+        <Body>{label}</Body>
         <Input {...field} {...props} />
       </Label>
-      {meta.touched && meta.error ? (
+      {/* {meta.touched && meta.error ? (
         <div className="error">{meta.error}</div>
-      ) : null}
+      ) : null} */}
     </FieldLayout>
   );
 };
@@ -51,13 +54,15 @@ const Login = () => {
   });
 
   return (
-    <>
-      <h1>Login</h1>
-      <Layout pad="0.5 1">
-        or{" "}
-        <Link data-testid="link-register" to="/p/register">
-          Register a new account
-        </Link>
+    <Layout pad="1">
+      <Heading>Login</Heading>
+      <Layout pad="2 1 1">
+        <Body>
+          or{" "}
+          <Link data-testid="link-register" to="/p/register">
+            Register a new account
+          </Link>
+        </Body>
       </Layout>
       {res.error && res.error.message}
 
@@ -80,13 +85,14 @@ const Login = () => {
             />
           </div>
           <ButtonLayout>
-            <Button mode="" type="submit">
-              Submit
+            <Button type="submit" size="medium">
+              Log In
+              <SignInIcon />
             </Button>
           </ButtonLayout>
         </form>
       </FormLayout>
-    </>
+    </Layout>
   );
 };
 export default Login;

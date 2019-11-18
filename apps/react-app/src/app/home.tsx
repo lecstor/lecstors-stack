@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import useAuth from "../auth/use-auth";
 
-import { Lorem } from "@lecstor/react-ui";
+// import { Lorem } from "@lecstor/react-ui";
 
 const H1 = styled.h1``;
 
@@ -15,7 +15,7 @@ const Home = () => {
       <H1>Home</H1>
       <h2>Hi {auth.user.firstname}</h2>
       <Link to="/login">Login</Link>
-      <Lorem />
+      {/* <Lorem /> */}
     </>
   );
 };

@@ -17,17 +17,17 @@ module.exports = api => {
       "@babel/preset-react"
     ],
     plugins: [
-      [
-        "transform-imports",
-        {
-          "@lecstor/react-ui": {
-            transform: importName => {
-              return `@lecstor/react-ui/esm/${kebabCase(importName)}`;
-            },
-            preventFullImport: false
-          }
-        }
-      ],
+      // [
+      //   "transform-imports",
+      //   {
+      //     "@lecstor/react-ui": {
+      //       transform: importName => {
+      //         return `@lecstor/react-ui/esm/${kebabCase(importName)}`;
+      //       },
+      //       preventFullImport: false
+      //     }
+      //   }
+      // ],
       "react-hot-loader/babel",
       "@loadable/babel-plugin"
     ]
