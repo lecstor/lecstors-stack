@@ -1,17 +1,20 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { useFormik } from "formik";
+import { useField, Formik, FormikProps, FormikValues } from "formik";
 import { useMutation } from "urql";
 import * as Yup from "yup";
 
 import {
+  Body,
   Button,
   ButtonLayout,
   FieldLayout,
   FormLayout,
+  Heading,
   Input,
   Label,
-  Layout
+  Layout,
+  SignInIcon
 } from "@lecstor/react-ui";
 
 import { registerUser } from "./queries";
@@ -36,18 +39,14 @@ type Props = {
   label: string;
   name: string;
   type: string;
-  formik: {
-    getFieldProps: ReturnType<typeof useFormik>["getFieldProps"];
-  };
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-const TextField = ({ label, formik, ...props }: Props) => {
-  const [field, meta] = formik.getFieldProps(props);
-  console.log({ field, meta });
+const TextField = ({ label, ...props }: Props) => {
+  const [field, meta] = useField(props);
   return (
     <FieldLayout>
       <Label>
-        {label}
+        <Body>{label}</Body>
         <Input {...field} {...props} />
       </Label>
       {meta.touched && meta.error ? (
@@ -64,62 +63,64 @@ const Register = () => {
 
   console.log({ res });
 
-  const formik = useFormik({
+  const formikProps = {
     initialValues: { firstname: "", surname: "", email: "" },
     onSubmit: (values, actions) => {
       executeMutation(values);
       actions.setSubmitting(false);
     },
     validationSchema
-  });
+  };
 
   if (res.data && res.data.createUser) {
     return <Redirect to="/" />;
   }
 
   return (
-    <>
-      <h1>Register</h1>
+    <Layout pad="1">
+      <Heading>Register</Heading>
       <Layout pad="1">{res.error && res.error.message}</Layout>
       <FormLayout>
-        <form onSubmit={formik.handleSubmit}>
-          <div>
-            <TextField
-              formik={formik}
-              name="firstname"
-              type="text"
-              label="First name"
-              maxLength={100}
-              data-testid="register-input-firstname"
-            />
-          </div>
-          <div>
-            <TextField
-              formik={formik}
-              name="surname"
-              type="text"
-              label="Surname"
-              maxLength={100}
-              data-testid="register-input-surname"
-            />
-          </div>
-          <div>
-            <TextField
-              formik={formik}
-              name="email"
-              type="text"
-              label="Email"
-              data-testid="register-input-email"
-            />
-          </div>
-          <ButtonLayout>
-            <Button mode="" type="submit">
-              Submit
-            </Button>
-          </ButtonLayout>
-        </form>
+        <Formik {...formikProps}>
+          {(props: FormikProps<FormikValues>) => (
+            <form onSubmit={props.handleSubmit}>
+              <div>
+                <TextField
+                  name="firstname"
+                  type="text"
+                  label="First name"
+                  maxLength={100}
+                  data-testid="register-input-firstname"
+                />
+              </div>
+              <div>
+                <TextField
+                  name="surname"
+                  type="text"
+                  label="Surname"
+                  maxLength={100}
+                  data-testid="register-input-surname"
+                />
+              </div>
+              <div>
+                <TextField
+                  name="email"
+                  type="text"
+                  label="Email"
+                  data-testid="register-input-email"
+                />
+              </div>
+              <ButtonLayout>
+                <Button type="submit" size="medium">
+                  Register
+                  <SignInIcon />
+                </Button>
+              </ButtonLayout>
+            </form>
+          )}
+        </Formik>
       </FormLayout>
-    </>
+    </Layout>
   );
 };
 export default Register;

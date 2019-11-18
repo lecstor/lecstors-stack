@@ -1,5 +1,5 @@
 import React from "react";
-import { useFormik } from "formik";
+import { useField, Formik, FormikProps, FormikValues } from "formik";
 import { useMutation } from "urql";
 import { Link } from "react-router-dom";
 
@@ -22,22 +22,21 @@ type Props = {
   label: string;
   name: string;
   type: string;
-  formik: {
-    getFieldProps: ReturnType<typeof useFormik>["getFieldProps"];
-  };
 };
 
-const TextField = ({ label, formik, ...props }: Props) => {
-  const field = formik.getFieldProps(props);
+const TextField = ({ label, ...props }: Props) => {
+  const [field, meta] = useField(props);
   return (
     <FieldLayout>
       <Label>
         <Body>{label}</Body>
         <Input {...field} {...props} />
       </Label>
-      {/* {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null} */}
+      {meta.touched && meta.error ? (
+        <div className="error" data-testid={`${props["data-testid"]}-error`}>
+          {meta.error}
+        </div>
+      ) : null}
     </FieldLayout>
   );
 };
@@ -45,13 +44,13 @@ const TextField = ({ label, formik, ...props }: Props) => {
 const Login = () => {
   const [res, executeMutation] = useMutation(loginUser);
 
-  const formik = useFormik({
+  const formikProps = {
     initialValues: { username: "", password: "" },
     onSubmit: (values, actions) => {
       executeMutation(values);
       actions.setSubmitting(false);
     }
-  });
+  };
 
   return (
     <Layout pad="1">
@@ -67,30 +66,24 @@ const Login = () => {
       {res.error && res.error.message}
 
       <FormLayout>
-        <form onSubmit={formik.handleSubmit}>
-          <div>
-            <TextField
-              formik={formik}
-              name="username"
-              type="text"
-              label="Username"
-            />
-          </div>
-          <div>
-            <TextField
-              formik={formik}
-              name="password"
-              type="password"
-              label="Password"
-            />
-          </div>
-          <ButtonLayout>
-            <Button type="submit" size="medium">
-              Log In
-              <SignInIcon />
-            </Button>
-          </ButtonLayout>
-        </form>
+        <Formik {...formikProps}>
+          {(props: FormikProps<FormikValues>) => (
+            <form onSubmit={props.handleSubmit}>
+              <div>
+                <TextField name="username" type="text" label="Username" />
+              </div>
+              <div>
+                <TextField name="password" type="password" label="Password" />
+              </div>
+              <ButtonLayout>
+                <Button type="submit" size="medium">
+                  Log In
+                  <SignInIcon />
+                </Button>
+              </ButtonLayout>
+            </form>
+          )}
+        </Formik>
       </FormLayout>
     </Layout>
   );
