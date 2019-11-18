@@ -1,20 +1,97 @@
-import styled from "styled-components";
+import React, { FC, ReactNode } from "react";
+import styled, { css } from "styled-components";
 
-type CustomProps = {
-  mode?: string;
+import robotoCrop from "../typography/roboto-crop";
+import { fontSize, FontSize as Size } from "../typography/font-sizes";
+import { DropShadowSvgFilter } from "../svg-filters";
+import { Button as ButtonType } from "../theme/theme-types";
+
+type Mode = "primary" | "secondary";
+
+type ButtonProps = {
+  mode?: Mode;
+  size?: Size;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+const hasManyChildren = (children: ReactNode) =>
+  React.Children.count(children) > 1;
+
+const buttonColors = (color: ButtonType) => `
+  color: ${color.label};
+  background-color: ${color.bottom};
+  background-image: linear-gradient(
+    -180deg,
+    ${color.top},
+    ${color.bottom} 90%
+  );
+  &:hover {
+    background-color: ${color.hBottom};
+    background-image: linear-gradient(-180deg, ${color.hTop}, ${color.hBottom} 90%);
+  }
+`;
+
+const modes = {
+  primary: css`
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+    text-shadow: 1px 1px 0px ${({ theme }) => theme.colors.black.shadow};
+    .icon {
+      filter: url(#drop-shadow);
+    }
+
+    ${({ theme }) => {
+      const { primary } = theme.buttons;
+      return `
+        ${buttonColors(primary)}
+      `;
+    }}
+  `,
+  secondary: css`
+    ${({ theme }) => {
+      const { secondary } = theme.buttons;
+      return `
+        color: ${theme.colors.black.primary};
+        ${buttonColors(secondary)}
+      `;
+    }}
+  `
 };
 
-const Button = styled.button.attrs<CustomProps>(({ mode }) => ({
-  mode: mode || "primary"
-}))<CustomProps>`
+const modeCss = ({ mode = "primary" }: { mode?: Mode }) => modes[mode];
+
+const Component: FC<ButtonProps> = ({
+  children,
+  mode = "primary",
+  size,
+  ...props
+}) => (
+  <>
+    {mode !== "secondary" && <DropShadowSvgFilter />}
+    <button {...props}>
+      {React.Children.map(children, child => {
+        if (typeof child === "string") {
+          return <span>{child}</span>;
+        }
+        return child;
+      })}
+    </button>
+  </>
+);
+
+const Button = styled(Component)<ButtonProps>`
+  ${fontSize}
+  ${robotoCrop()}
+  padding: 0.5em;
+  ${({ children }) =>
+    hasManyChildren(children) &&
+    `
+    .icon { margin-left: 0.5em; margin-right: 0.5em; }
+    .icon:first-child { margin-left: 0; }
+    .icon:last-child { margin-right: 0; }
+  `}
   position: relative;
   display: inline-block;
-  padding: 0.6rem 1.2rem;
-  font-size: 1.6rem;
-  font-weight: 600;
-  line-height: 2rem;
   white-space: nowrap;
-  vertical-align: middle;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -27,27 +104,7 @@ const Button = styled.button.attrs<CustomProps>(({ mode }) => ({
   border-radius: 0.25em;
   -webkit-appearance: none;
 
-  /* small */
-  /* padding: 3px 10px;
-  font-size: 12px;
-  line-height: 20px; */
-
-  /* primary */
-  ${p =>
-    p.mode === "primary" &&
-    `
-    color: #fff;
-    background-color: #0366d6;
-    background-image: linear-gradient(-180deg, #2196f3, #0366d6 90%);
-  `}
-
-  ${p =>
-    p.mode === "secondary" &&
-    `
-    color: inherit;
-    background-color: none;
-    background-image: none;
-  `}
+  ${p => modeCss(p)}
 `;
 
 export default Button;

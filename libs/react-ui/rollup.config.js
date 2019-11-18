@@ -1,3 +1,4 @@
+import resolve from "rollup-plugin-node-resolve";
 import typescript from "rollup-plugin-typescript2";
 import pkg from "./package.json";
 import { terser } from "rollup-plugin-terser";
@@ -48,6 +49,7 @@ export default [
     output: [{ file: pkg.module, format: "es" }],
     external,
     plugins: [
+      resolve(),
       typescript({
         typescript: require("typescript")
       })
@@ -58,6 +60,7 @@ export default [
     output: { file: pkg.main, format: "cjs" },
     external,
     plugins: [
+      resolve(),
       typescript({
         typescript: require("typescript")
       }),
