@@ -1,14 +1,17 @@
 import React, { FC, ReactNode } from "react";
 import styled, { css } from "styled-components";
 
-import robotoCrop from "../typography/roboto-crop";
 import { DropShadowSvgFilter } from "../svg-filters";
-import { Button as ButtonType } from "../theme/theme-types";
-import { ScreenSize, ScreenTypography } from "../theme/theme-types";
-
+import { ButtonModes } from "../theme/settings/buttons";
+import {
+  Button as ButtonType,
+  ScreenSize,
+  ScreenTypography
+} from "../theme/theme-types";
+import robotoCrop from "../typography/roboto-crop";
 import { textCss } from "../typography/text";
 
-type Mode = "primary" | "secondary";
+type Mode = keyof ButtonModes;
 
 type ButtonProps = {
   mode?: Mode;
@@ -33,31 +36,33 @@ const buttonColors = (color: ButtonType) => `
   }
 `;
 
-const modes = {
-  primary: css`
-    transition-duration: 0.2s;
-    transition-timing-function: ease-out;
-    text-shadow: 1px 1px 0px ${({ theme }) => theme.colors.black.shadow};
-    .icon {
-      filter: url(#drop-shadow);
-    }
+const createMode = (
+  mode: string,
+  { shadow = true }: { shadow?: boolean } = {}
+) => css`
+  ${shadow &&
+    css`
+      transition-duration: 0.2s;
+      transition-timing-function: ease-out;
+      text-shadow: 1px 1px 0px ${({ theme }) => theme.colors.black.shadow};
+      .icon {
+        filter: url(#drop-shadow);
+      }
+    `}
 
-    ${({ theme }) => {
-      const { primary } = theme.buttons;
-      return `
-        ${buttonColors(primary)}
-      `;
-    }}
-  `,
-  secondary: css`
-    ${({ theme }) => {
-      const { secondary } = theme.buttons;
-      return `
-        color: ${theme.colors.black.primary};
-        ${buttonColors(secondary)}
-      `;
-    }}
-  `
+  ${({ theme }) => {
+    return `
+    ${buttonColors(theme.buttons[mode])}
+  `;
+  }}
+`;
+
+const modes = {
+  primary: createMode("primary"),
+  danger: createMode("danger"),
+  caution: createMode("caution"),
+  success: createMode("success"),
+  secondary: createMode("secondary", { shadow: false })
 };
 
 const modeCss = ({ mode = "primary" }: { mode?: Mode }) => modes[mode];
