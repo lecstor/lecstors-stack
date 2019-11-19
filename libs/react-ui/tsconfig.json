@@ -3,6 +3,10 @@
     "declaration": true,
     "strict": true,
     "jsx": "react",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": "src",
+    "paths": {
+      "testing-library": ["../test/testing-library"]
+    }
   }
 }
