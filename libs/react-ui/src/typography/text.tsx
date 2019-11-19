@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import styled, { DefaultTheme } from "styled-components";
+import styled, { css, DefaultTheme } from "styled-components";
 
 import robotoCrop from "./roboto-crop";
 
@@ -12,7 +12,7 @@ type GetCssOptions = {
   screenSize?: ScreenSize;
 };
 
-const getCss = ({
+export const textCss = ({
   theme,
   font = "body",
   screenSize = "responsive"
@@ -30,11 +30,11 @@ const getCss = ({
     screenFont = screenTheme.body;
   }
   const { fontSize, fontWeight, lineHeight } = screenFont;
-  return `
+  return css`
     font-size: ${fontSize}rem;
     font-weight: ${fontWeight};
     ${robotoCrop({ lineHeight })}
-    `;
+  `;
 };
 
 type DivProps = {
@@ -44,7 +44,7 @@ type DivProps = {
 
 export const Div = styled.div<DivProps>`
   ${({ theme, font = "body", screenSize }) =>
-    getCss({ theme, font, screenSize })}
+    textCss({ theme, font, screenSize })}
   color: ${({ theme, color = theme.colors.black.primary }) => color};
 `;
 

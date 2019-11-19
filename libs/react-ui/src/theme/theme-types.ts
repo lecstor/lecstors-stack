@@ -1,7 +1,7 @@
 export type Font = {
   fontSize: number;
   lineHeight: number;
-  fontWeight: number;
+  fontWeight?: number;
 };
 
 export type Button = {
@@ -23,6 +23,22 @@ export type Color = {
 
 export type ScreenSize = "small" | "medium" | "large" | "responsive";
 
+export type ScreenSizes = {
+  small: number;
+  medium: number;
+  large: number;
+  responsive?: number;
+};
+
+export type ScreenTypographySizes = {
+  xsmall: Font;
+  small: Font;
+  regular: Font;
+  medium: Font;
+  large: Font;
+  xlarge: Font;
+};
+
 export type ScreenTypography = {
   heading1: Font;
   heading2: Font;
@@ -32,4 +48,4 @@ export type ScreenTypography = {
   body: Font;
   bodySmall: Font;
   caption: Font;
-};
+} & ScreenTypographySizes;

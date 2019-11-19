@@ -2,27 +2,11 @@ import * as React from "react";
 import styled from "styled-components";
 
 import Layout from "../layout";
-import Button from "../form/button";
-import { AddIcon } from "../icons";
 
 import { ScreenTypography } from "../theme/theme-types";
 
 import { P, Div, Body, Caption, Heading, SubHeading } from "./text";
 import Shelf from "../layout/shelf";
-// import * as text from "./text";
-
-// const Pretty = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: space-around;
-//   /* height: 15rem; */
-//   border: 1px solid blue;
-//   padding: 1rem;
-// `;
-
-// const Spacer = styled.div`
-//   height: 1rem;
-// `;
 
 const Border = styled.div`
   border: 1px solid red;
@@ -194,29 +178,29 @@ export const Text = () => (
       <Shelf pad="1 0">
         <PaddedCell>Lorem ipsum dolor sit.</PaddedCell>
         <PaddedCell>
-          <Div size="heading1">Lorem ipsum dolor sit.</Div>
+          <Div font="heading1">Lorem ipsum dolor sit.</Div>
         </PaddedCell>
         <PaddedCell>
-          <Div size="heading1">Lorem ipsum dolor sit.</Div>
+          <Div font="heading1">Lorem ipsum dolor sit.</Div>
         </PaddedCell>
       </Shelf>
       <Shelf pad="1 0">
         <PaddedCell>Lorem ipsum</PaddedCell>
         <PaddedCell>
-          <Div size="heading1">Lorem ipsum</Div>
+          <Div font="heading1">Lorem ipsum</Div>
         </PaddedCell>
         <PaddedCell>
-          <Div size="heading1">Lorem ipsum</Div>
+          <Div font="heading1">Lorem ipsum</Div>
         </PaddedCell>
       </Shelf>
     </Layout>
     <Layout pad="1">
       <Border>
         <Layout pad="1">
-          <Div size="heading1">AaBbGgIiJj - Div heading1</Div>
-          <Div size="heading1">AaBbGgIiJj - Div heading1</Div>
-          <Div size="heading1">AaBbGgIiJj - Div heading1</Div>
-          <Div size="heading1">AaBbGgIiJj - Div heading1</Div>
+          <Div font="heading1">AaBbGgIiJj - Div heading1</Div>
+          <Div font="heading1">AaBbGgIiJj - Div heading1</Div>
+          <Div font="heading1">AaBbGgIiJj - Div heading1</Div>
+          <Div font="heading1">AaBbGgIiJj - Div heading1</Div>
         </Layout>
       </Border>
     </Layout>

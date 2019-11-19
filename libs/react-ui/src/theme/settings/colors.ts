@@ -1,4 +1,4 @@
-import { Color } from "./theme-types";
+import { Color } from "../theme-types";
 import { darken, lighten } from "polished";
 
 const blue = "#1976d2";

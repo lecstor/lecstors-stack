@@ -2,12 +2,11 @@ import React from "react";
 import deepmerge from "deepmerge";
 import { ThemeProvider as Provider, DefaultTheme } from "styled-components";
 
-import largeScreenTypographyTheme from "./typography/large-screen";
-import mediumScreenTypographyTheme from "./typography/medium-screen";
-import smallScreenTypographyTheme from "./typography/small-screen";
-import buttons from "./buttons";
-import colors from "./colors";
-import responsive from "./responsive";
+import typography from "./settings/typography";
+
+import buttons from "./settings/buttons";
+import colors from "./settings/colors";
+import screenSizes from "./settings/screen-sizes";
 import { ScreenSize } from "./theme-types";
 
 export interface ThemeProviderProps<T extends object, U extends object = T> {
@@ -15,20 +14,14 @@ export interface ThemeProviderProps<T extends object, U extends object = T> {
   theme?: T | ((theme: U) => T);
 }
 
-const typography = {
-  small: smallScreenTypographyTheme,
-  medium: mediumScreenTypographyTheme,
-  large: largeScreenTypographyTheme
-};
-
 export const ThemeProvider = ({
   children,
   theme: themeOverrides = {}
 }: ThemeProviderProps<any, any>) => {
   const smallScreenMaxSize =
-    themeOverrides?.responsive?.screen?.medium || responsive.screen.medium;
+    themeOverrides?.screenSizes?.medium || screenSizes.medium;
   const mediumScreenMaxSize =
-    themeOverrides?.responsive?.screen?.large || responsive.screen.large;
+    themeOverrides?.screenSizes?.large || screenSizes.large;
 
   let screenSize: ScreenSize = "large";
   if (typeof window !== "undefined") {
@@ -46,10 +39,8 @@ export const ThemeProvider = ({
     },
     buttons,
     colors,
-    responsive: {
-      screenSize,
-      ...responsive
-    }
+    screenSizes,
+    screenSize
   };
 
   const theme = deepmerge(defaultTheme, themeOverrides);

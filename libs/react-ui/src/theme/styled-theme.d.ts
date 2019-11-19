@@ -16,12 +16,7 @@ declare module "styled-components" {
     colors: {
       [name: string]: Theme.Color;
     };
-    responsive: {
-      screenSize: Theme.ScreenSize;
-      screen: {
-        small: number;
-        isSmall?: boolean;
-      };
-    };
+    screenSizes: Theme.ScreenSizes;
+    screenSize: Theme.ScreenSize;
   }
 }

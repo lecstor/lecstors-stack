@@ -2,15 +2,18 @@ import React, { FC, ReactNode } from "react";
 import styled, { css } from "styled-components";
 
 import robotoCrop from "../typography/roboto-crop";
-import { fontSize, FontSize as Size } from "../typography/font-sizes";
 import { DropShadowSvgFilter } from "../svg-filters";
 import { Button as ButtonType } from "../theme/theme-types";
+import { ScreenSize, ScreenTypography } from "../theme/theme-types";
+
+import { textCss } from "../typography/text";
 
 type Mode = "primary" | "secondary";
 
 type ButtonProps = {
   mode?: Mode;
-  size?: Size;
+  size?: keyof ScreenTypography;
+  screenSize?: ScreenSize;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const hasManyChildren = (children: ReactNode) =>
@@ -79,7 +82,7 @@ const Component: FC<ButtonProps> = ({
 );
 
 const Button = styled(Component)<ButtonProps>`
-  ${fontSize}
+  ${({ theme, size, screenSize }) => textCss({ theme, font: size, screenSize })}
   ${robotoCrop()}
   padding: 0.5em;
   ${({ children }) =>

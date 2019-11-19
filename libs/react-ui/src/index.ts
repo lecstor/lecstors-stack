@@ -1,6 +1,7 @@
 export * from "./icons";
 export * from "./theme";
 export * from "./typography";
+export * from "./global-style";
 
 export { default as Button } from "./form/button";
 export { default as Input } from "./form/input";
