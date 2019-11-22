@@ -22,17 +22,26 @@ type ButtonProps = {
 const hasManyChildren = (children: ReactNode) =>
   React.Children.count(children) > 1;
 
+const Label = styled.div`
+  height: 100%;
+  padding: 1px 0;
+`;
+
 const buttonColors = (color: ButtonType) => `
   color: ${color.label};
   background-color: ${color.bottom};
   background-image: linear-gradient(
     -180deg,
     ${color.top},
-    ${color.bottom} 90%
+    ${color.bottom} 95%
   );
   &:hover {
     background-color: ${color.hBottom};
-    background-image: linear-gradient(-180deg, ${color.hTop}, ${color.hBottom} 90%);
+    background-image: linear-gradient(-180deg, ${color.hTop}, ${color.hBottom} 95%);
+  }
+  &:active {
+    background-color: ${color.hBottom};
+    background-image: linear-gradient(-180deg, ${color.hBottom}, ${color.hTop} 95%);
   }
 `;
 
@@ -49,6 +58,13 @@ const createMode = (
         filter: url(#drop-shadow);
       }
     `}
+
+  &:active {
+    ${Label} {
+      padding-top: 2px;
+      padding-bottom: 0;
+    }
+  }
 
   ${({ theme }) => {
     return `
@@ -76,12 +92,14 @@ const Component: FC<ButtonProps> = ({
   <>
     {mode !== "secondary" && <DropShadowSvgFilter />}
     <button {...props}>
-      {React.Children.map(children, child => {
-        if (typeof child === "string") {
-          return <span>{child}</span>;
-        }
-        return child;
-      })}
+      <Label>
+        {React.Children.map(children, child => {
+          if (typeof child === "string") {
+            return <span>{child}</span>;
+          }
+          return child;
+        })}
+      </Label>
     </button>
   </>
 );
