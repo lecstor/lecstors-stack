@@ -1,4 +1,4 @@
 {
-  "typescript.tsdk": ".vscode/pnpify/typescript/lib",
-  "eslint.nodePath": ".vscode/pnpify"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "jest.disabledWorkspaceFolders": ["./tools/cypress/"],
 }
