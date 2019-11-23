@@ -23,7 +23,6 @@ const hasManyChildren = (children: ReactNode) =>
   React.Children.count(children) > 1;
 
 const Label = styled.div`
-  height: 100%;
   padding: 1px 0;
 `;
 
@@ -106,7 +105,6 @@ const Component: FC<ButtonProps> = ({
 
 const Button = styled(Component)<ButtonProps>`
   ${({ theme, size, screenSize }) => textCss({ theme, font: size, screenSize })}
-  ${robotoCrop()}
   padding: 0.5em;
   ${({ children }) =>
     hasManyChildren(children) &&
