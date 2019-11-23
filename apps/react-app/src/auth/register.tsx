@@ -1,6 +1,7 @@
-import React from "react";
+import React, { FC } from "react";
 import { Redirect } from "react-router-dom";
-import { useField, Formik, FormikProps, FormikValues } from "formik";
+import useForm from "react-hook-form";
+import { FieldError } from "react-hook-form/dist/types";
 import { useMutation } from "urql";
 import * as Yup from "yup";
 
@@ -37,39 +38,58 @@ const validationSchema = Yup.object().shape({
 
 type Props = {
   label: string;
-  name: string;
-  type: string;
+  error: FieldError;
+  ref?: React.Ref<HTMLInputElement>;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-const TextField = ({ label, ...props }: Props) => {
-  const [field, meta] = useField(props);
-  return (
-    <FieldLayout>
-      <Label>
-        <Body>{label}</Body>
-        <Input {...field} {...props} />
-      </Label>
-      {meta.touched && meta.error ? (
-        <div className="error" data-testid={`${props["data-testid"]}-error`}>
-          {meta.error}
-        </div>
-      ) : null}
-    </FieldLayout>
-  );
+const TextField: FC<Props> = React.forwardRef<HTMLInputElement, Props>(
+  ({ label, error, ...props }: Props, ref) => {
+    return (
+      <FieldLayout>
+        <Label>
+          <Body>{label}</Body>
+          <Input
+            {...props}
+            ref={ref}
+            aria-invalid={error ? "true" : "false"}
+            aria-describedby={`error-${props.name}-required error-${props.name}-min error-${props.name}-max error-${props.name}-email`}
+          />
+          {error && (
+            <div
+              className="error"
+              id={`error-${props.name}-${error.type}`}
+              data-testid={`${props["data-testid"]}-error`}
+            >
+              {error.message}
+            </div>
+          )}
+        </Label>
+      </FieldLayout>
+    );
+  }
+);
+
+TextField.displayName = "TextField";
+
+type FormData = {
+  firstname: string;
+  lastname: string;
+  email: string;
 };
 
 const Register = () => {
   const [res, executeMutation] = useMutation(registerUser);
-
-  console.log({ res });
-
-  const formikProps = {
-    initialValues: { firstname: "", surname: "", email: "" },
-    onSubmit: (values, actions) => {
-      executeMutation(values);
-      actions.setSubmitting(false);
-    },
+  const { register, handleSubmit, watch, errors } = useForm<FormData>({
     validationSchema
+  });
+
+  console.log({ res, errors });
+
+  console.log(watch("firstname")); // watch input value by passing the name of it
+
+  const onSubmit = (values, actions) => {
+    executeMutation(values);
+    actions.setSubmitting(false);
   };
 
   if (res.data && res.data.createUser) {
@@ -81,44 +101,46 @@ const Register = () => {
       <Heading>Register</Heading>
       <Layout pad="1">{res.error && res.error.message}</Layout>
       <FormLayout>
-        <Formik {...formikProps}>
-          {(props: FormikProps<FormikValues>) => (
-            <form onSubmit={props.handleSubmit}>
-              <div>
-                <TextField
-                  name="firstname"
-                  type="text"
-                  label="First name"
-                  maxLength={100}
-                  data-testid="register-input-firstname"
-                />
-              </div>
-              <div>
-                <TextField
-                  name="surname"
-                  type="text"
-                  label="Surname"
-                  maxLength={100}
-                  data-testid="register-input-surname"
-                />
-              </div>
-              <div>
-                <TextField
-                  name="email"
-                  type="text"
-                  label="Email"
-                  data-testid="register-input-email"
-                />
-              </div>
-              <ButtonLayout>
-                <Button type="submit" size="medium">
-                  Register
-                  <SignInIcon />
-                </Button>
-              </ButtonLayout>
-            </form>
-          )}
-        </Formik>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <TextField
+              name="firstname"
+              type="text"
+              label="First name"
+              maxLength={100}
+              data-testid="register-input-firstname"
+              ref={register}
+              error={errors.firstname}
+            />
+          </div>
+          <div>
+            <TextField
+              name="surname"
+              type="text"
+              label="Surname"
+              maxLength={100}
+              data-testid="register-input-surname"
+              ref={register}
+              error={errors.surname}
+            />
+          </div>
+          <div>
+            <TextField
+              name="email"
+              type="text"
+              label="Email"
+              data-testid="register-input-email"
+              ref={register}
+              error={errors.email}
+            />
+          </div>
+          <ButtonLayout>
+            <Button type="submit" size="medium">
+              Register
+              <SignInIcon />
+            </Button>
+          </ButtonLayout>
+        </form>
       </FormLayout>
     </Layout>
   );
