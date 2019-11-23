@@ -21,7 +21,7 @@ services:
       - gateway
     volumes:
       - ./apps/react-app:/usr/src/apps/react-app
-      - ./libs/react-ui:/usr/src/libs/react-ui
+      - ./modules/react-ui:/usr/src/modules/react-ui
     ports: 
       - 4321:4321
   postgres:

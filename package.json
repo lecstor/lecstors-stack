@@ -2,12 +2,12 @@
   "private": true,
   "workspaces": [
     "apps/*",
-    "libs/*",
+    "modules/*",
     "services/*",
     "tools/*"
   ],
   "scripts": {
-    "nuke": "rm -r node_modules; for d in {apps,libs,services,tools}/*/node_modules; do echo $d; rm -r $d; done"
+    "nuke": "rm -r node_modules; for d in {apps,modules,services,tools}/*/node_modules; do echo $d; rm -r $d; done"
   },
   "dependencies": {},
   "devDependencies": {
@@ -16,10 +16,12 @@
     "@types/prettier": "1.18.2",
     "@typescript-eslint/eslint-plugin": "^2.7.0",
     "@typescript-eslint/parser": "^2.2.0",
+    "babel-jest": "^24.9.0",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
+    "jest": "^24.9.0",
     "prettier": "^1.18.2",
     "regenerator-runtime": "^0.13.3",
     "typescript": "^3.7.2",

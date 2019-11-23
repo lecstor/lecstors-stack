@@ -7,7 +7,7 @@ import * as React from "react";
 
 // https://danielmilner.com/adding-drop-shadows-to-svgs/
 export const DropShadowSvgFilter = () => (
-  <svg width="0" height="0" style={{ position: "absolute" }}>
+  <svg width="0" height="0" style={{ position: "absolute", left: 0, top: 0 }}>
     <filter id="drop-shadow">
       <feGaussianBlur in="SourceAlpha" stdDeviation="0" />
       <feOffset dx="1" dy="1" result="offsetblur" />

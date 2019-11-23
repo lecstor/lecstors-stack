@@ -8,8 +8,8 @@ WORKDIR /usr/src
 
 RUN mkdir apps
 COPY apps/react-app apps/react-app
-RUN mkdir libs
-COPY libs/react-ui libs/react-ui
+RUN mkdir modules
+COPY modules/react-ui modules/react-ui
 COPY .yarn .yarn
 COPY ["package.json", "tsconfig.json", "yarn.lock", ".yarnrc", "./"]
 
