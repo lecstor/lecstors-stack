@@ -5,7 +5,7 @@ describe("Login", () => {
 
   it("Visits the React App", () => {
     cy.visit("/");
-    cy.contains("Submit").click();
+    cy.contains("Log In").click();
     cy.url().should("eq", `${baseUrl}/p/login`);
     cy.get("#root").should("contain", "User not found");
 
@@ -17,7 +17,7 @@ describe("Login", () => {
       .type("fooBar")
       .should("have.value", "fooBar");
 
-    cy.contains("Submit").click();
+    cy.contains("Log In").click();
     cy.url().should("eq", `${baseUrl}/`);
     cy.get("h1").should("contain", "Home");
     cy.get("#root").should("contain", "Jason");

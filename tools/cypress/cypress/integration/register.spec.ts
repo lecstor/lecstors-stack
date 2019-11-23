@@ -56,7 +56,7 @@ describe("Register", () => {
 
     cy.get("[data-testid=register-input-email-error]").should("not.exist");
 
-    cy.contains("Submit").click();
+    cy.get("[data-testid=register-button]").click();
     cy.url().should("eq", `${baseUrl}/`);
     cy.get("h1").should("contain", "Home");
     cy.get("#root").should("contain", "Fred");

@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import { Redirect } from "react-router-dom";
 import useForm from "react-hook-form";
-import { FieldError } from "react-hook-form/dist/types";
 import { useMutation } from "urql";
 import * as Yup from "yup";
 
@@ -38,7 +37,7 @@ const validationSchema = Yup.object().shape({
 
 type Props = {
   label: string;
-  error: FieldError;
+  error: { message?: string; type: string };
   ref?: React.Ref<HTMLInputElement>;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
@@ -80,6 +79,7 @@ type FormData = {
 const Register = () => {
   const [res, executeMutation] = useMutation(registerUser);
   const { register, handleSubmit, watch, errors } = useForm<FormData>({
+    mode: "onBlur",
     validationSchema
   });
 
@@ -87,9 +87,8 @@ const Register = () => {
 
   console.log(watch("firstname")); // watch input value by passing the name of it
 
-  const onSubmit = (values, actions) => {
+  const onSubmit = values => {
     executeMutation(values);
-    actions.setSubmitting(false);
   };
 
   if (res.data && res.data.createUser) {
@@ -135,7 +134,7 @@ const Register = () => {
             />
           </div>
           <ButtonLayout>
-            <Button type="submit" size="medium">
+            <Button type="submit" size="medium" data-testid="register-button">
               Register
               <SignInIcon />
             </Button>
