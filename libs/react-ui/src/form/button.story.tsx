@@ -5,6 +5,7 @@ import { ButtonModes } from "../theme/settings/buttons";
 import { ScreenTypographySizes } from "../theme/theme-types";
 
 import Button from "./button";
+import ButtonLayout from "./button-layout";
 
 import { SignInIcon } from "../icons";
 
@@ -52,6 +53,14 @@ const Buttons = ({ mode }: { mode: keyof ButtonModes }) => (
               Sign In
               <SignInIcon />
             </Button>
+          </td>
+          <td>
+            <ButtonLayout>
+              <Button size={size} mode={mode}>
+                Sign In
+                <SignInIcon />
+              </Button>
+            </ButtonLayout>
           </td>
         </tr>
       ))}

@@ -8,7 +8,6 @@ import {
   ScreenSize,
   ScreenTypography
 } from "../theme/theme-types";
-import robotoCrop from "../typography/roboto-crop";
 import { textCss } from "../typography/text";
 
 type Mode = keyof ButtonModes;
