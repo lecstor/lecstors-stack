@@ -1,5 +1,5 @@
 {
-  "name": "gql2ts",
+  "name": "@lecstor/gql2ts",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
