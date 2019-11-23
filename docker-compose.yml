@@ -57,6 +57,6 @@ services:
     # share the current folder as volume to avoid copying
     working_dir: /e2e
     volumes:
-      - ./services/cypress:/e2e
+      - ./tools/cypress:/e2e
 volumes:
   dbdata:
