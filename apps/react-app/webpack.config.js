@@ -9,8 +9,8 @@ const devConfig = {
   devServer: {
     contentBase: "./dist",
     hot: true,
-    historyApiFallback: true
-    // allowedHosts: ["react-app"]
+    historyApiFallback: true,
+    allowedHosts: ["react-app"]
   }
 };
 
