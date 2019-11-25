@@ -10,7 +10,10 @@ const devConfig = {
     contentBase: "./dist",
     hot: true,
     historyApiFallback: true,
-    allowedHosts: ["react-app"]
+    allowedHosts: ["react-app"],
+    proxy: {
+      "/graphql": "http://gateway:3000"
+    }
   }
 };
 

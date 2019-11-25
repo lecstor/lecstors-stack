@@ -1,12 +1,17 @@
-import { Provider, createClient as createUrqlClient } from "urql";
-
-const gatewayHost =
-  location.hostname === "react-app" ? "gateway" : location.hostname;
+import {
+  Provider,
+  createClient as createUrqlClient
+  // debugExchange,
+  // defaultExchanges
+} from "urql";
+// import { schemaExchange } from "urql-exchange-schema";
+// import newMockSchema from "./lib/mock-schema";
 
 export const createClient = () =>
   createUrqlClient({
-    url: `http://${gatewayHost}:3000/graphql`,
+    url: `/graphql`,
     // exchanges: [schemaExchange(newMockSchema())]
+    // exchanges: [...defaultExchanges, debugExchange],
     fetchOptions: {
       mode: "cors", // no-cors, cors, *same-origin
       credentials: "include" // include, same-origin
