@@ -29,19 +29,13 @@ const Profile = () => {
       {logoutRes.error && logoutRes.error.message}
       {verifyRes.error && verifyRes.error.message}
       <ButtonLayout>
-        <Button mode="" onClick={verifyOnClick}>
-          Verify Email
-        </Button>
+        <Button onClick={verifyOnClick}>Verify Email</Button>
       </ButtonLayout>
       <ButtonLayout>
-        <Button mode="" onClick={deleteOnClick}>
-          Delete Profile
-        </Button>
+        <Button onClick={deleteOnClick}>Delete Profile</Button>
       </ButtonLayout>
       <ButtonLayout>
-        <Button mode="" onClick={logoutOnClick}>
-          Log Out
-        </Button>
+        <Button onClick={logoutOnClick}>Log Out</Button>
       </ButtonLayout>
     </>
   );

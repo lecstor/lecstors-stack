@@ -7,23 +7,8 @@ import loadable from "@loadable/component";
 import { ThemeProvider, GlobalStyle } from "@lecstor/react-ui";
 
 import { Provider, createClient } from "./lib/gql-client";
-import { schemaExchange } from "urql-exchange-schema";
 
 import { AuthProvider } from "./auth/context";
-
-import newMockSchema from "./lib/mock-schema";
-
-// import { createGlobalStyle } from "styled-components";
-
-// const GlobalStyle = createGlobalStyle`
-//   html {
-//     font-size: 10px;
-//   }
-//   body {
-//     font-size: 1.6rem;
-//     font-family: 'Open Sans', sans-serif;
-//   }
-// `;
 
 const Login = loadable(() => import("./auth/login"));
 const Register = loadable(() => import("./auth/register"));

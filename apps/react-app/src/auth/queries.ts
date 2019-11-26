@@ -49,7 +49,7 @@ export const loginUser = gql`
 
 export const logoutUser = gql`
   mutation LogoutUser {
-    logoutUser {
+    logout {
       user {
         id
       }
