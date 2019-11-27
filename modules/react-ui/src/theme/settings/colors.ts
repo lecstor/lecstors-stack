@@ -3,8 +3,8 @@ import { darken, lighten } from "polished";
 
 const blue = "#1976d2";
 const grey = "#bdbdbd";
-const white = "#fff";
-const black = "#000";
+const white = "#ccc"; // makes light2 #FFF
+const black = "#333"; // makes dark2 #000
 const red = "#e53935";
 const orange = "#ff9800";
 const green = "#4caf50";

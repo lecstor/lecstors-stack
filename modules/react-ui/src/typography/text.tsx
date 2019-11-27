@@ -45,7 +45,7 @@ type DivProps = {
 export const Div = styled.div<DivProps>`
   ${({ theme, font = "body", screenSize }) =>
     textCss({ theme, font, screenSize })}
-  color: ${({ theme, color = theme.colors.black.primary }) => color};
+  color: ${({ theme, color = theme.colors.black.dark1 }) => color};
 `;
 
 export const P: FC<DivProps> = props => <Div as="p" {...props} />;
