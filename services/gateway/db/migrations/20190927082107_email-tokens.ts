@@ -1,6 +1,6 @@
 import * as Knex from "knex";
 
-exports.up = function(knex: Knex): Promise<any> {
+exports.up = function(knex: Knex) {
   return knex.schema.createTable("email_verification_tokens", table => {
     table.uuid("id").primary();
     table
@@ -12,6 +12,6 @@ exports.up = function(knex: Knex): Promise<any> {
   });
 };
 
-exports.down = function(knex: Knex): Promise<any> {
+exports.down = function(knex: Knex) {
   return knex.schema.dropTable("email_verification_tokens");
 };

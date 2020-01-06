@@ -1,6 +1,6 @@
 import * as Knex from "knex";
 
-exports.up = function(knex: Knex): Promise<any> {
+exports.up = function(knex: Knex) {
   return knex.schema.createTable("credentials", table => {
     table.uuid("id").primary();
 
@@ -23,7 +23,7 @@ exports.up = function(knex: Knex): Promise<any> {
   });
 };
 
-exports.down = async function(knex: Knex): Promise<any> {
+exports.down = async function(knex: Knex) {
   // await knex.schema.raw(`
   //   ALTER TABLE "credentials" DROP CONSTRAINT "strategy_type";
   // `);
