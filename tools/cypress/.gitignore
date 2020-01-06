@@ -1,4 +1,6 @@
 *.png
 /cypress/videos
 /cypress/screenshots
+coverage/
+.nyc_output/
 

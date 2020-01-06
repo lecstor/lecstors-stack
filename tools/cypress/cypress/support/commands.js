@@ -23,3 +23,17 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+// capture coverage which would be lost by cy.visit() call.
+// https://github.com/cypress-io/cypress/issues/346#issuecomment-365220178
+Cypress.Commands.overwrite("visit", (originalFn, url, options) => {
+  cy.window().then(win => {
+    // if application code has been instrumented, the app iframe "window" has an object
+    const applicationSourceCoverage = win.__coverage__;
+
+    if (applicationSourceCoverage) {
+      cy.task("combineCoverage", JSON.stringify(applicationSourceCoverage));
+    }
+    originalFn(url, options);
+  });
+});
