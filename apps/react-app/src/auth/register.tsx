@@ -1,21 +1,19 @@
-import React, { FC } from "react";
+import React from "react";
 import { Redirect } from "react-router-dom";
 import useForm from "react-hook-form";
 import { useMutation } from "urql";
 import * as Yup from "yup";
 
 import {
-  Body,
   Button,
   ButtonLayout,
-  FieldLayout,
   FormLayout,
   Heading,
-  Input,
-  Label,
   Layout,
   SignInIcon
 } from "@lecstor/react-ui";
+
+import FormText from "../components/form-text";
 
 import { registerUser } from "./queries";
 
@@ -34,41 +32,6 @@ const validationSchema = Yup.object().shape({
     .max(100, "Sorry, but can you provide a shorter version or your surname?")
     .required("Required")
 });
-
-type Props = {
-  label: string;
-  error: { message?: string; type: string };
-  ref?: React.Ref<HTMLInputElement>;
-} & React.InputHTMLAttributes<HTMLInputElement>;
-
-const TextField: FC<Props> = React.forwardRef<HTMLInputElement, Props>(
-  ({ label, error, ...props }: Props, ref) => {
-    return (
-      <FieldLayout>
-        <Label>
-          <Body>{label}</Body>
-          <Input
-            {...props}
-            ref={ref}
-            aria-invalid={error ? "true" : "false"}
-            aria-describedby={`error-${props.name}-required error-${props.name}-min error-${props.name}-max error-${props.name}-email`}
-          />
-          {error && (
-            <div
-              className="error"
-              id={`error-${props.name}-${error.type}`}
-              data-testid={`${props["data-testid"]}-error`}
-            >
-              {error.message}
-            </div>
-          )}
-        </Label>
-      </FieldLayout>
-    );
-  }
-);
-
-TextField.displayName = "TextField";
 
 type FormData = {
   firstname: string;
@@ -102,7 +65,7 @@ const Register = () => {
       <FormLayout>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <TextField
+            <FormText
               name="firstname"
               type="text"
               label="First name"
@@ -113,7 +76,7 @@ const Register = () => {
             />
           </div>
           <div>
-            <TextField
+            <FormText
               name="surname"
               type="text"
               label="Surname"
@@ -124,7 +87,7 @@ const Register = () => {
             />
           </div>
           <div>
-            <TextField
+            <FormText
               name="email"
               type="text"
               label="Email"
@@ -144,4 +107,5 @@ const Register = () => {
     </Layout>
   );
 };
+
 export default Register;

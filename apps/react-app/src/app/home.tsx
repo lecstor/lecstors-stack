@@ -15,6 +15,7 @@ const Home = () => {
       <H1>Home</H1>
       <h2>Hi {auth.user.firstname}</h2>
       <Link to="/login">Login</Link>
+      <Link to="/profile">Profile</Link>
       {/* <Lorem /> */}
     </>
   );
