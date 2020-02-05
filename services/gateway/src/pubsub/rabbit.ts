@@ -19,8 +19,8 @@ export async function publish({
   message
 }: PublishArgs) {
   const channel = await getChannel(exchange);
+  console.log("pubsub: publish %s: '%s'", key, message);
   channel.publish(exchange, key, Buffer.from(JSON.stringify(message)));
-  return console.log(" [x] Sent %s: '%s'", key, message);
 }
 
 type ListenArgs = {
@@ -42,7 +42,7 @@ export async function listen({ exchange = "default", keys, fn }: ListenArgs) {
     q.queue,
     message => {
       const msg = JSON.parse(message.content.toString());
-      console.log(" [x] %s:'%s'", message.fields.routingKey, msg);
+      console.log("pubsub: consume %s:'%s'", message.fields.routingKey, msg);
       fn(msg);
     },
     { noAck: true }

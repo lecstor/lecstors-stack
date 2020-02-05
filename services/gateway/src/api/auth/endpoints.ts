@@ -2,7 +2,7 @@ import express from "express";
 import passport from "passport";
 
 import { fillError, userNotFound } from "../../errors";
-import { sendUserCreated } from "../../models/auth/tasks/user-created";
+import { userCreated } from "../../pubsub";
 
 import {
   createUser,
@@ -19,7 +19,7 @@ routes.post("/register", async (req, res, next) => {
   const { firstname, surname, email } = req.body;
   try {
     const user = await createUser({ firstname, surname, email });
-    await sendUserCreated(user);
+    await userCreated(user);
 
     req.logIn(user, err => {
       if (err) {

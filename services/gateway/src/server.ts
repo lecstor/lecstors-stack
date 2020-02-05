@@ -14,7 +14,7 @@ import cors from "cors";
 import sessionStore from "./express-session-store";
 import schema from "./graphql/schema";
 import { getContext } from "./graphql/context";
-import initUserTask from "./models/auth/tasks/user-created";
+import initNotifications from "./notifications";
 import passport from "passport";
 import { routes as authRoutes } from "./api/auth";
 
@@ -92,7 +92,7 @@ server.applyMiddleware({ app, path: "/graphql", cors: false });
 const httpServer = createServer(app);
 
 httpServer.listen({ port: 3000 }, (): void => {
-  initUserTask();
+  initNotifications();
   console.log(
     `\n🚀      GraphQL is now running on http://localhost:3000/graphql`
   );
