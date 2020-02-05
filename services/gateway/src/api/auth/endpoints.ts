@@ -51,13 +51,12 @@ routes.post("/verify-email", async (req, res, next) => {
 routes.post("/set-credentials", async (req, res, next) => {
   const { username, password } = req.body;
   try {
-    const credentials = setCredentials({
+    await setCredentials({
       userId: req.user.id,
       username,
       password
     });
     res.send({ ok: true });
-    await credentials;
   } catch (err) {
     next(err);
   }

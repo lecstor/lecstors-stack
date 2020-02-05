@@ -1,4 +1,4 @@
-# WIP! - not fully functional
+# WIP!
 
 # Lecstor's Stack
 
@@ -38,11 +38,7 @@ We can seed the database with a user too with..
 ```
 NODE_ENV=localhost yarn workspace @lecstor/gateway run db:seed
 ```
-
-You can find the username and password in the db.. the password isn't even
-being hashed yet.. shh.
-
-Ah, right, we're not validating the password either..
+username: `lecstor` password: `password` 😅
 
 ## Up and Running
 

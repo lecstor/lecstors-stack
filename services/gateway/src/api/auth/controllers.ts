@@ -59,7 +59,7 @@ export async function setCredentials({
   username: string;
   password: string;
 }) {
-  const salt = await bcrypt.genSalt(10);
+  const salt = await bcrypt.genSalt(15);
   const passwordHash = await bcrypt.hash(password, salt);
 
   return Credentials.query().insert({
