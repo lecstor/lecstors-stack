@@ -1,56 +1,50 @@
-import React from "react";
-import { useField, Formik, FormikProps, FormikValues } from "formik";
-import { useMutation } from "urql";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import useForm from "react-hook-form";
+import * as Yup from "yup";
 
 import {
   Body,
   Button,
   ButtonLayout,
-  FieldLayout,
   FormLayout,
   Heading,
-  Input,
-  Label,
   Layout,
   SignInIcon
 } from "@lecstor/react-ui";
 
-import { loginUser } from "./queries";
+import FormText from "../components/form-text";
 
-type Props = {
-  label: string;
-  name: string;
-  type: string;
-};
+import useLogIn from "./hooks/use-log-in";
 
-const TextField = ({ label, ...props }: Props) => {
-  const [field, meta] = useField(props);
-  return (
-    <FieldLayout>
-      <Label>
-        <Body>{label}</Body>
-        <Input {...field} {...props} />
-      </Label>
-      {meta.touched && meta.error ? (
-        <div className="error" data-testid={`${props["data-testid"]}-error`}>
-          {meta.error}
-        </div>
-      ) : null}
-    </FieldLayout>
-  );
+const validationSchema = Yup.object().shape({
+  username: Yup.string()
+    // .email("Invalid email address")
+    .required("Required"),
+  password: Yup.string()
+    .min(2, "Must be longer than 2 characters")
+    .max(100, "Sorry, but can you provide a shorter version of your password")
+});
+
+type FormData = {
+  username: string;
+  password: string;
 };
 
 const Login = () => {
-  const [res, executeMutation] = useMutation(loginUser);
+  const [res, setRes] = useState<{ error?: { message: string } }>({});
+  const apiLogIn = useLogIn();
+  const { register, handleSubmit, errors } = useForm<FormData>({
+    mode: "onBlur",
+    validationSchema
+  });
 
-  const formikProps = {
-    initialValues: { username: "", password: "" },
-    onSubmit: (values, actions) => {
-      executeMutation(values);
-      actions.setSubmitting(false);
-    }
-  };
+  const onSubmit = values =>
+    apiLogIn(values).then(err => {
+      if (err) {
+        setRes(err);
+      }
+    });
 
   return (
     <Layout pad="1">
@@ -58,32 +52,42 @@ const Login = () => {
       <Layout pad="2 1 1">
         <Body>
           or{" "}
-          <Link data-testid="link-register" to="/p/register">
+          <Link data-testid="link-register" to="/a/register">
             Register a new account
           </Link>
         </Body>
       </Layout>
-      {res.error && res.error.message}
+      <Layout pad="1">{res.error && res.error.message}</Layout>
 
       <FormLayout>
-        <Formik {...formikProps}>
-          {(props: FormikProps<FormikValues>) => (
-            <form onSubmit={props.handleSubmit}>
-              <div>
-                <TextField name="username" type="text" label="Username" />
-              </div>
-              <div>
-                <TextField name="password" type="password" label="Password" />
-              </div>
-              <ButtonLayout>
-                <Button type="submit" size="medium">
-                  Log In
-                  <SignInIcon />
-                </Button>
-              </ButtonLayout>
-            </form>
-          )}
-        </Formik>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <FormText
+              name="username"
+              type="text"
+              label="Username"
+              data-testid="login-input-username"
+              ref={register}
+              error={errors.username}
+            />
+          </div>
+          <div>
+            <FormText
+              name="password"
+              type="text"
+              label="Password"
+              data-testid="login-input-password"
+              ref={register}
+              error={errors.password}
+            />
+          </div>
+          <ButtonLayout>
+            <Button type="submit" size="medium" data-testid="login-button">
+              Log In
+              <SignInIcon />
+            </Button>
+          </ButtonLayout>
+        </form>
       </FormLayout>
     </Layout>
   );

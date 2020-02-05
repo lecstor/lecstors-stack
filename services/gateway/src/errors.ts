@@ -1,4 +1,3 @@
-
 export { ApolloError } from "apollo-server-express";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,15 +16,22 @@ export type ErrorInfo = {
   ```
 */
 
-export function userNotFound(info: ErrorInfo): ErrorResp {
+export function userNotFound(info?: ErrorInfo): ErrorResp {
   return ["User not found", "USER_NOT_FOUND", info];
 }
 
-export function emailExists(info: ErrorInfo): ErrorResp {
+export function emailExists(info?: ErrorInfo): ErrorResp {
   return ["Email already registered", "EMAIL_EXISTS", info];
 }
 
-export function wrongPassword(info: ErrorInfo): ErrorResp {
+export function wrongPassword(info?: ErrorInfo): ErrorResp {
   return ["Password is incorrect", "WRONG_PASSWORD", info];
 }
 
+export function fillError(error, data) {
+  const [message, code, info] = data;
+  error.message = message;
+  error.code = code;
+  error.info = info;
+  return error;
+}

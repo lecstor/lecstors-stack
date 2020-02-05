@@ -41,6 +41,12 @@ module.exports = api => {
       ],
       "@babel/preset-react"
     ],
-    plugins: ["react-hot-loader/babel", "@loadable/babel-plugin"]
+    plugins: [
+      "react-hot-loader/babel",
+      "@loadable/babel-plugin",
+      "@babel/plugin-proposal-nullish-coalescing-operator",
+      "@babel/plugin-proposal-optional-chaining"
+    ]
+  
   };
 };

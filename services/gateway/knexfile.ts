@@ -4,8 +4,6 @@ import config from "config";
 
 const knexConfig: Knex.Config = config.get("knex");
 
-console.log(knexConfig);
-
 module.exports = knexConfig;
 
 // export default knexConfig;

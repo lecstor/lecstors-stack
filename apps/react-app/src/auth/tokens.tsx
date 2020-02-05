@@ -1,13 +1,13 @@
 import React from "react";
 import { useQuery } from "urql";
 
-import useAuth from "./use-auth";
+import useAuth from "./hooks/use-auth";
 
 import { getTokens } from "./queries";
 
 const Tokens = () => {
-  const auth = useAuth();
-  console.log({ auth });
+  const { auth } = useAuth();
+
   const [res] = useQuery({
     query: getTokens,
     variables: { email: auth.user.emails[0] }

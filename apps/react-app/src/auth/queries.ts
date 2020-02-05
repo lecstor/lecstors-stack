@@ -39,14 +39,6 @@ export const registerUser = gql`
   }
 `;
 
-export const loginUser = gql`
-  mutation LoginUser($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      ${authProps}
-    }
-  }
-`;
-
 export const logoutUser = gql`
   mutation LogoutUser {
     logout {

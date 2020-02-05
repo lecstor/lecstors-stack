@@ -2,11 +2,16 @@
 
 describe("Register", () => {
   const { baseUrl } = Cypress.config();
+  const email = "e2e-register@example.com";
 
-  it("Visits the React App", () => {
+  beforeEach(() => {
+    cy.deleteUser(email);
+  });
+
+  it("Registers a new account", () => {
     cy.visit("/");
     cy.get("[data-testid=link-register]").click();
-    cy.url().should("eq", `${baseUrl}/p/register`);
+    cy.url().should("eq", `${baseUrl}/a/register`);
 
     cy.get('input[name="firstname"]')
       .type("F")
@@ -48,8 +53,9 @@ describe("Register", () => {
     cy.get("#error-email-undefined").should("contain", "Invalid email address");
 
     cy.get('input[name="email"]')
-      .type("red4@lecstor.com")
-      .should("have.value", "fred4@lecstor.com");
+      .clear()
+      .type(email)
+      .should("have.value", email);
 
     cy.get("#error-email-undefined").should("not.exist");
 
@@ -57,10 +63,5 @@ describe("Register", () => {
     cy.url().should("eq", `${baseUrl}/`);
     cy.get("h1").should("contain", "Home");
     cy.get("#root").should("contain", "Fred");
-
-    cy.contains("Profile").click();
-    cy.contains("Delete Profile").click();
-
-    cy.url().should("eq", `${baseUrl}/p/login`);
   });
 });

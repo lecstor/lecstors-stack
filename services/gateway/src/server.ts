@@ -15,7 +15,8 @@ import sessionStore from "./express-session-store";
 import schema from "./graphql/schema";
 import { getContext } from "./graphql/context";
 import initUserTask from "./models/auth/tasks/user-created";
-import passport from "./passport";
+import passport from "passport";
+import { routes as authRoutes } from "./api/auth";
 
 const app = express();
 const isProd = app.get("env") === "production";
@@ -39,6 +40,7 @@ if (isProd) {
 app.use(morgan("combined"));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(session(sessionOptions));
 app.use(
   "*",
@@ -50,6 +52,19 @@ app.use(
 app.use(compression());
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use("/auth", authRoutes);
+
+function errorHandler(err, req, res, next) {
+  if (res.headersSent) {
+    return next(err);
+  }
+  console.log(err);
+  res.status(401);
+  res.send({ error: { ...err, message: err.message } });
+}
+
+app.use(errorHandler);
 
 const server = new ApolloServer({
   schema,

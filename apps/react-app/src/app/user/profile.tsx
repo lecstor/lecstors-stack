@@ -1,23 +1,20 @@
 import React from "react";
-import { useMutation, useQuery } from "urql";
+import { useQuery } from "urql";
 
 import { Button, ButtonLayout } from "@lecstor/react-ui";
 
-import { deleteUser, logoutUser } from "../../auth/queries";
-import { currentUser, verifyEmail } from "./queries";
+import useDeleteAccount from "../../auth/hooks/use-delete-account";
+import useLogOut from "../../auth/hooks/use-log-out";
+import { currentUser } from "./queries";
 
 const Profile = () => {
-  const [userRes] = useQuery({ query: currentUser });
-  const [deleteRes, deleteUserMutation] = useMutation(deleteUser);
-  const [logoutRes, logoutUserMutation] = useMutation(logoutUser);
-  const [verifyRes, verifyMutation] = useMutation(verifyEmail);
+  const apiDeleteAccount = useDeleteAccount();
+  const apiLogOut = useLogOut();
 
-  const deleteOnClick = () => deleteUserMutation();
-  const logoutOnClick = () => logoutUserMutation();
-  const verifyOnClick = () =>
-    verifyMutation({
-      token: userRes.data.currentUser.emails[0].verificationTokens[0].id
-    });
+  const [userRes] = useQuery({ query: currentUser });
+
+  const deleteOnClick = () => apiDeleteAccount();
+  const logoutOnClick = () => apiLogOut();
 
   if (userRes.fetching) return null;
 
@@ -25,14 +22,8 @@ const Profile = () => {
     <>
       <h1>Profile</h1>
       <pre>{JSON.stringify(userRes, null, 2)}</pre>
-      {deleteRes.error && deleteRes.error.message}
-      {logoutRes.error && logoutRes.error.message}
-      {verifyRes.error && verifyRes.error.message}
       <ButtonLayout>
-        <Button onClick={verifyOnClick}>Verify Email</Button>
-      </ButtonLayout>
-      <ButtonLayout>
-        <Button onClick={deleteOnClick}>Delete Profile</Button>
+        <Button onClick={deleteOnClick}>Delete Account</Button>
       </ButtonLayout>
       <ButtonLayout>
         <Button onClick={logoutOnClick}>Log Out</Button>

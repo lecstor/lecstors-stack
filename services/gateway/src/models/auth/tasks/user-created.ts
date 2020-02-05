@@ -3,7 +3,6 @@ import { listen, publish } from "../../../rabbit";
 import EmailVerificationToken from "../../user/email-verification-token.model";
 
 export async function userCreated(user) {
-  // console.log(JSON.stringify({ user }, null, 2));
   console.log(`Sending invite to ${user.emails[0].email}`);
 
   const token = await EmailVerificationToken.query()

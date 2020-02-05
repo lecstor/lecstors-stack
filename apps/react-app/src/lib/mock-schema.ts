@@ -20,16 +20,8 @@ const typeDefs = `
   }
 `;
 
-const mocks = {
-  User() {
-    console.log("user mock");
-    return { id: "blah" };
-  }
-};
-
 export default function newMockSchema() {
   const schema = makeExecutableSchema({ typeDefs });
-  // addMockFunctionsToSchema({ schema, mocks });
   addMockFunctionsToSchema({ schema });
   return schema;
 }

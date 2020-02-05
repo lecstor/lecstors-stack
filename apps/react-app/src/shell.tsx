@@ -6,12 +6,14 @@ import loadable from "@loadable/component";
 
 import { ThemeProvider, GlobalStyle } from "@lecstor/react-ui";
 
-import { Provider, createClient } from "./lib/gql-client";
+import { Provider as UrqlProvider, createClient } from "./lib/gql-client";
 
-import { AuthProvider } from "./auth/context";
+import AuthProvider from "./auth/provider";
+import AuthGateway from "./auth/gateway";
 
 const Login = loadable(() => import("./auth/login"));
 const Register = loadable(() => import("./auth/register"));
+const VerifyEmail = loadable(() => import("./auth/verify-email"));
 
 const App = loadable(() => import("./app"));
 
@@ -22,16 +24,23 @@ const Shell = () => (
     <GlobalStyle />
     <ThemeProvider>
       <BrowserRouter>
-        <Provider value={client}>
+        <UrqlProvider value={client}>
           <GlobalStyle />
           <AuthProvider>
             <Switch>
-              <Route path="/p/login" component={Login} />
-              <Route path="/p/register" component={Register} />
-              <Route path="/" component={App} />
+              <Route path="/verify-email/:token" component={VerifyEmail} />
+              <Route>
+                <AuthGateway>
+                  <Switch>
+                    <Route path="/a/login" component={Login} />
+                    <Route path="/a/register" component={Register} />
+                    <Route path="/" component={App} />
+                  </Switch>
+                </AuthGateway>
+              </Route>
             </Switch>
           </AuthProvider>
-        </Provider>
+        </UrqlProvider>
       </BrowserRouter>
     </ThemeProvider>
   </>
