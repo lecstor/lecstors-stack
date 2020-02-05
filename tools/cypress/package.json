@@ -8,11 +8,8 @@
   },
   "devDependencies": {
     "@cypress/code-coverage": "^1.10.2",
-    "cypress": "^3.6.1",
+    "cypress": "^3.8.3",
     "istanbul-lib-coverage": "^2.0.5",
     "nyc": "^14.1.1"
-  },
-  "dependencies": {
-    "cypress": "3.8.1"
   }
 }

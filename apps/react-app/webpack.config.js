@@ -12,7 +12,12 @@ const devConfig = {
     historyApiFallback: true,
     allowedHosts: ["react-app"],
     proxy: {
-      "/graphql": "http://gateway:3000"
+      "/api": {
+        target: "http://gateway:3000",
+        pathRewrite: { "^/api": "" }
+      },
+      "/graphql": "http://gateway:3000",
+      "/user/verify-email": "http://gateway:3000"
     }
   }
 };

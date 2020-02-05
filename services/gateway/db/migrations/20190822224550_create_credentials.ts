@@ -6,9 +6,13 @@ exports.up = function(knex: Knex) {
 
     table.string("providerId").unique(); // provider id/username/token
     table.string("secret"); // password/2fa secret
-    table.uuid("userId").references("users.id");
     table.string("strategy"); // "local" | "fb" | "tw"
     table.unique(["userId", "strategy"]);
+    table
+      .uuid("userId")
+      .references("users.id")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
 
     /*
     In theory this would be better, but it's just a pita if you want to be

@@ -7,9 +7,9 @@ services:
       target: development
     depends_on:
       - postgres
+      - rabbitmq
     volumes:
       - ./services/gateway:/usr/src/services/gateway
-      - /usr/src/.yarn/unplugged
     ports: 
       - 3000:3000
   react-app:
@@ -24,6 +24,8 @@ services:
       - ./modules/react-ui:/usr/src/modules/react-ui
     ports: 
       - 4321:4321
+    environment:
+      - NODE_ENV=e2e
   postgres:
     image: "postgres:11"
     container_name: "postgres"
@@ -34,7 +36,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - dbdata:/var/lib/postgresql/data
+      - storage:/var/lib/postgresql/data
   rabbitmq:
     image: "rabbitmq:alpine"
     hostname: "rabbit"
@@ -46,17 +48,22 @@ services:
     volumes:
       - ./rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
   cypress:
-    image: "cypress/included:3.4.1"
+    build:
+      context: ./tools/cypress
     depends_on:
       - react-app
     environment:
       # pass base url with internal docker app url
       - CYPRESS_baseUrl=http://react-app:4321
+      # - CYPRESS_baseUrl=http://host.docker.internal:4321
       # - DEBUG=cypress:*
-
+      # - CI=0
     # share the current folder as volume to avoid copying
     working_dir: /e2e
     volumes:
       - ./tools/cypress:/e2e
+    # command: ["cypress", "run", "--headed"]
+    # command: ["./node_modules", ".bin", "cypress", "run"]
+
 volumes:
-  dbdata:
+  storage:

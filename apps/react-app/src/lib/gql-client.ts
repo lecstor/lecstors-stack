@@ -9,7 +9,7 @@ import {
 
 export const createClient = () =>
   createUrqlClient({
-    url: `/graphql`,
+    url: `/api/graphql`,
     // exchanges: [schemaExchange(newMockSchema())]
     // exchanges: [...defaultExchanges, debugExchange],
     fetchOptions: {

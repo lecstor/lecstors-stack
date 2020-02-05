@@ -57,21 +57,6 @@ export default function connectObjection(appSession: typeof session) {
       .insert({ id, userId, data })
       .then(() => fn.call(this))
       .catch(err => fn.call(this, err));
-
-    // .then(() => fn.call(this))
-    // .catch(console.log);
-
-    // const expireTime = this.getExpireTime(sess.cookie.maxAge);
-    // const query =
-    //   "INSERT INTO " +
-    //   this.quotedTable() +
-    //   " (sess, expire, sid) SELECT $1, to_timestamp($2), $3 ON CONFLICT (sid) DO UPDATE SET sess=$1, expire=to_timestamp($2) RETURNING sid";
-
-    // this.query(query, [sess, expireTime, sid], function(err) {
-    //   if (fn) {
-    //     fn.call(this, err);
-    //   }
-    // });
   };
 
   /**

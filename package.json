@@ -7,6 +7,8 @@
     "tools/*"
   ],
   "scripts": {
+    "setup": "NODE_ENV=localhost yarn workspace @lecstor/gateway run db:migrate && NODE_ENV=localhost yarn workspace @lecstor/gateway run db:seed",
+    "cypress-open": "yarn workspace @lecstor/cypress open",
     "nuke": "rm -r node_modules; for d in {apps,modules,services,tools}/*/node_modules; do echo $d; rm -r $d; done"
   },
   "dependencies": {},

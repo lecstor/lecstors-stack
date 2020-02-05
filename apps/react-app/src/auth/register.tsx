@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import useForm from "react-hook-form";
-import { useMutation } from "urql";
 import * as Yup from "yup";
+
+import useRegister from "./hooks/use-register";
 
 import {
   Button,
@@ -14,8 +15,6 @@ import {
 } from "@lecstor/react-ui";
 
 import FormText from "../components/form-text";
-
-import { registerUser } from "./queries";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -40,28 +39,29 @@ type FormData = {
 };
 
 const Register = () => {
-  const [res, executeMutation] = useMutation(registerUser);
-  const { register, handleSubmit, watch, errors } = useForm<FormData>({
+  const apiRegister = useRegister();
+  const [res, setRes] = useState();
+  const { register, handleSubmit, errors } = useForm<FormData>({
     mode: "onBlur",
     validationSchema
   });
 
-  console.log({ res, errors });
-
-  console.log(watch("firstname")); // watch input value by passing the name of it
-
   const onSubmit = values => {
-    executeMutation(values);
+    apiRegister(values).then(err => {
+      if (err) {
+        setRes(err);
+      }
+    });
   };
 
-  if (res.data && res.data.createUser) {
+  if (res?.data?.createUser) {
     return <Redirect to="/" />;
   }
 
   return (
     <Layout pad="1">
       <Heading>Register</Heading>
-      <Layout pad="1">{res.error && res.error.message}</Layout>
+      <Layout pad="1">{res?.error && res.error.message}</Layout>
       <FormLayout>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>

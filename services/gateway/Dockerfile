@@ -6,6 +6,8 @@ FROM node:12.10.0-alpine AS base
 
 WORKDIR /usr/src
 
+RUN apk --no-cache add --virtual builds-deps build-base python
+
 RUN mkdir services
 COPY services/gateway services/gateway
 COPY .yarn .yarn
