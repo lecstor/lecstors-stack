@@ -1,16 +1,37 @@
+import config from "@lecstor/config";
+
 import { listen } from "../pubsub/rabbit";
+
+import { sendMail } from "./sendgrid";
 
 import EmailVerificationToken from "../models/user/email-verification-token.model";
 
 export async function userCreated(user) {
-  const { id, email } = user.emails[0];
+  const { firstname, surname, emails } = user;
+  const { id, email } = emails[0];
 
   const token = await EmailVerificationToken.query()
     .insert({ emailId: id, status: "pending" })
     .catch(console.log);
 
   if (token) {
-    console.log(`TODO: send token ${token.id} to ${email}`);
+    const { scheme, host, port } = config.gateway.url;
+    const verificationUrl = `${scheme}://${host}${
+      port === 80 ? "" : `:${port}`
+    }/verify-email/${token.id}`;
+
+    if (config.notifications.sendEmailVerification) {
+      console.log(`DONE: send token ${token.id} to ${email}`);
+      sendMail({
+        to: `${firstname} ${surname} <${email}>`,
+        from: "Jason Galea <jason@lecstor.com>",
+        subject: "Welcome to Lecstor!",
+        // text: "and easy to do anywhere, even with Node.js",
+        html: `<a href="${verificationUrl}">Click to verify your email</a>`
+      });
+    } else {
+      console.log(`Verify email at: ${verificationUrl}`);
+    }
   }
   return token;
 }

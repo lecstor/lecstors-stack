@@ -1,7 +1,8 @@
 import Knex from "knex";
-import config from "config";
+import config from "@lecstor/config";
 
-const knexConfig: Knex.Config = config.get("knex");
+const knexConfig = config.knex;
+
 const connectConfig: Knex.Config = {
   ...knexConfig,
   migrations: {

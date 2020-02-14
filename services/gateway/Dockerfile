@@ -9,6 +9,7 @@ WORKDIR /usr/src
 RUN apk --no-cache add --virtual builds-deps build-base python
 
 RUN mkdir services
+COPY modules/config modules/config
 COPY services/gateway services/gateway
 COPY .yarn .yarn
 COPY ["package.json", "yarn.lock", ".yarnrc", "./"]

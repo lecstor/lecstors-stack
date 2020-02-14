@@ -8,47 +8,37 @@ import morgan from "morgan";
 import uuid from "uuid/v4";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
+import passport from "passport";
 
 import cors from "cors";
 
+import globalConfig from "@lecstor/config";
 import sessionStore from "./express-session-store";
 import schema from "./graphql/schema";
 import { getContext } from "./graphql/context";
 import initNotifications from "./notifications";
-import passport from "passport";
 import { routes as authRoutes } from "./api/auth";
 
+const config = globalConfig.gateway;
+
 const app = express();
-const isProd = app.get("env") === "production";
 
 const sessionOptions: SessionOptions = {
+  ...config.session,
   store: new (sessionStore(session))(),
   genid: () => uuid(),
-  secret: "cnjdubvksmfgsdfvfvdfgw",
-  cookie: {
-    secure: isProd,
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    httpOnly: true
-  },
-  resave: false,
-  saveUninitialized: false
+  cookie: config.session.cookie
 };
 
-if (isProd) {
-  app.set("trust proxy", 1); // trust first proxy
+if (config.trustProxy) {
+  app.set("trust proxy", config.trustProxy);
 }
 app.use(morgan("combined"));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session(sessionOptions));
-app.use(
-  "*",
-  cors({
-    origin: ["http://localhost:4321", "http://react-app:4321"],
-    credentials: true
-  })
-);
+app.use("*", cors(config.cors));
 app.use(compression());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -68,32 +58,36 @@ app.use(errorHandler);
 
 const server = new ApolloServer({
   schema,
-  debug: !isProd,
+  debug: config.graphql.debug,
   // validationRules: [depthLimit(7)],
   context: getContext,
 
   formatError: error => {
-    if (!isProd) {
+    if (config.graphql.debug) {
       console.log("Error", JSON.stringify(error));
     }
     return error;
   },
 
   formatResponse: response => {
-    if (!isProd) {
+    if (config.graphql.debug) {
       console.log("Response", JSON.stringify(response));
     }
     return response;
   }
 });
 
-server.applyMiddleware({ app, path: "/graphql", cors: false });
+server.applyMiddleware({
+  app,
+  path: config.graphql.path,
+  cors: config.graphql.cors
+});
 
 const httpServer = createServer(app);
 
-httpServer.listen({ port: 3000 }, (): void => {
+httpServer.listen({ port: config.url.port }, (): void => {
   initNotifications();
   console.log(
-    `\n🚀      GraphQL is now running on http://localhost:3000/graphql`
+    `\n🚀      GraphQL is now running on http://${config.url.host}:${config.url.port}/graphql`
   );
 });

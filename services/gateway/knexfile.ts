@@ -1,8 +1,6 @@
-import Knex from "knex";
+import config from "@lecstor/config";
 
-import config from "config";
-
-const knexConfig: Knex.Config = config.get("knex");
+const knexConfig = config.knex;
 
 module.exports = knexConfig;
 

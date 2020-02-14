@@ -65,5 +65,7 @@ passport.deserializeUser(async function(id: string, done) {
       );
       return done(err);
     });
-  return done(null, user);
+  // passport will clear the session if the user is false or null
+  // if it is undefined passport will throw an error preventing everything, even login, from working
+  return done(null, user || null);
 });
