@@ -27,16 +27,12 @@ docker-compose pull
 
 ```
 docker exec -it postgres psql -U postgres -c "create database lecstor"
-NODE_ENV=localhost yarn workspace @lecstor/gateway run db:migrate
+make db:migrate
 ```
-
-`NODE_ENV=localhost` tells the knex migration that we're running locally
-so the db host will be `localhost` rather than `postgres` which is what it
-would be if we were running in a docker container.
 
 We can seed the database with a user too with..
 ```
-NODE_ENV=localhost yarn workspace @lecstor/gateway run db:seed
+make db:seed
 ```
 username: `lecstor` password: `password` 😅
 
@@ -61,21 +57,16 @@ update automatically.
 ### Run the [Cypress](https://www.cypress.io/) end to end testing framework
 
 ```
-yarn workspace @lecstor/cypress open
+make cypress-open
 ```
 
-### Run production builds
-
-You can run production builds for testing by overriding the compose config.
-
-Open `docker-compose.override.yml.example` and save it as `docker-compose.override.yml`.
-
-Docker-compose will read this file and apply the overrides to the base config.
+### Run react-app with a production build
 
 ```
-dc stop gateway react-app
-dc up
+make dc-build-app-prod
+docker-compose restart react-app
 ```
+Visit http://localhost/
 
 ## Run the gateway service on your local machine
 

@@ -5,6 +5,8 @@ services:
       context: ./
       dockerfile: ./services/gateway/Dockerfile
       target: development
+    environment:
+      - NODE_ENV=development
     depends_on:
       - postgres
       - rabbitmq
@@ -13,19 +15,19 @@ services:
     ports: 
       - 3000:3000
   react-app:
+    image: "lecstor-react-app:${TARGET}"
     build:
       context: ./
       dockerfile: ./apps/react-app/Dockerfile
-      target: development
+      target: "${TARGET}"
     depends_on:
       - gateway
     volumes:
       - ./apps/react-app:/usr/src/apps/react-app
       - ./modules/react-ui:/usr/src/modules/react-ui
+      - ./modules/config:/usr/src/modules/config
     ports: 
       - 4321:4321
-    environment:
-      - NODE_ENV=e2e
   postgres:
     image: "postgres:11"
     container_name: "postgres"

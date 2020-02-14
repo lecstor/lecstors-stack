@@ -6,11 +6,6 @@
     "services/*",
     "tools/*"
   ],
-  "scripts": {
-    "setup": "NODE_ENV=localhost yarn workspace @lecstor/gateway run db:migrate && NODE_ENV=localhost yarn workspace @lecstor/gateway run db:seed",
-    "cypress-open": "yarn workspace @lecstor/cypress open",
-    "nuke": "rm -r node_modules; for d in {apps,modules,services,tools}/*/node_modules; do echo $d; rm -r $d; done"
-  },
   "dependencies": {},
   "devDependencies": {
     "@types/eslint-plugin-prettier": "2.2.0",
@@ -29,10 +24,5 @@
     "regenerator-runtime": "^0.13.3",
     "typescript": "^3.7.4",
     "wsrun": "^5.1.0"
-  },
-  "dependenciesMeta": {
-    "@storybook/core": {
-      "unplugged": true
-    }
   }
 }
