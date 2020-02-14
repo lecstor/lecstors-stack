@@ -1,0 +1,22 @@
+{
+  "name": "@lecstor/config",
+  "private": true,
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "update": "yarn build && yarn pack",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "copin": "^2.0.0",
+    "lodash": "^4.17.15"
+  }
+}
