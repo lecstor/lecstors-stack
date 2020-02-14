@@ -61,38 +61,20 @@ export const config: Config = {
       secure: false
     },
     trustProxy: 1, // https://expressjs.com/en/guide/behind-proxies.html
+    host: "gateway",
+    port: 3000,
     url: {
-      scheme: "http",
-      host: "gateway",
-      port: 3000,
-      internal: {
-        scheme: "http",
-        host: "gateway",
-        port: 3000
-      },
-      external: {
-        scheme: "http",
-        host: "localhost",
-        port: 3000
-      }
+      internal: "http://gateway:3000",
+      external: "http://localhost:3000"
     }
   },
   reactApp: {
     gateway: "internal",
+    host: "0.0.0.0",
+    port: 4321,
     url: {
-      scheme: "http",
-      host: "0.0.0.0",
-      port: 4321,
-      internal: {
-        scheme: "http",
-        host: "react-app",
-        port: 4321
-      },
-      external: {
-        scheme: "http",
-        host: "localhost",
-        port: 4321
-      }
+      external: "http://localhost:4321",
+      internal: "http://react-app:4321"
     }
   }
 };

@@ -85,9 +85,9 @@ server.applyMiddleware({
 
 const httpServer = createServer(app);
 
-httpServer.listen({ port: config.url.port }, (): void => {
+httpServer.listen({ port: config.port }, (): void => {
   initNotifications();
   console.log(
-    `\n🚀      GraphQL is now running on http://${config.url.host}:${config.url.port}/graphql`
+    `\n🚀 Gateway is now running at ${config.url.external} (internal: ${config.host}:${config.port})`
   );
 });

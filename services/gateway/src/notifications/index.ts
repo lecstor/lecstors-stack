@@ -15,10 +15,7 @@ export async function userCreated(user) {
     .catch(console.log);
 
   if (token) {
-    const { scheme, host, port } = config.gateway.url;
-    const verificationUrl = `${scheme}://${host}${
-      port === 80 ? "" : `:${port}`
-    }/verify-email/${token.id}`;
+    const verificationUrl = `${config.gateway.url.external}/verify-email/${token.id}`;
 
     if (config.notifications.sendEmailVerification) {
       console.log(`DONE: send token ${token.id} to ${email}`);

@@ -1,16 +1,5 @@
 import * as Knex from "knex";
 
-type Url = {
-  scheme: string;
-  port: number;
-  host: string;
-};
-
-type UrlConfig = Url & {
-  internal: Url;
-  external: Url;
-};
-
 export { RecursivePartial } from "../index";
 
 export type Config = {
@@ -54,10 +43,20 @@ export type Config = {
       secure: boolean;
     };
     trustProxy: boolean | string | string[] | number;
-    url: UrlConfig;
+    host: string;
+    port: number;
+    url: {
+      internal: string;
+      external: string;
+    };
   };
   reactApp: {
-    gateway: string;
-    url: UrlConfig;
+    gateway: "internal" | "external";
+    host: string;
+    port: number;
+    url: {
+      internal: string;
+      external: string;
+    };
   };
 };

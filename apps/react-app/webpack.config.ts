@@ -9,14 +9,11 @@ interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
 }
 
-const { host, port } = config.reactApp.url;
-const { host: internalHost } = config.reactApp.url.internal;
-const { host: externalHost } = config.reactApp.url.external;
+const { host, port } = config.reactApp;
+const { host: internalHost } = new URL(config.reactApp.url.internal);
+const { host: externalHost } = new URL(config.reactApp.url.external);
 
 const gatewayUrl = config.gateway.url[config.reactApp.gateway];
-
-const { scheme: gwScheme, host: gwHost, port: gwPort } = gatewayUrl;
-const target = `${gwScheme}://${gwHost}:${gwPort}`;
 
 const devConfig: Configuration = {
   mode: "development",
@@ -30,7 +27,7 @@ const devConfig: Configuration = {
     allowedHosts: [internalHost, externalHost],
     proxy: {
       "/api": {
-        target,
+        target: gatewayUrl,
         pathRewrite: { "^/api": "" }
       }
     }
