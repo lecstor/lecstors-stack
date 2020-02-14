@@ -7,6 +7,7 @@
     "baseUrl": "src",
     "paths": {
       "testing-library": ["../test/testing-library"]
-    }
+    },
+    "types": ["react", "jest"],
   }
 }

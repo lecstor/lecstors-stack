@@ -2,58 +2,48 @@
 # Builds a production image by default
 # set `target: development` for a build with src watch/auto restart
 # 
-FROM node:12.10.0-alpine AS base
+FROM node:current-alpine AS base
 
 WORKDIR /usr/src
 
-RUN mkdir apps
-COPY apps/react-app apps/react-app
-RUN mkdir modules
-COPY modules/react-ui modules/react-ui
+COPY apps/react-app/package.json apps/react-app/package.json
+COPY modules/config/package.json modules/config/package.json
+COPY modules/react-ui/package.json modules/react-ui/package.json
+
 COPY .yarn .yarn
 COPY ["package.json", "tsconfig.json", "yarn.lock", ".yarnrc", "./"]
 
-RUN yarn
+RUN yarn --offline --production
 
 #---
-# keep development image slim
-# The base stage deleted unused node modules from the cache but that doesn't
-# shed the weight of them.
-FROM node:12.10.0-alpine AS development
+FROM node:current-alpine AS development
 
-# ENV NODE_CONFIG_ENV development
-# ENV NODE_ENV development
+ENV NODE_ENV development
 
 WORKDIR /usr/src
 
-COPY --from=base /usr/src .
+COPY --from=base /usr/src/node_modules ./node_modules
+COPY ["package.json", "./"]
 
-CMD ["yarn", "workspace", "@lecstor/react-app", "run", "dev"]
+CMD ["yarn", "workspace", "@lecstor/react-app", "run", "dev-docker"]
 
-# #---
-# FROM development AS prodbuild
+#---
+FROM base AS prodbuild
 
-# WORKDIR /usr/src
+WORKDIR /usr/src
 
-# RUN yarn gateway:build
+COPY apps/react-app apps/react-app
+COPY modules/config modules/config
+COPY modules/react-ui modules/react-ui
 
-# # remove devDeps from package.json
-# RUN yarn remove -A $(echo 'console.log(Object.keys(require("./apps/gateway/package.json").devDependencies).join(" "))' | node -)
+RUN yarn workspace @lecstor/react-app run build
 
-# #---
-# FROM node:12.10.0-alpine AS production
+#---
+FROM nginx:alpine AS production
 
-# ENV NODE_CONFIG_ENV development
-# ENV NODE_ENV development
+RUN rm /etc/nginx/conf.d/default.conf
 
-# WORKDIR /usr/src
+COPY apps/react-app/nginx.conf /etc/nginx
 
-# COPY ["yarn.lock",".yarnrc",".yarnrc.yml","./"]
-# COPY --from=prodbuild /usr/src/apps/gateway/package.json .
-# COPY --from=prodbuild /usr/src/apps/gateway/config config
-# COPY --from=prodbuild /usr/src/apps/gateway/dist dist
-# COPY --from=prodbuild /usr/src/.yarn .yarn
-# RUN yarn install
-
-# CMD ["yarn", "gateway:start"]
+COPY --from=prodbuild /usr/src/apps/react-app/dist /usr/src
 
