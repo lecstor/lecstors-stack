@@ -1,0 +1,9 @@
+*
+!.yarn
+!.yarnrc
+!services/gateway
+!modules/config
+!package.json
+!tsconfig.json
+!yarn.lock
+**/node_modules/**/*

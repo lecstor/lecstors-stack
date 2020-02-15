@@ -8,21 +8,16 @@ WORKDIR /usr/src
 
 RUN apk --no-cache add --virtual builds-deps build-base python
 
-RUN mkdir services
 COPY modules/config modules/config
 COPY services/gateway services/gateway
 COPY .yarn .yarn
 COPY ["package.json", "yarn.lock", ".yarnrc", "./"]
 
-RUN yarn --frozen-lockfile
+RUN yarn  --offline --frozen-lockfile --production
 
 #---
-# keep development image slim
-# The base stage deleted unused node modules from the cache but that doesn't
-# shed the weight of them.
 FROM node:12.10.0-alpine AS development
 
-ENV NODE_CONFIG_ENV development
 ENV NODE_ENV development
 
 WORKDIR /usr/src
@@ -34,27 +29,29 @@ CMD ["yarn", "workspace", "@lecstor/gateway", "start:docker:dev"]
 #---
 FROM development AS prodbuild
 
+ENV NODE_ENV production
+
 WORKDIR /usr/src
 
 RUN yarn workspace @lecstor/gateway build
-
-# remove devDeps from package.json
-RUN yarn workspace @lecstor/gateway remove -A $(echo 'console.log(Object.keys(require("./services/gateway/package.json").devDependencies).join(" "))' | node -)
+RUN yarn workspace @lecstor/config build
+RUN yarn workspace @lecstor/gateway remove typescript ts-node ts-node-dev --frozen-lockfile --production 
 
 #---
 FROM node:12.10.0-alpine AS production
 
-ENV NODE_CONFIG_ENV development
-ENV NODE_ENV development
+ENV NODE_ENV production
 
 WORKDIR /usr/src
 
 COPY ["yarn.lock",".yarnrc","./"]
-COPY --from=prodbuild /usr/src/services/gateway/tsconfig.json .
 COPY --from=prodbuild /usr/src/services/gateway/package.json .
-COPY --from=prodbuild /usr/src/services/gateway/config config
 COPY --from=prodbuild /usr/src/services/gateway/dist dist
-COPY --from=prodbuild /usr/src/.yarn .yarn
-RUN yarn --production --frozen-lockfile
+
+# I'd prefer to have the config module installed for realz but I'm having trouble orchestrating that..
+COPY --from=prodbuild /usr/src/modules/config/package.json modules/config/package.json
+COPY --from=prodbuild /usr/src/modules/config/dist modules/config/dist
+
+COPY --from=prodbuild /usr/src/node_modules node_modules
 
 CMD ["yarn", "start:docker:dist"]

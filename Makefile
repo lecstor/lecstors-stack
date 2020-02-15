@@ -9,6 +9,22 @@ dc-build-app-prod:
 	COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
 	TARGET=production docker-compose build react-app
 
+dc-build-gateway-dev:
+	COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
+	docker-compose build gateway
+
+dc-build-gateway-prod:
+	COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
+	TARGET=production docker-compose build gateway
+
+dc-restart-gateway-dev:
+	docker-compose stop gateway
+	docker-compose up -d gateway
+
+dc-restart-gateway-prod:
+	docker-compose stop gateway
+	TARGET=production docker-compose up -d gateway
+
 #------------------------------------------------------------------------------
 # NPM Build
 
