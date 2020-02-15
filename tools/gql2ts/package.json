@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "generate": "graphql-codegen"
+    "generate": "graphql-codegen",
+    "test": "echo"
   },
   "dependencies": {
     "graphql": "^14.5.4"

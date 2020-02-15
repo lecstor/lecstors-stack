@@ -1,10 +1,12 @@
 {
   "name": "@lecstor/cypress",
   "version": "0.0.1",
+  "license": "MIT",
   "scripts": {
     "open": "cypress open",
     "run": "cypress run",
-    "report": "nyc report --reporter=json --reporter=lcov --reporter=text-summary"
+    "report": "nyc report --reporter=json --reporter=lcov --reporter=text-summary",
+    "test": "echo"
   },
   "devDependencies": {
     "@cypress/code-coverage": "^1.10.2",

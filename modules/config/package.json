@@ -10,7 +10,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "update": "yarn build && yarn pack",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "echo"
   },
   "devDependencies": {
     "typescript": "^3.7.5"

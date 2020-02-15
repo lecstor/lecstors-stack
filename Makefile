@@ -49,6 +49,10 @@ db-rollback:
 
 #------------------------------------------------------------------------------
 # Testing
+
+test:
+	yarn wsrun --skip-missing -c test
+	
 cypress-open:
 	yarn workspace @lecstor/cypress open
 

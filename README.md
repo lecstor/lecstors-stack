@@ -84,6 +84,7 @@ yarn workspace @lecstor/react-ui storybook
 ## Run Tests
 
 ```bash
+yarn workspaces run test
 yarn workspace @lecstor/react-ui test
 ```
 
@@ -92,5 +93,6 @@ yarn workspace @lecstor/react-ui test
 [wsrun](https://github.com/hfour/wsrun)
 
 ```
-yarn wsrun test
+make test
+yarn wsrun --skip-missing -c test
 ```

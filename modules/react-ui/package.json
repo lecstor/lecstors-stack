@@ -4,6 +4,7 @@
   "main": "dist/react-ui.cjs.js",
   "module": "dist/react-ui.esm.js",
   "types": "dist/index.d.ts",
+  "license": "MIT",
   "scripts": {
     "build": "rollup -c",
     "storybook": "start-storybook",

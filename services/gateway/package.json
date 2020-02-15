@@ -15,7 +15,8 @@
     "start:local:dev": "COPIN_CONFIG_BUILD=local NODE_ENV=development yarn run ts-node-dev --transpileOnly --no-notify ./src/server.ts",
     "start:local:dist": "COPIN_CONFIG_BUILD=local yarn node ./dist/src/server.js",
     "start": "yarn start:local:dev",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "test": "echo"
   },
   "dependencies": {
     "@lecstor/config": "1.0.0",
