@@ -9,6 +9,10 @@ dc-build-app-prod:
 	COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
 	TARGET=production docker-compose build react-app
 
+dc-restart-react-app-prod:
+	docker-compose stop react-app
+	TARGET=production docker-compose up -d react-app
+
 dc-build-gateway-dev:
 	COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
 	docker-compose build gateway

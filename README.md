@@ -54,42 +54,25 @@ Brings up:
 The gateway service and react app will both watch your code for changes and
 update automatically.
 
+## Run react-app on your host machine in dev mode
+
+```
+dc stop react-app
+yarn workspace @lecstor/react-app run dev
+```
+
+### Run react-app with a production build in docker
+
+```
+make dc-build-app-prod dc-restart-react-app-prod
+```
+Visit http://localhost/
+
 ### Run the [Cypress](https://www.cypress.io/) end to end testing framework
 
 ```
 make cypress-open
 ```
-
-### Run react-app with a production build
-
-```
-make dc-build-app-prod
-docker-compose restart react-app
-```
-Visit http://localhost/
-
-## Run the gateway service on your local machine
-
-```
-dc stop gateway
-```
-
-### in dev mode
-
-```
-yarn workspace @lecstor/gateway start:local:dev
-```
-
-### with a production build
-
-```
-yarn workspace @lecstor/gateway build
-yarn workspace @lecstor/gateway start:local:dist
-```
-
-start - dev build, localhost
-build:prod - prod build, localhost
-start:prod - prod build, localhost
 
 # React UI
 
