@@ -10,7 +10,7 @@
     "dev-docker": "TS_NODE_PROJECT=tsconfig.webpack.json webpack-dev-server --config ./webpack.config.ts",
     "start": "yarn dev",
     "build": "TS_NODE_PROJECT=tsconfig.webpack.json webpack-cli --env.production",
-    "build-serve": "tsc serve.ts --types node --esModuleInterop",
+    "serve-build": "tsc serve.ts --types node --esModuleInterop",
     "build-stats": "TS_NODE_PROJECT=tsconfig.webpack.json webpack-cli --env.production --profile --json > build-stats.json",
     "bundles": "yarn webpack-bundle-analyzer ./build-stats.json ./dist",
     "opt": "yarn build-stats && yarn bundles",
