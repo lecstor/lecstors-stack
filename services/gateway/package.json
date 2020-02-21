@@ -11,7 +11,7 @@
     "db:seed": "knex seed:run",
     "db:make-migration": "knex migrate:make -x ts",
     "start:docker:dev": "yarn run ts-node-dev --transpileOnly --no-notify ./src/server.ts",
-    "start:docker:dist": "yarn node ./dist/src/server.js",
+    "start:docker:prod": "yarn node ./src/server.js",
     "start:local:dev": "COPIN_CONFIG_BUILD=local NODE_ENV=development yarn run ts-node-dev --transpileOnly --no-notify ./src/server.ts",
     "start:local:dist": "COPIN_CONFIG_BUILD=local yarn node ./dist/src/server.js",
     "start": "yarn start:local:dev",

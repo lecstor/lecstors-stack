@@ -1,0 +1,44 @@
+version: "3.7"
+services:
+  gateway:
+    ports: 
+      - 3000:3000
+    volumes:
+      - ./services/gateway:/usr/src/services/gateway
+      - ./modules/config:/usr/src/modules/config
+  react-app:
+    ports: 
+      - 4321:4321
+    volumes:
+      - ./apps/react-app:/usr/src/apps/react-app
+      - ./modules/react-ui:/usr/src/modules/react-ui
+      - ./modules/config:/usr/src/modules/config
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: fooBar
+      POSTGRES_USER: lecstor
+      POSTGRES_DB: lecstor
+    ports:
+      - "5432:5432"
+  rabbitmq:
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    
+  # cypress:
+  #   build:
+  #     context: ./tools/cypress
+  #   depends_on:
+  #     - react-app
+  #   environment:
+  #     # pass base url with internal docker app url
+  #     - CYPRESS_baseUrl=http://react-app:4321
+  #     # - CYPRESS_baseUrl=http://host.docker.internal:4321
+  #     # - DEBUG=cypress:*
+  #     # - CI=0
+  #   # share the current folder as volume to avoid copying
+  #   working_dir: /e2e
+  #   volumes:
+  #     - ./tools/cypress:/e2e
+  #   # command: ["cypress", "run", "--headed"]
+  #   # command: ["./node_modules", ".bin", "cypress", "run"]

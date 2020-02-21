@@ -13,37 +13,15 @@
 git clone git@github.com:lecstor/lecstors-stack.git
 ```
 
-## Load up
+## Setup
 
 this *will* take a few minutes..
 
 ```
 cd lecstors-stack
 yarn
-docker-compose pull
+make dc-up
 ```
-
-## Create a database and add tables
-
-```
-docker exec -it postgres psql -U postgres -c "create database lecstor"
-make db:migrate
-```
-
-We can seed the database with a user too with..
-```
-make db:seed
-```
-username: `lecstor` password: `password` 😅
-
-## Up and Running
-
-The default docker-compose config will start a development-ready stack.
-
-```
-dc up
-```
-(with `alias dc='docker-compose'` in .bashrc / .bash_profile / .profile)
 
 Brings up:
 
@@ -67,6 +45,19 @@ yarn workspace @lecstor/react-app run dev
 make dc-build-app-prod dc-restart-react-app-prod
 ```
 Visit http://localhost/
+
+### Update Kubernetes config from docker-compose config
+```
+make k8s-config-prod
+```
+### Create namespace in Kubernetes
+```
+make k8s-create
+```
+### Deploy to Kubernetes
+```
+k8s-apply
+```
 
 ### Run the [Cypress](https://www.cypress.io/) end to end testing framework
 

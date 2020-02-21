@@ -1,35 +1,26 @@
 version: "3.7"
 services:
   gateway:
-    image: "lecstor-gateway:${TARGET}"
+    image: "lecstor-gateway:${TAG}"
     build:
       context: ./
       dockerfile: ./services/gateway/Dockerfile
-      target: "${TARGET}"
-    environment:
-      - NODE_ENV="${NODE_ENV}"
+      target: "${BUILD_TARGET}"
     depends_on:
       - postgres
       - rabbitmq
-    volumes:
-      - ./services/gateway:/usr/src/services/gateway
-      - ./modules/config:/usr/src/modules/config
-    ports: 
-      - 3000:3000
+    labels:
+      app: gateway
   react-app:
-    image: "lecstor-react-app:${TARGET}"
+    image: "lecstor-react-app:${TAG}"
     build:
       context: ./
       dockerfile: ./apps/react-app/Dockerfile
-      target: "${TARGET}"
+      target: "${BUILD_TARGET}"
     depends_on:
       - gateway
-    volumes:
-      - ./apps/react-app:/usr/src/apps/react-app
-      - ./modules/react-ui:/usr/src/modules/react-ui
-      - ./modules/config:/usr/src/modules/config
-    ports: 
-      - 4321:4321
+    labels:
+      kompose.service.type: LoadBalancer
   postgres:
     image: "postgres:11"
     container_name: "postgres"
@@ -40,34 +31,25 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - storage:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
   rabbitmq:
-    image: "rabbitmq:alpine"
+    build:
+      context: rabbitmq
     hostname: "rabbit"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
     labels:
       NAME: "rabbitmq"
     volumes:
-      - ./rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
-  cypress:
-    build:
-      context: ./tools/cypress
-    depends_on:
-      - react-app
-    environment:
-      # pass base url with internal docker app url
-      - CYPRESS_baseUrl=http://react-app:4321
-      # - CYPRESS_baseUrl=http://host.docker.internal:4321
-      # - DEBUG=cypress:*
-      # - CI=0
-    # share the current folder as volume to avoid copying
-    working_dir: /e2e
-    volumes:
-      - ./tools/cypress:/e2e
-    # command: ["cypress", "run", "--headed"]
-    # command: ["./node_modules", ".bin", "cypress", "run"]
-
+      - rabbitmq:/var/lib/rabbitmq
+      # image: "rabbitmq:alpine"
+    # hostname: "rabbit"
+    # ports:
+    #   - "15672:15672"
+    #   - "5672:5672"
+    # labels:
+    #   NAME: "rabbitmq"
+    # volumes:
+    #   - ./rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
 volumes:
-  storage:
+  postgres-data:
+  rabbitmq:
+    
