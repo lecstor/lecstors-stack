@@ -25,6 +25,10 @@ WORKDIR /usr/src
 COPY --from=base /usr/src/node_modules ./node_modules
 COPY ["package.json", "./"]
 
+COPY docker/wait-for.sh .
+
+ENTRYPOINT ["./wait-for.sh", "gateway:3000", "--"]
+
 CMD ["yarn", "workspace", "@lecstor/react-app", "run", "dev-docker"]
 
 #---
@@ -47,3 +51,8 @@ COPY apps/react-app/nginx.conf /etc/nginx
 
 COPY --from=prodbuild /usr/src/apps/react-app/dist /usr/src
 
+COPY docker/wait-for.sh .
+
+ENTRYPOINT ["./wait-for.sh", "gateway:3000", "--"]
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,6 +1,7 @@
 *
 !.yarn
 !.yarnrc
+!docker/
 !apps/react-app
 !modules/config
 !modules/react-ui

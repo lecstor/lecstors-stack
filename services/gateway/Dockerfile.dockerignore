@@ -1,9 +1,10 @@
 *
 !.yarn
 !.yarnrc
-!services/gateway
+!docker/
 !modules/config
 !package.json
+!services/gateway
 !tsconfig.json
 !yarn.lock
 **/node_modules/**/*

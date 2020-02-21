@@ -23,4 +23,6 @@ RUN echo  " node version:    $(node -v) \n" \
   "debian version:  $(cat /etc/debian_version) \n" \
   "user:            $(whoami) \n"
 
-ENTRYPOINT ["npx", "cypress", "run"]
+COPY docker/wait-for.sh .
+
+ENTRYPOINT ["./wait-for.sh", "react-app:80", "--", "npx", "cypress", "run"]
