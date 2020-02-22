@@ -40,6 +40,8 @@ COPY apps/react-app apps/react-app
 COPY modules/config modules/config
 COPY modules/react-ui modules/react-ui
 
+COPY ["package.json", "./"]
+
 RUN yarn workspace @lecstor/react-app run build
 
 #---

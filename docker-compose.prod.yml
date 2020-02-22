@@ -2,7 +2,7 @@ version: "3.7"
 services:
   react-app:
     ports: 
-      - 80:4321
+      - 80:80
   postgres:
     environment:
       POSTGRES_PASSWORD: fooBar

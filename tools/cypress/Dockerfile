@@ -1,5 +1,7 @@
 FROM cypress/browsers:node12.6.0-chrome77
 
+RUN apt-get update && apt-get -y install netcat
+
 # avoid too many progress messages
 # https://github.com/cypress-io/cypress/issues/1243
 ENV CI=1
@@ -9,7 +11,7 @@ RUN echo "whoami: $(whoami)"
 RUN npm config -g set user $(whoami)
 # RUN npm install -g "cypress@${CYPRESS_VERSION}"
 # RUN cypress verify
-COPY package.json .
+COPY tools/cypress/package.json .
 RUN npm i
 RUN npx cypress verify
 
@@ -25,4 +27,4 @@ RUN echo  " node version:    $(node -v) \n" \
 
 COPY docker/wait-for.sh .
 
-ENTRYPOINT ["./wait-for.sh", "react-app:80", "--", "npx", "cypress", "run"]
+ENTRYPOINT ["../wait-for.sh", "react-app:4321", "--", "npx", "cypress", "run"]

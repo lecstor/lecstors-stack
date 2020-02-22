@@ -10,10 +10,17 @@ interface Configuration extends WebpackConfiguration {
 }
 
 const { host, port } = config.reactApp;
-const { host: internalHost } = new URL(config.reactApp.url.internal);
-const { host: externalHost } = new URL(config.reactApp.url.external);
+const { hostname: internalHost } = new URL(config.reactApp.url.internal);
+const { hostname: externalHost } = new URL(config.reactApp.url.external);
 
 const gatewayUrl = config.gateway.url[config.reactApp.gateway];
+
+console.log("webpack dev server", {
+  allowedHosts: [internalHost, externalHost],
+  gatewayUrl
+});
+
+// DEBUG='express:*'
 
 const devConfig: Configuration = {
   mode: "development",

@@ -25,20 +25,28 @@ services:
       - "15672:15672"
       - "5672:5672"
     
-  # cypress:
-  #   build:
-  #     context: ./tools/cypress
-  #   depends_on:
-  #     - react-app
-  #   environment:
-  #     # pass base url with internal docker app url
-  #     - CYPRESS_baseUrl=http://react-app:4321
-  #     # - CYPRESS_baseUrl=http://host.docker.internal:4321
-  #     # - DEBUG=cypress:*
-  #     # - CI=0
-  #   # share the current folder as volume to avoid copying
-  #   working_dir: /e2e
-  #   volumes:
-  #     - ./tools/cypress:/e2e
-  #   # command: ["cypress", "run", "--headed"]
-  #   # command: ["./node_modules", ".bin", "cypress", "run"]
+  cypress:
+    build:
+      context: ./
+      dockerfile: ./tools/cypress/Dockerfile
+    depends_on:
+      - react-app
+    environment:
+      # pass base url with internal docker app url
+      - CYPRESS_baseUrl=http://react-app:4321
+      # - CYPRESS_baseUrl=http://host.docker.internal:4321
+      # - DEBUG=cypress:*
+      # - CI=0
+    # share the current folder as volume to avoid copying
+    working_dir: /e2e
+    volumes:
+      - ./tools/cypress:/e2e
+    # command: ["cypress", "run", "--headed"]
+    # command: ["./node_modules", ".bin", "cypress", "run"]
+    # entrypoint:
+    #   - "../wait-for.sh"
+    #   - "react-app:4321"
+    #   - "--"
+    #   - "npx"
+    #   - "cypress"
+    #   - "run"
