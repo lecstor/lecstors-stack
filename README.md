@@ -19,8 +19,8 @@ this *will* take a few minutes..
 
 ```
 cd lecstors-stack
-yarn
-make dc-up
+source ./lecstors-stack.sh
+yarn && lecstors-stack logup
 ```
 
 Brings up:
@@ -35,14 +35,15 @@ update automatically.
 ## Run react-app on your host machine in dev mode
 
 ```
-dc stop react-app
+lecstors-stack stop react-app
 yarn workspace @lecstor/react-app run dev
 ```
 
 ### Run react-app with a production build in docker
 
 ```
-make dc-build-app-prod dc-restart-react-app-prod
+lecstors-stack prod build react-app
+lecstors-stack prod recreate react-app
 ```
 Visit http://localhost/
 
