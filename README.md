@@ -1,4 +1,4 @@
-![.github/workflows/main.yaml](https://github.com/lecstor/lecstors-stack/workflows/Some%20Tests/badge.svg)
+![Some tests](https://github.com/lecstor/lecstors-stack/workflows/Some%20Tests/badge.svg)
 
 # WIP!
 
