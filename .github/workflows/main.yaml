@@ -1,3 +1,4 @@
+name: Some tests
 on:
   push:
     branches:
