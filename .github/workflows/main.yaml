@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+      - actions-test
+    # pull_request:
+    #   branches:
+    #     - master
+jobs:
+
+  build:
+    name: Build, push, and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+          ref: actions-test
+
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      
+      - name: Install
+        run: yarn install
+
+      - name: Test
+        run: |
+          yarn workspace @lecstor/react-ui run test
+          yarn workspace @lecstor/react-app run test
