@@ -34,7 +34,9 @@ Brings up:
 The gateway service and react app will both watch your code for changes and
 update automatically.
 
-## Run react-app on your host machine in dev mode
+## Options
+
+### Run react-app on your host machine in dev mode
 
 ```
 lecstors-stack stop react-app
@@ -49,23 +51,40 @@ lecstors-stack prod recreate react-app
 ```
 Visit http://localhost/
 
+## Kubernetes
+
+Deploy the stack to Kubernetes in Docker Desktop
+
 ### Update Kubernetes config from docker-compose config
+
 ```
-make k8s-config-prod
+lecstors-stack k8s config
 ```
+
 ### Create namespace in Kubernetes
+
 ```
-make k8s-create
+lecstors-stack k8s create
 ```
+
 ### Deploy to Kubernetes
+
 ```
-k8s-apply
+lecstors-stack k8s apply
 ```
 
 ### Run the [Cypress](https://www.cypress.io/) end to end testing framework
 
+#### In the UI:
+
 ```
-make cypress-open
+lecstors-stack cypress open
+```
+
+#### or in the console:
+
+```
+lecstors-stack cypress run
 ```
 
 # React UI
