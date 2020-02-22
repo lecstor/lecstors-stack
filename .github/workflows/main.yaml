@@ -25,6 +25,8 @@ jobs:
         run: |
           yarn policies set-version
           yarn install --frozen-lockfile
+          yarn workspace @lecstor/react-ui build
+          yarn workspace @lecstor/config build
 
       - name: Test
         run: |
