@@ -11,6 +11,8 @@ services:
       - rabbitmq
     labels:
       app: gateway
+    environment:
+      - NODE_ENV
   react-app:
     image: "lecstor-react-app:${TAG}"
     build:
@@ -21,6 +23,8 @@ services:
       - gateway
     labels:
       kompose.service.type: LoadBalancer
+    environment:
+      - NODE_ENV
   postgres:
     image: "postgres:11"
     container_name: "postgres"
@@ -28,8 +32,6 @@ services:
       POSTGRES_PASSWORD: fooBar
       POSTGRES_USER: lecstor
       POSTGRES_DB: lecstor
-    ports:
-      - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
   rabbitmq:
@@ -40,15 +42,6 @@ services:
       NAME: "rabbitmq"
     volumes:
       - rabbitmq:/var/lib/rabbitmq
-      # image: "rabbitmq:alpine"
-    # hostname: "rabbit"
-    # ports:
-    #   - "15672:15672"
-    #   - "5672:5672"
-    # labels:
-    #   NAME: "rabbitmq"
-    # volumes:
-    #   - ./rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
 volumes:
   postgres-data:
   rabbitmq:

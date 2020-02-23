@@ -52,6 +52,8 @@ Cypress.Commands.add("unregisterUser", () => {
 Cypress.Commands.add(
   "registerUser",
   ({ email, firstname = "Fred", surname = "Flintstone" }) => {
+    cy.visit("/");
+    cy.get("h1").should("contain", "Login");
     cy.request({
       url: "/api/auth/register",
       method: "POST",

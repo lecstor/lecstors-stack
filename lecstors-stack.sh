@@ -97,15 +97,42 @@ END
 
   dc-raw () {
     echo "dc-raw" "$@"
-    local mode="development"
+    local mode="dev"
+    local build_target="development"
+    local node_env="development"
     if [ "$1" = "prod" ]
     then
-      mode="production"
+      mode="prod"
+      build_target="production"
+      node_env="production"
     fi
+
+    shift $((1)) # remove mode arg
+
+    local OPTIND=1
+
+    while getopts ":tp" opt; do
+      echo "getopts case ${opt}"
+      case ${opt} in
+        t )
+          node_env="test"
+          ;;
+        p )
+          node_env="production"
+          ;;
+        \? ) echo "Usage: cmd [-t]"
+          ;;
+      esac
+    done
+
+    shift $((OPTIND - 1)) # remove any opts
+    
+    # echo "${mode} - ${build_target} - ${node_env} ${*}" 
+
     COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
-    COMPOSE_FILE=docker-compose.yml:docker-compose."$1".yml \
-    BUILD_TARGET="${mode}" NODE_ENV="${mode}" TAG="${mode}" \
-    docker-compose "${@:2}"
+    COMPOSE_FILE=docker-compose.yml:docker-compose."${mode}".yml \
+    BUILD_TARGET="${build_target}" NODE_ENV="${node_env}" TAG="${build_target}-${node_env}" \
+    docker-compose "${@}"
   }
 
   kubernetes () {
@@ -118,6 +145,8 @@ END
         ;;
       apply)
         kubectl apply -n "${3-lecstors-prod}" -R -f kubernetes/production
+        ;;
+      \? ) echo "Usage: k8s config | create | apply"
         ;;
       # *)
       #   dc-raw "$@"
@@ -159,6 +188,13 @@ END
       recreate)
         dc-raw "$1" up -d --force-recreate --no-deps "${@:3}" \
         && dc-raw "$1" logs -f --tail=0 "${@:3}"
+        ;;
+      remove-node_modules)
+        rm -r node_modules
+        for d in {apps,modules,services,tools}/*/node_modules;
+          do echo "$d"
+          rm -r "$d"
+        done
         ;;
       stopup)
         dc-raw "$1" stop "${@:3}" \
@@ -212,3 +248,5 @@ END
   fi
   dc-command "${mode}" "${args[@]}"
 }
+
+"$@"

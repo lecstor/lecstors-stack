@@ -1,5 +1,6 @@
 import express from "express";
 import passport from "passport";
+import retry from "async-retry";
 
 import { fillError, userNotFound } from "../../errors";
 import { userCreated } from "../../pubsub";
@@ -96,7 +97,22 @@ routes.get("/user", (req, res) => {
 
 if (["development", "test"].includes(process.env.NODE_ENV)) {
   routes.get("/email-verify-tokens", async (req, res) => {
-    const tokens = await getEmailVerifyTokens(req.body.email);
+    const tokens = await retry(
+      async () => {
+        // if anything throws, we retry
+        const tokens = await getEmailVerifyTokens(req.body.email);
+        console.log({ tokens });
+
+        if (!tokens || tokens.length === 0) {
+          throw new Error("no tokens");
+        }
+
+        return tokens;
+      },
+      {
+        retries: 5
+      }
+    );
     res.send({ tokens });
   });
 

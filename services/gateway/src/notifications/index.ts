@@ -33,7 +33,8 @@ export async function userCreated(user) {
   return token;
 }
 
-export default async function init() {
-  await listen({ keys: ["user.created"], fn: userCreated });
-  console.log("pubsub: Notifications subscribed to user.created");
+export default function init() {
+  return listen({ keys: ["user.created"], fn: userCreated })
+    .then(() => console.log("pubsub: Notifications subscribed to user.created"))
+    .catch(console.log);
 }

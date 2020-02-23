@@ -7,13 +7,13 @@ describe("Verify Email", () => {
     cy.deleteUser(email);
   });
 
-  it("Verifies email while logged in", () => {
+  it("while logged in", () => {
     cy.registerUser({ email });
     cy.verifyEmail({ email });
     cy.get("[data-testid=is-verified]").contains("verified: yes");
   });
 
-  it("Verifies email while logged out", () => {
+  it("while logged out", () => {
     cy.registerUser({ email });
     cy.logoutUser();
     cy.verifyEmail({ email });

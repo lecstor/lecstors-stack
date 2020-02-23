@@ -32,10 +32,12 @@ describe("Login", () => {
     cy.logoutUser();
 
     cy.get('input[name="username"]')
+      .should("have.value", "")
       .type(username)
       .should("have.value", username);
 
     cy.get('input[name="password"]')
+      .should("have.value", "")
       .type("fooBar")
       .should("have.value", "fooBar");
 
@@ -47,13 +49,17 @@ describe("Login", () => {
   it("logs in", () => {
     cy.registerUser({ email });
     cy.setCredentials({ username, password });
+
     cy.logoutUser();
+    cy.visit("/");
 
     cy.get('input[name="username"]')
+      .should("have.value", "")
       .type(username)
       .should("have.value", username);
 
     cy.get('input[name="password"]')
+      .should("have.value", "")
       .type(password)
       .should("have.value", password);
 
