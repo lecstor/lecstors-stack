@@ -85,8 +85,9 @@ server.applyMiddleware({
 
 const httpServer = createServer(app);
 
+initNotifications();
+
 httpServer.listen({ port: config.port }, (): void => {
-  initNotifications();
   console.log(
     `\n🚀 Gateway is now running at ${config.url.external} (internal: ${config.host}:${config.port})`
   );

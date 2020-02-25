@@ -5,8 +5,7 @@ import Button from "./button";
 
 describe("Button", () => {
   it("renders without crashing", () => {
-    const { getByText, getByRole, debug } = render(<Button>Hello</Button>);
-    debug();
+    const { getByText, getByRole } = render(<Button>Hello</Button>);
     expect(getByText("Hello")).toBeDefined();
     expect(getByRole("button")).toHaveStyleRule("background-color", "#145ca4");
   });

@@ -1,4 +1,4 @@
-![Some tests](https://github.com/lecstor/lecstors-stack/workflows/Some%20tests/badge.svg)
+![Some tests](https://github.com/lecstor/lecstors-stack/workflows/Build/badge.svg)
 
 # WIP!
 

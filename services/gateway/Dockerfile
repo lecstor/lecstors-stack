@@ -49,8 +49,6 @@ ENV NODE_ENV production
 
 WORKDIR /usr/src
 
-COPY ["yarn.lock",".yarnrc","./"]
-
 COPY --from=prodbuild /usr/src/package.json .
 
 # gateway packge for the scripts
@@ -67,6 +65,6 @@ COPY --from=prodbuild /usr/src/node_modules node_modules
 COPY docker/wait-for.sh .
 COPY services/gateway/docker-entrypoint.sh .
 
-ENTRYPOINT ["./wait-for.sh", "postgres:5432", "--", "./docker-entrypoint.sh"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
 
 CMD ["yarn", "workspace", "@lecstor/gateway", "run", "start:docker:prod"]

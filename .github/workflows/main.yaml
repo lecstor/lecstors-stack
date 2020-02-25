@@ -1,4 +1,4 @@
-name: Some tests
+name: Build
 on:
   push:
     branches:
@@ -8,25 +8,69 @@ on:
       - master
 jobs:
   build:
-    name: Build, push, and deploy
+    name: Test the stack
     runs-on: ubuntu-latest
+    env:
+      # prevents extra Cypress installation progress messages
+      CI: 1
+      # avoid warnings like "tput: No value for $TERM and no -T specified"
+      TERM: xterm
     steps:
-      - name: Checkout master
+      - name: checkout master
         uses: actions/checkout@v2
 
-      - name: Set up Node
+      - name: set up Node
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      
-      - name: Install
+
+      # - uses: actions/cache@v1
+      #   id: yarn-offline-mirror # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      #   with:
+      #     path: .yarn/offline-mirror
+      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-yarn-
+
+      - name: install
         run: |
           yarn policies set-version
           yarn install --frozen-lockfile
           yarn workspace @lecstor/react-ui build
           yarn workspace @lecstor/config build
 
-      - name: Test
+      - name: '"unit" tests'
         run: |
           yarn workspace @lecstor/react-ui run test
           yarn workspace @lecstor/react-app run test
+
+      - name: bring up the app
+        run: |
+          ./lecstors-stack.sh lecstors-stack prod -t up -d react-app gateway
+          ./docker/wait-for.sh localhost:80
+
+      - name: e2e tests
+        env:
+          CYPRESS_baseUrl: http://localhost
+        run: ./lecstors-stack.sh lecstors-stack cypress run
+
+      - name: Dump docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v1
+        # with:
+        #   images: 'gateway'
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: screenshots
+          path: tools/cypress/cypress/screenshots
+
+      # - name: e2e tests
+      #   uses: cypress-io/github-action@v1
+      #   with:
+      #     install: false
+      #     start: "../../lecstors-stack.sh lecstors-stack prod up react-app"
+      #     working-directory: tools/cypress
+      #     wait-on: 'http://localhost:80'

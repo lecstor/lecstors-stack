@@ -21,6 +21,8 @@ describe("Set Credentials", () => {
 
     cy.logoutUser();
     cy.loginUser({ username, password: "password" });
+    cy.visit("/");
+
     cy.get("h1").should("contain", "Home");
   });
 });
