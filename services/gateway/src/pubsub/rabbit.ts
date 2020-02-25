@@ -1,11 +1,15 @@
-import amqp from "amqplib";
+import amqp from "amqp-connection-manager";
 
-async function getChannel(exchange) {
-  const connection = await amqp.connect("amqp://rabbitmq");
-  const channel = await connection.createChannel();
-  channel.assertExchange(exchange, "topic", { durable: false });
-  return channel;
-}
+const connection = amqp.connect("amqp://rabbitmq");
+
+const EXCHANGE = "default";
+
+// Ask the connection manager for a ChannelWrapper.  Specify a setup function to
+// run every time we reconnect to the broker.
+const publishChannel = connection.createChannel({
+  json: true,
+  setup: channel => channel.assertExchange(EXCHANGE, "topic", { durable: true })
+});
 
 type PublishArgs = {
   exchange?: string;
@@ -18,9 +22,12 @@ export async function publish({
   key,
   message
 }: PublishArgs) {
-  const channel = await getChannel(exchange);
   console.log("pubsub: publish %s: '%s'", key, message);
-  channel.publish(exchange, key, Buffer.from(JSON.stringify(message)));
+  publishChannel.publish(exchange, key, message).catch(err => {
+    console.log("Message was rejected:", err.stack);
+    publishChannel.close();
+    connection.close();
+  });
 }
 
 type ListenArgs = {
@@ -30,23 +37,30 @@ type ListenArgs = {
 };
 
 export async function listen({ exchange = "default", keys, fn }: ListenArgs) {
-  const channel = await getChannel(exchange);
-
-  const q = await channel.assertQueue("", { exclusive: true });
-
-  keys.forEach(key => {
-    channel.bindQueue(q.queue, exchange, key);
-  });
-
-  channel.consume(
-    q.queue,
-    message => {
-      const msg = JSON.parse(message.content.toString());
-      console.log("pubsub: consume %s:'%s'", message.fields.routingKey, msg);
-      fn(msg);
-    },
-    { noAck: true }
-  );
-
-  return channel;
+  return connection
+    .createChannel({
+      setup: channel =>
+        // `channel` here is a regular amqplib `ConfirmChannel`.
+        Promise.all([
+          channel.assertQueue("", { exclusive: true, autoDelete: true }),
+          channel.assertExchange(exchange, "topic"),
+          channel.prefetch(1),
+          ...keys.map(key => channel.bindQueue("", exchange, key)),
+          channel.consume(
+            "",
+            message => {
+              const msg = JSON.parse(message.content.toString());
+              console.log(
+                "pubsub: consume %s:'%s'",
+                message.fields.routingKey,
+                msg
+              );
+              fn(msg);
+            },
+            { noAck: true }
+          )
+        ])
+    })
+    .waitForConnect()
+    .then(() => console.log("Listening for messages"));
 }

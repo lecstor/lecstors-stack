@@ -101,7 +101,6 @@ if (["development", "test"].includes(process.env.NODE_ENV)) {
       async () => {
         // if anything throws, we retry
         const tokens = await getEmailVerifyTokens(req.body.email);
-        console.log({ tokens });
 
         if (!tokens || tokens.length === 0) {
           throw new Error("no tokens");
