@@ -1,0 +1,14 @@
+*
+!apps/react-app
+!modules/config
+!modules/react-ui
+!services/gateway
+
+!.yarn
+!.yarnrc
+!docker/
+!package.json
+!tsconfig.json
+!yarn.lock
+
+**/node_modules/**/*

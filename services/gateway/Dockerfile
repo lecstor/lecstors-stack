@@ -1,20 +1,9 @@
 #
+# requires the base image
+#
 # Builds a production image by default
 # set `target: development` for a build with src watch/auto restart
 # 
-FROM node:12.10.0-alpine AS base
-
-WORKDIR /usr/src
-
-RUN apk --no-cache add --virtual builds-deps build-base python
-
-COPY modules/config modules/config
-COPY services/gateway services/gateway
-COPY .yarn .yarn
-COPY ["package.json", "yarn.lock", ".yarnrc", "./"]
-
-RUN yarn  --offline --frozen-lockfile --production
-
 #---
 FROM node:12.10.0-alpine AS development
 
@@ -22,12 +11,14 @@ ENV NODE_ENV development
 
 WORKDIR /usr/src
 
-COPY --from=base /usr/src .
+COPY --from=base /usr/src/node_modules node_modules
+COPY --from=base ["/usr/src/package.json", "/usr/src/yarn.lock", "/usr/src/.yarnrc", "./"]
+COPY --from=base /usr/src/wait-for.sh .
 
-COPY docker/wait-for.sh .
-COPY services/gateway/docker-entrypoint.sh .
+COPY  modules/config modules/config
+COPY  services/gateway services/gateway
 
-ENTRYPOINT ["./wait-for.sh", "postgres:5432", "--", "./docker-entrypoint.sh"]
+ENTRYPOINT ["./wait-for.sh", "postgres:5432", "--", "./services/gateway/docker-entrypoint.sh"]
 
 CMD ["yarn", "workspace", "@lecstor/gateway", "start:docker:dev"]
 
@@ -62,9 +53,10 @@ COPY --from=prodbuild /usr/src/modules/config/dist modules/config/dist
 
 COPY --from=prodbuild /usr/src/node_modules node_modules
 
-COPY docker/wait-for.sh .
-COPY services/gateway/docker-entrypoint.sh .
+COPY --from=prodbuild /usr/src/wait-for.sh .
+COPY --from=prodbuild /usr/src/services/gateway/docker-entrypoint.sh .
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
 
 CMD ["yarn", "workspace", "@lecstor/gateway", "run", "start:docker:prod"]
+

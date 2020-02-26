@@ -96,7 +96,6 @@ END
   }
 
   dc-raw () {
-    echo "dc-raw" "$@"
     local mode="dev"
     local build_target="development"
     local node_env="development"
@@ -112,7 +111,6 @@ END
     local OPTIND=1
 
     while getopts ":tp" opt; do
-      echo "getopts case ${opt}"
       case ${opt} in
         t )
           node_env="test"
@@ -127,8 +125,13 @@ END
 
     shift $((OPTIND - 1)) # remove any opts
     
-    # echo "${mode} - ${build_target} - ${node_env} ${*}" 
+cat <<-END
+  COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \\
+  COMPOSE_FILE=docker-compose.yml:docker-compose.${mode}.yml \\
+  BUILD_TARGET=${build_target} NODE_ENV=${node_env} TAG=${build_target}-${node_env} \\
+  docker-compose ${@}
 
+END
     COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
     COMPOSE_FILE=docker-compose.yml:docker-compose."${mode}".yml \
     BUILD_TARGET="${build_target}" NODE_ENV="${node_env}" TAG="${build_target}-${node_env}" \
@@ -174,7 +177,6 @@ END
   }
 
   dc-command () {
-    echo "dc-command" "$@"
     case $2 in
       config)
         yarn workspace @lecstor/config run "${3-build}"
@@ -239,11 +241,9 @@ END
   mode="dev"
   if [ "$1" = "prod" ] || [ "$1" = "dev" ]
   then
-    echo "explicit"
     mode="$1"
     args=("${@:2}")
   else
-    echo "dev default"
     args=("$@")
   fi
   dc-command "${mode}" "${args[@]}"

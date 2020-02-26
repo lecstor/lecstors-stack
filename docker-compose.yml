@@ -1,5 +1,8 @@
 version: "3.7"
 services:
+  base:
+    image: base
+    build: .
   gateway:
     image: "lecstor-gateway:${TAG}"
     build:
@@ -7,6 +10,7 @@ services:
       dockerfile: ./services/gateway/Dockerfile
       target: "${BUILD_TARGET}"
     depends_on:
+      - base
       - postgres
       - rabbitmq
     labels:
@@ -20,6 +24,7 @@ services:
       dockerfile: ./apps/react-app/Dockerfile
       target: "${BUILD_TARGET}"
     depends_on:
+      - base
       - gateway
     labels:
       kompose.service.type: LoadBalancer

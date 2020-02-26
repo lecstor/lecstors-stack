@@ -1,12 +1,7 @@
 *
-!.yarn
-!.yarnrc
-!docker/
+
 !apps/react-app
 !modules/config
 !modules/react-ui
-!nginx.conf
-!package.json
-!tsconfig.json
-!yarn.lock
+
 **/node_modules/**/*
