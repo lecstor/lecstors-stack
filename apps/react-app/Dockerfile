@@ -11,6 +11,7 @@ ENV NODE_ENV development
 
 WORKDIR /usr/src
 
+COPY --from=base /usr/src/.yarn/releases .yarn/releases
 COPY --from=base /usr/src/node_modules ./node_modules
 COPY --from=base ["/usr/src/package.json", "/usr/src/yarn.lock", "/usr/src/.yarnrc", "./"]
 COPY --from=base /usr/src/wait-for.sh .

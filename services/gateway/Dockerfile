@@ -13,6 +13,7 @@ WORKDIR /usr/src
 
 COPY --from=base /usr/src/node_modules node_modules
 COPY --from=base ["/usr/src/package.json", "/usr/src/yarn.lock", "/usr/src/.yarnrc", "./"]
+COPY --from=base /usr/src/.yarn/releases .yarn/releases
 COPY --from=base /usr/src/wait-for.sh .
 
 COPY  modules/config modules/config
@@ -41,6 +42,7 @@ ENV NODE_ENV production
 WORKDIR /usr/src
 
 COPY --from=prodbuild /usr/src/package.json .
+COPY --from=prodbuild /usr/src/.yarn/releases .yarn/releases
 
 # gateway packge for the scripts
 COPY --from=prodbuild /usr/src/services/gateway/package.json services/gateway/package.json
