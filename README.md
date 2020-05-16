@@ -17,13 +17,22 @@ git clone git@github.com:lecstor/lecstors-stack.git
 
 ## Setup
 
-this *will* take a few minutes..
+this *will* take a few minutes the first time.
+
+Change to the repo directory and start the CLI app.
 
 ```
 cd lecstors-stack
-source ./lecstors-stack.sh
-yarn && lecstors-stack logup
+yarn lecs
 ```
+
+Start the stack in docker-for-mac and list the running containers.
+
+```
+makitso> dc up react-app
+makitso> dc ps
+```
+Visit http://localhost:4321
 
 Brings up:
 
@@ -39,17 +48,19 @@ update automatically.
 ### Run react-app on your host machine in dev mode
 
 ```
-lecstors-stack stop react-app
-yarn workspace @lecstor/react-app run dev
+makitso> dc stop react-app
+makitso> react-app start
 ```
+Visit http://localhost:4321
+
+This will tail the react-app logs, use ctrl-c to exit.
 
 ### Run react-app with a production build in docker
 
 ```
-lecstors-stack prod build react-app
-lecstors-stack prod recreate react-app
+makitso> react-app start -p
 ```
-Visit http://localhost/
+Visit http://localhost:4322/
 
 ## Kubernetes
 
@@ -58,19 +69,19 @@ Deploy the stack to Kubernetes in Docker Desktop
 ### Update Kubernetes config from docker-compose config
 
 ```
-lecstors-stack k8s config
+yarn lecs kubernetes generate
 ```
 
 ### Create namespace in Kubernetes
 
 ```
-lecstors-stack k8s create
+yarn lecs kubernetes create namespace my-namespace
 ```
 
 ### Deploy to Kubernetes
 
 ```
-lecstors-stack k8s apply
+yarn lecs kubernetes apply
 ```
 
 ### Run the [Cypress](https://www.cypress.io/) end to end testing framework
@@ -78,13 +89,13 @@ lecstors-stack k8s apply
 #### In the UI:
 
 ```
-lecstors-stack cypress open
+yarn lecs cypress open
 ```
 
 #### or in the console:
 
 ```
-lecstors-stack cypress run
+yarn lecs cypress run
 ```
 
 # React UI

@@ -5,7 +5,7 @@ services:
     build:
       context: ./
       dockerfile: ./services/gateway/Dockerfile
-      target: "${BUILD_TARGET}"
+      target: "${BUILD_ENV}"
     depends_on:
       - postgres
       - rabbitmq
@@ -18,7 +18,7 @@ services:
     build:
       context: ./
       dockerfile: ./apps/react-app/Dockerfile
-      target: "${BUILD_TARGET}"
+      target: "${BUILD_ENV}"
     depends_on:
       - gateway
     labels:

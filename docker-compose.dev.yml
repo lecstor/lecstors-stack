@@ -2,13 +2,13 @@ version: "3.7"
 services:
   gateway:
     ports: 
-      - 3000:3000
+      - ${GATEWAY_PORT-4040:3000}
     volumes:
       - ./services/gateway:/usr/src/services/gateway
       - ./modules/config:/usr/src/modules/config
   react-app:
     ports: 
-      - 4321:4321
+      - ${REACT_APP_PORT-4321:4321}
     volumes:
       - ./apps/react-app:/usr/src/apps/react-app
       - ./modules/react-ui:/usr/src/modules/react-ui

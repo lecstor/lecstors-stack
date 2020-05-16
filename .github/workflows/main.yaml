@@ -46,13 +46,13 @@ jobs:
 
       - name: bring up the app
         run: |
-          ./lecstors-stack.sh lecstors-stack prod -t up -d react-app gateway
+          yarn lecs dc up -p -t react-app gateway
           ./docker/wait-for.sh localhost:80
 
       - name: e2e tests
         env:
           CYPRESS_baseUrl: http://localhost
-        run: ./lecstors-stack.sh lecstors-stack cypress run
+        run: yarn lecs cypress run
 
       - name: Dump docker logs on failure
         if: failure()
@@ -71,6 +71,6 @@ jobs:
       #   uses: cypress-io/github-action@v1
       #   with:
       #     install: false
-      #     start: "../../lecstors-stack.sh lecstors-stack prod up react-app"
+      #     start: "yarn lecs dc up -p react-app"
       #     working-directory: tools/cypress
       #     wait-on: 'http://localhost:80'
