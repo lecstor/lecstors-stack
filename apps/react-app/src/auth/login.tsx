@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import useForm from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 
 import {

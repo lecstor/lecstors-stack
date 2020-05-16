@@ -25,7 +25,6 @@ const Shell = () => (
     <ThemeProvider>
       <BrowserRouter>
         <UrqlProvider value={client}>
-          <GlobalStyle />
           <AuthProvider>
             <Switch>
               <Route path="/verify-email/:token" component={VerifyEmail} />

@@ -53,6 +53,7 @@ module.exports = (env): webpack.Configuration => {
           use: {
             loader: require.resolve("babel-loader"),
             options: {
+              plugins: ["babel-plugin-styled-components"],
               presets: ["@babel/preset-env"]
             }
           }
