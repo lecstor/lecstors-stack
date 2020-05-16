@@ -29,8 +29,8 @@ yarn lecs
 Start the stack in docker-for-mac and list the running containers.
 
 ```
-makitso> dc up react-app
-makitso> dc ps
+lecs> dc up react-app
+lecs> dc ps
 ```
 Visit http://localhost:4321
 
@@ -48,8 +48,8 @@ update automatically.
 ### Run react-app on your host machine in dev mode
 
 ```
-makitso> dc stop react-app
-makitso> react-app start
+lecs> dc stop react-app
+lecs> react-app start
 ```
 Visit http://localhost:4321
 
@@ -58,7 +58,7 @@ This will tail the react-app logs, use ctrl-c to exit.
 ### Run react-app with a production build in docker
 
 ```
-makitso> react-app start -p
+lecs> react-app start -p
 ```
 Visit http://localhost:4322/
 

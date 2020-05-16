@@ -38,6 +38,7 @@ jobs:
           yarn install --frozen-lockfile
           yarn workspace @lecstor/react-ui build
           yarn workspace @lecstor/config build
+          yarn lecs-build
 
       - name: '"unit" tests'
         run: |
