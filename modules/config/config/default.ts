@@ -18,13 +18,13 @@ export const config: Config = {
     client: "postgresql",
     connection: {
       host: "postgres",
-      database: "lecstor",
-      user: "lecstor",
-      password: "fooBar"
+      database: "",
+      user: "",
+      password: ""
     },
     pool: {
-      min: 2,
-      max: 10
+      min: 1,
+      max: 1
     },
     migrations: {
       directory: "db/migrations",
@@ -42,7 +42,7 @@ export const config: Config = {
   },
   gateway: {
     cors: {
-      origin: ["http://localhost:4321", "http://react-app:4321"],
+      origin: [],
       credentials: true
     },
     graphql: {
@@ -57,7 +57,7 @@ export const config: Config = {
       },
       resave: false,
       saveUninitialized: false,
-      secret: "cnjdubvksmfgsdfvfvdfgw",
+      secret: "",
       secure: false
     },
     trustProxy: 1, // https://expressjs.com/en/guide/behind-proxies.html
@@ -65,7 +65,7 @@ export const config: Config = {
     port: 3000,
     url: {
       internal: "http://gateway:3000",
-      external: "http://localhost:3000"
+      external: ""
     }
   },
   reactApp: {
@@ -73,8 +73,8 @@ export const config: Config = {
     host: "0.0.0.0",
     port: 4321,
     url: {
-      external: "http://localhost:4321",
-      internal: "http://react-app:4321"
+      external: "",
+      internal: ""
     }
   }
 };
