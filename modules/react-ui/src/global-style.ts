@@ -3,7 +3,6 @@ import modernNormalize from "styled-modern-normalize";
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,600');
   ${modernNormalize}
 
   html, body {
