@@ -58,12 +58,12 @@ const commands: Commands = {
         description: "Create and start containers",
         arguments: ["[services...] - services to bring up"],
         options: [
-          "-b --build - Build images before starting containers.",
+          "-b --build {boolean} - Build images before starting containers.",
           "-l --logs {boolean} - tail the logs (default: false)",
-          "-o --removeOrphans - Remove containers for services not defined in the Compose file.",
+          "-o --removeOrphans{boolean}  - Remove containers for services not defined in the Compose file.",
           "-p --prod {boolean} - production build",
-          "-r --forceRecreate - Recreate containers even if their configuration and image haven't changed.",
-          "-t --test - run in test environment"
+          "-r --forceRecreate {boolean} - Recreate containers even if their configuration and image haven't changed.",
+          "-t --test {boolean} - run in test environment"
         ],
         action: async ({ input }) => {
           const {
@@ -73,6 +73,7 @@ const commands: Commands = {
             services,
             ...args
           } = input.args;
+          console.log({ services, str: argToString(services) });
           await dockerCompose(
             `up -d${forceRecreate ? " --force-recreate" : ""}${
               removeOrphans ? " --remove-orphans" : ""
