@@ -1,7 +1,7 @@
-import uuid from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { Model, QueryContext } from "objection";
 
-function guid({ field = "id", generateGuid = () => uuid.v4() } = {}) {
+function guid({ field = "id", generateGuid = () => uuidv4() } = {}) {
   return (baseModel: typeof Model) => {
     return class extends baseModel {
       $beforeInsert(context: QueryContext) {

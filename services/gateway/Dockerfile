@@ -15,6 +15,8 @@ COPY ["package.json", "yarn.lock", ".yarnrc", "./"]
 
 RUN yarn  --offline --frozen-lockfile --production
 
+RUN npm rebuild bcrypt --build-from-source
+
 #---
 FROM node:12.10.0-alpine AS development
 
