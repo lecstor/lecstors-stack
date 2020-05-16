@@ -47,8 +47,9 @@ jobs:
 
       - name: bring up the app
         run: |
-          yarn lecs dc up -p -t react-app gateway
-          ./docker/wait-for.sh localhost:80
+        yarn lecs dc up -p -t gateway
+        yarn lecs dc up -p -t react-app
+        ./docker/wait-for.sh localhost:80
 
       - name: e2e tests
         env:
