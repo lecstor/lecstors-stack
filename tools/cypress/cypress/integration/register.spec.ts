@@ -50,14 +50,15 @@ describe("Register", () => {
       .should("have.value", "f")
       .blur();
 
-    cy.get("#error-email-undefined").should("contain", "Invalid email address");
+    const error = cy.get("#error-email-email");
+    error.should("contain", "Invalid email address");
 
     cy.get('input[name="email"]')
       .clear()
       .type(email)
       .should("have.value", email);
 
-    cy.get("#error-email-undefined").should("not.exist");
+    cy.get("#error-email-email").should("not.exist");
 
     cy.get("[data-testid=register-button]").click();
     cy.url().should("eq", `${baseUrl}/`);
