@@ -8,7 +8,7 @@
     "test": "echo"
   },
   "dependencies": {
-    "graphql": "^14.5.4"
+    "graphql": "^15.1.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.7.0",

@@ -4,3 +4,5 @@ node_modules/
 .yarn/offline-mirror/
 docker-compose.override.yml
 .DS_Store
+lab/
+services/nginx/
