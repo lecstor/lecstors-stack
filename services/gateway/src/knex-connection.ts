@@ -7,11 +7,11 @@ const connectConfig: Knex.Config = {
   ...knexConfig,
   migrations: {
     ...knexConfig.migrations,
-    directory: `${__dirname}/${knexConfig.migrations.directory}`
+    directory: `${__dirname}/${knexConfig.migrations?.directory}`
   },
   seeds: {
     ...knexConfig.seeds,
-    directory: `${__dirname}/${knexConfig.seeds.directory}`
+    directory: `${__dirname}/${knexConfig.seeds?.directory}`
   }
 };
 

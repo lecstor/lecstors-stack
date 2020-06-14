@@ -11,6 +11,7 @@
     "jsx": "react",
     "esModuleInterop": true,
     "lib": ["dom", "es2015"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "strict": true,
   }
 }

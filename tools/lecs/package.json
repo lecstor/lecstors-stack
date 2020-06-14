@@ -7,13 +7,13 @@
     "build": "rm -rf dist && tsc"
   },
   "devDependencies": {
-    "@types/node": "^13.7.7",
+    "@types/node": "^14.0.13",
     "@types/shelljs": "^0.8.6",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "makitso": "^2.1.0",
+    "makitso": "^2.1.1",
     "shelljs": "^0.8.3"
   }
 }

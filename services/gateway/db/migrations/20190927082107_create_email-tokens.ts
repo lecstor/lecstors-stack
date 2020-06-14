@@ -1,7 +1,7 @@
 import * as Knex from "knex";
 
-exports.up = function(knex: Knex) {
-  return knex.schema.createTable("email_verification_tokens", table => {
+exports.up = function (knex: Knex) {
+  return knex.schema.createTable("email_verification_tokens", (table) => {
     table.uuid("id").primary();
     table
       .uuid("emailId")
@@ -12,6 +12,6 @@ exports.up = function(knex: Knex) {
   });
 };
 
-exports.down = function(knex: Knex) {
+exports.down = function (knex: Knex) {
   return knex.schema.dropTable("email_verification_tokens");
 };

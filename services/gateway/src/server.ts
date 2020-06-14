@@ -1,23 +1,30 @@
-import express from "express";
+import express, { ErrorRequestHandler } from "express";
 import { ApolloServer } from "apollo-server-express";
+// import { GraphQLResponse } from "apollo-server-types";
 // import depthLimit from 'graphql-depth-limit';
 import { createServer } from "http";
 import compression from "compression";
 import session, { SessionOptions } from "express-session";
 import morgan from "morgan";
-import uuid from "uuid/v4";
+import { v4 as uuidV4 } from "uuid";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import passport from "passport";
 
 import cors from "cors";
 
+// import { graphql } from "graphql";
+// import { builder as graphQlBuilder } from "objection-graphql";
+
 import globalConfig from "@lecstor/config";
 import sessionStore from "./express-session-store";
-import schema from "./graphql/schema";
-import { getContext } from "./graphql/context";
+import schema from "./api/graphql/schema";
+import { getContext } from "./api/graphql/context";
 import initNotifications from "./notifications";
-import { routes as authRoutes } from "./api/auth";
+import { routes as authRoutes } from "./api/rest";
+
+// import Group from "./models/group/group.model";
+// import User from "./models/user/user.model";
 
 const config = globalConfig.gateway;
 
@@ -26,7 +33,7 @@ const app = express();
 const sessionOptions: SessionOptions = {
   ...config.session,
   store: new (sessionStore(session))(),
-  genid: () => uuid(),
+  genid: () => uuidV4(),
   cookie: config.session.cookie
 };
 
@@ -45,18 +52,24 @@ app.use(passport.session());
 
 app.use("/auth", authRoutes);
 
-function errorHandler(err, req, res, next) {
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
   }
   console.log(err);
   res.status(401);
   res.send({ error: { ...err, message: err.message } });
-}
+};
 
 app.use(errorHandler);
 
+// const graphQlSchema = graphQlBuilder()
+//   .model(Group)
+//   .model(User)
+//   .build();
+
 const server = new ApolloServer({
+  // schema: graphQlSchema,
   schema,
   debug: config.graphql.debug,
   // validationRules: [depthLimit(7)],
@@ -67,14 +80,14 @@ const server = new ApolloServer({
       console.log("Error", JSON.stringify(error));
     }
     return error;
-  },
-
-  formatResponse: response => {
-    if (config.graphql.debug) {
-      console.log("Response", JSON.stringify(response));
-    }
-    return response;
   }
+
+  // formatResponse: (response: GraphQLResponse) => {
+  //   if (config.graphql.debug) {
+  //     // console.log("Response", JSON.stringify(response));
+  //   }
+  //   return response;
+  // }
 });
 
 server.applyMiddleware({

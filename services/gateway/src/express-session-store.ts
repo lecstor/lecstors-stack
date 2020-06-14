@@ -1,98 +1,58 @@
-import util from "util";
-import session from "express-session";
-import Sessions from "./models/auth/session.model";
+import session, { SessionOptions } from "express-session";
+import Sessions from "./db/models/auth/session.model";
 
 export default function connectObjection(appSession: typeof session) {
-  const Store = appSession.Store; // || session.session.Store;
-
-  const PGStore = function(options = {}): void {
-    Store.call(this, options);
-  };
-
-  /**
-   * Inherit from `Store`.
-   */
-  util.inherits(PGStore, Store);
-
-  /**
-   * Attempt to fetch session by the given `sid`.
-   *
-   * @param {String} sid – the session id
-   * @param {Function} fn – a standard Node.js callback returning the parsed session object
-   * @access public
-   */
-
-  PGStore.prototype.get = async function(id: string, fn: Function) {
-    const session = await Sessions.query().findById(id);
-    if (session) {
-      const { userId, data } = session;
-      return fn(null, { ...data, userId });
-    }
-    return fn();
-  };
-
-  /**
-   * Commit the given `sess` object associated with the given `sid`.
-   *
-   * @param {String} sid – the session id
-   * @param {Object} sess – the session object to store
-   * @param {Function} fn – a standard Node.js callback returning the parsed session object
-   * @access public
-   */
-
-  PGStore.prototype.set = async function(
-    id: string,
-    sess: Record<string, any>,
-    fn: Function
-  ) {
-    const { userId, ...data } = sess;
-    const updated = await Sessions.query()
-      .findById(id)
-      .patch({ userId, data });
-    if (updated) {
-      return fn.call(this);
+  class ObjectionStore extends appSession.Store {
+    constructor(options?: SessionOptions) {
+      super(options);
     }
 
-    return Sessions.query()
-      .insert({ id, userId, data })
-      .then(() => fn.call(this))
-      .catch(err => fn.call(this, err));
-  };
+    get = async function(id: string, fn: Function) {
+      const session = await Sessions.query().findById(id);
+      if (session) {
+        const { userId, data } = session;
+        return fn(null, { ...data, userId });
+      }
+      return fn();
+    };
 
-  /**
-   * Destroy the session associated with the given `sid`.
-   *
-   * @param {String} sid – the session id
-   * @access public
-   */
+    set = async function(
+      id: string,
+      session: Record<string, any>,
+      fn?: (error?: any) => void
+    ) {
+      const { userId, ...data } = session;
+      const updated = await Sessions.query()
+        .findById(id)
+        .patch({ userId, data });
+      if (updated) {
+        return fn?.();
+      }
 
-  PGStore.prototype.destroy = async function(id: string, fn: Function) {
-    await Sessions.query().deleteById(id);
-    fn.call(this);
-  };
+      return Sessions.query()
+        .insert({ id, userId, data })
+        .then(() => fn?.())
+        .catch(err => fn?.(err));
+    };
 
-  /**
-   * Touch the given session object associated with the given session ID.
-   *
-   * @param {String} sid – the session id
-   * @param {Object} sess – the session object to store
-   * @param {Function} fn – a standard Node.js callback returning the parsed session object
-   * @access public
-   */
+    destroy = async function(id: string, fn?: (error?: any) => void) {
+      await Sessions.query().deleteById(id);
+      fn?.();
+    };
 
-  // PGStore.prototype.touch = function(sid, sess, fn) {
-  //   const expireTime = this.getExpireTime(sess.cookie.maxAge);
+    // touch = function(sid, sess, fn) {
+    //   const expireTime = this.getExpireTime(sess.cookie.maxAge);
+    //   this.query(
+    //     "UPDATE " +
+    //       this.quotedTable() +
+    //       " SET expire = to_timestamp($1) WHERE sid = $2 RETURNING sid",
+    //     [expireTime, sid],
+    //     function(err) {
+    //       fn(err);
+    //     }
+    //   );
+    // };
+  }
 
-  //   this.query(
-  //     "UPDATE " +
-  //       this.quotedTable() +
-  //       " SET expire = to_timestamp($1) WHERE sid = $2 RETURNING sid",
-  //     [expireTime, sid],
-  //     function(err) {
-  //       fn(err);
-  //     }
-  //   );
-  // };
-
-  return PGStore;
+  return ObjectionStore;
 }

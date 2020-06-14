@@ -11,21 +11,23 @@
     "lecs-build": "yarn workspace @lecstor/lecs run build",
     "lecs-dev": "ts-node ./tools/lecs/src/index.ts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "bitset": "^5.1.1"
+  },
   "devDependencies": {
-    "@types/eslint-plugin-prettier": "2.2.0",
+    "@types/eslint-plugin-prettier": "3.1.0",
     "@types/morgan": "^1.7.37",
-    "@types/prettier": "1.19.0",
-    "@typescript-eslint/eslint-plugin": "^2.7.0",
-    "@typescript-eslint/parser": "^2.2.0",
-    "babel-jest": "^25.1.0",
-    "eslint": "^6.6.0",
+    "@types/prettier": "2.0.1",
+    "@typescript-eslint/eslint-plugin": "^3.2.0",
+    "@typescript-eslint/parser": "^3.2.0",
+    "babel-jest": "^26.0.1",
+    "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.3.0",
-    "eslint-plugin-jest-dom": "^2.0.1",
+    "eslint-plugin-jest-dom": "^3.0.1",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
-    "jest": "^25.1.0",
-    "prettier": "^1.18.2",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
     "regenerator-runtime": "^0.13.3",
     "typescript": "^3.7.4",
     "wsrun": "^5.1.0"

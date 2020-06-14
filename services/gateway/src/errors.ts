@@ -16,19 +16,26 @@ export type ErrorInfo = {
   ```
 */
 
-export function userNotFound(info?: ErrorInfo): ErrorResp {
+export function userNotFound(info: ErrorInfo = {}): ErrorResp {
   return ["User not found", "USER_NOT_FOUND", info];
 }
 
-export function emailExists(info?: ErrorInfo): ErrorResp {
+export function emailExists(info: ErrorInfo = {}): ErrorResp {
   return ["Email already registered", "EMAIL_EXISTS", info];
 }
 
-export function wrongPassword(info?: ErrorInfo): ErrorResp {
+export function verificationTokenNotFound(info: ErrorInfo = {}): ErrorResp {
+  return ["Verification token not found", "VERIFICATION_TOKEN_NOT_FOUND", info];
+}
+
+export function wrongPassword(info: ErrorInfo = {}): ErrorResp {
   return ["Password is incorrect", "WRONG_PASSWORD", info];
 }
 
-export function fillError(error, data) {
+export function fillError(
+  error: Error & { code?: string; info?: ErrorInfo },
+  data: ErrorResp
+) {
   const [message, code, info] = data;
   error.message = message;
   error.code = code;

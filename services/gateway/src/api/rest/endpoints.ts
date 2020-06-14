@@ -3,16 +3,17 @@ import passport from "passport";
 import retry from "async-retry";
 
 import { fillError, userNotFound } from "../../errors";
-import { userCreated } from "../../pubsub";
+import { setCredentials } from "../../db/user";
+import { addGroupMember, createGroup } from "../../db/group";
 
 import {
   createUser,
   deleteUser,
   devDeleteUser,
   getEmailVerifyTokens,
-  setCredentials,
   verifyEmail
-} from "./controllers";
+} from "../../db/user";
+import { userCreated } from "../../pubsub";
 
 export const routes = express.Router();
 
@@ -21,6 +22,27 @@ routes.post("/register", async (req, res, next) => {
   try {
     const user = await createUser({ firstname, surname, email });
     await userCreated(user);
+
+    const org = await createGroup("Organisation", {
+      type: "organisation",
+      isPrimary: true
+    });
+    await Promise.all([
+      addGroupMember({ groupId: org.id, userId: user.id }),
+      createGroup("Team 1", { groupId: org.id, primaryGroupId: org.id })
+    ]);
+
+    // const p1 = addGroupMember({ groupId: org.id, userId: user.id });
+    // const p2 = await createGroup("Team 1", {
+    //   groupId: org.id,
+    //   primaryGroupId: org.id
+    // });
+    // const p3 = await createGroup("Team 2", {
+    //   groupId: p2.id,
+    //   primaryGroupId: org.id
+    // });
+    // const p4 = addGroupMember({ groupId: p3.id, userId: user.id });
+    // await Promise.all([p1, p4]);
 
     req.logIn(user, err => {
       if (err) {
@@ -37,13 +59,14 @@ routes.post("/verify-email", async (req, res, next) => {
   const { token } = req.body;
   try {
     const user = await verifyEmail({ token });
-
-    req.logIn(user, err => {
-      if (err) {
-        return next(err);
-      }
-      return res.send(user);
-    });
+    if (user) {
+      req.logIn(user, err => {
+        if (err) {
+          return next(err);
+        }
+        return res.send(user);
+      });
+    }
   } catch (err) {
     next(err);
   }
@@ -91,11 +114,12 @@ routes.post("/delete-account", async (req, res) => {
   res.send({ ok: true });
 });
 
-routes.get("/user", (req, res) => {
+routes.get("/user", async (req, res) => {
+  console.log("req.user", req.user);
   res.send({ user: req.user });
 });
 
-if (["development", "test"].includes(process.env.NODE_ENV)) {
+if (["development", "test"].includes(process.env.NODE_ENV || "")) {
   routes.get("/email-verify-tokens", async (req, res) => {
     const tokens = await retry(
       async () => {

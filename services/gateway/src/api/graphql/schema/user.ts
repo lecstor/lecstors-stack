@@ -1,13 +1,6 @@
 import { gql } from "apollo-server-express";
 
-export const typeDefs = gql`
-  type Credentials {
-    id: String
-    providerId: String
-    secret: String
-    userId: String
-  }
-
+const user = gql`
   type Email {
     email: String
     verified: Boolean
@@ -26,28 +19,24 @@ export const typeDefs = gql`
     id: String
     firstname: String
     surname: String
+    email: String
     emails: [Email]
     credentials: [Credentials]
   }
 
-  type Auth {
-    user: User
-  }
-
-  type Query {
-    auth: Auth
+  extend type Query {
     currentUser: User
-    user(id: String): User
+    user(userId: String): User
     tokens(email: String): [EmailVerificationToken]
   }
 
-  input CredentialsInput {
-    providerId: String
-    secret: String
-  }
-
-  type Mutation {
-    createUser(firstname: String, surname: String, email: String!): Auth
+  extend type Mutation {
+    createUser(
+      firstname: String
+      surname: String
+      email: String!
+      groupId: String!
+    ): User
     login(username: String!, password: String!): Auth
     verifyEmail(token: String!): Auth
 
@@ -56,3 +45,5 @@ export const typeDefs = gql`
     logout: Auth
   }
 `;
+
+export default user;

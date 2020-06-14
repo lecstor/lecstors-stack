@@ -32,7 +32,7 @@ export default class Email extends BaseModel {
   static relationMappings = (): RelationMappings => ({
     user: {
       relation: Model.BelongsToOneRelation,
-      modelClass: User,
+      modelClass: "user/user.model",
       join: {
         from: "emails.userId",
         to: "users.id"

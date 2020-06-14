@@ -2,7 +2,7 @@ import * as child from "child_process";
 
 import shell from "shelljs";
 
-export function executeSync(command: string, silent: boolean) {
+export function executeSync(command: string, silent?: boolean) {
   return shell.exec(command, { silent });
 }
 

@@ -1,18 +1,21 @@
 import config from "@lecstor/config";
+import { User as UserModel } from "../db/user";
+import { ModelObject } from "objection";
 
 import { listen } from "../pubsub/rabbit";
 
 import { sendMail } from "./sendgrid";
 
-import EmailVerificationToken from "../models/user/email-verification-token.model";
+import { findEmailVerificationToken } from "../db/user";
 
-export async function userCreated(user) {
+type User = ModelObject<UserModel>;
+
+export async function userCreated(user: User) {
   const { firstname, surname, emails } = user;
   const { id, email } = emails[0];
 
-  const token = await EmailVerificationToken.query()
-    .insert({ emailId: id, status: "pending" })
-    .catch(console.log);
+  const tokens = await findEmailVerificationToken({ emailId: id });
+  const token = tokens[0];
 
   if (token) {
     const verificationUrl = `${config.gateway.url.external}/verify-email/${token.id}`;
@@ -34,7 +37,7 @@ export async function userCreated(user) {
 }
 
 export default function init() {
-  return listen({ keys: ["user.created"], fn: userCreated })
+  return listen<User>({ keys: ["user.created"], fn: userCreated })
     .then(() => console.log("pubsub: Notifications subscribed to user.created"))
     .catch(console.log);
 }

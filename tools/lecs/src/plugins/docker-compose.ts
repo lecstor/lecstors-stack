@@ -26,7 +26,12 @@ function argIsArray(arg: string | string[]): arg is string[] {
 }
 
 function argToString(arg: string | string[]) {
-  return argIsArray(arg) ? arg.join(" ") : arg;
+  if (!arg) return "";
+  if (argIsArray(arg)) {
+    if (!arg.length) return "";
+    return arg.join(" ");
+  }
+  return arg;
 }
 
 const commands: Commands = {
@@ -41,10 +46,10 @@ const commands: Commands = {
           const { services, ...args } = input.args;
           await dockerCompose(`build ${argToString(services)}`, {
             ...args,
-            rejectCode: false
+            rejectCode: false,
           });
         },
-        help
+        help,
       },
       ps: {
         description: "List containers",
@@ -52,7 +57,7 @@ const commands: Commands = {
         action: async ({ input }) => {
           await dockerCompose("ps", { ...input.args, rejectCode: false });
         },
-        help
+        help,
       },
       up: {
         description: "Create and start containers",
@@ -63,7 +68,7 @@ const commands: Commands = {
           "-o --removeOrphans{boolean}  - Remove containers for services not defined in the Compose file.",
           "-p --prod {boolean} - production build",
           "-r --forceRecreate {boolean} - Recreate containers even if their configuration and image haven't changed.",
-          "-t --test {boolean} - run in test environment"
+          "-t --test {boolean} - run in test environment",
         ],
         action: async ({ input }) => {
           const {
@@ -73,46 +78,45 @@ const commands: Commands = {
             services,
             ...args
           } = input.args;
-          console.log({ services, str: argToString(services) });
           await dockerCompose(
             `up -d${forceRecreate ? " --force-recreate" : ""}${
               removeOrphans ? " --remove-orphans" : ""
             } ${argToString(services)}`,
             {
               ...args,
-              rejectCode: false
+              rejectCode: false,
             }
           );
           if (logs) {
             await dockerCompose("logs -f --tail=0", {
               ...args,
-              rejectCode: false
+              rejectCode: false,
             });
           }
         },
         suggest: async () => {
           return [...getApps(), ...getServices()];
         },
-        help
+        help,
       },
       down: {
         description: "Bring down the docker stack",
         action: async ({ input }) => {
           await dockerCompose(`down`, { ...input.args, rejectCode: false });
         },
-        help
+        help,
       },
       logs: {
         description: "View container logs",
         arguments: ["[services...] - services to log"],
         action: async ({ input }) => {
           const { services, ...args } = input.args;
-          await dockerCompose("logs -f --tail=0", {
+          await dockerCompose(`logs -f --tail=0 ${argToString(services)}`, {
             ...args,
-            rejectCode: false
+            rejectCode: false,
           });
         },
-        help
+        help,
       },
       stop: {
         description: "Stop containers",
@@ -121,17 +125,17 @@ const commands: Commands = {
           const { services, ...args } = input.args;
           await dockerCompose(`stop ${argToString(services)}`, {
             ...args,
-            rejectCode: false
+            rejectCode: false,
           });
         },
-        help
+        help,
       },
       restart: {
         description: "Restart services",
         arguments: ["[services...] - services to restart"],
         options: [
           "-h --hard {boolean} - stop service/s and then bring it/them back up (default: false)",
-          "-l --logs {boolean} - tail the logs (default: false)"
+          "-l --logs {boolean} - tail the logs (default: false)",
         ],
         action: async ({ input }) => {
           const { hard, logs, services: servicesArray, ...args } = input.args;
@@ -139,26 +143,26 @@ const commands: Commands = {
           if (hard) {
             await dockerCompose(`stop ${services}`, {
               ...args,
-              rejectCode: false
+              rejectCode: false,
             });
             await dockerCompose(`up ${services}`, {
               ...args,
-              rejectCode: false
+              rejectCode: false,
             });
           } else {
             await dockerCompose(`restart ${services}`, {
               ...args,
-              rejectCode: false
+              rejectCode: false,
             });
           }
           if (logs) {
             await dockerCompose(`logs -f --tail=0 ${services}`, {
               ...args,
-              rejectCode: false
+              rejectCode: false,
             });
           }
         },
-        help
+        help,
       },
       update: {
         description: "Pull service images",
@@ -167,23 +171,23 @@ const commands: Commands = {
           const { logs, ...args } = input.args;
           await dockerCompose("pull --ignore-pull-failures", {
             ...args,
-            rejectCode: false
+            rejectCode: false,
           });
           await dockerCompose("up -d --force-recreate", {
             ...args,
-            rejectCode: false
+            rejectCode: false,
           });
           if (logs) {
             await dockerCompose("logs -f --tail=0", {
               ...args,
-              rejectCode: false
+              rejectCode: false,
             });
           }
         },
-        help
-      }
-    }
-  }
+        help,
+      },
+    },
+  },
 };
 
 export default function plugin() {

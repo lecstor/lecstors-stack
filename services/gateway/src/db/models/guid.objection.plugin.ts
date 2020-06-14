@@ -3,12 +3,12 @@ import { Model, QueryContext } from "objection";
 
 function guid({ field = "id", generateGuid = () => uuidv4() } = {}) {
   return (baseModel: typeof Model) => {
-    return class extends baseModel {
+    return class Anon extends baseModel {
       $beforeInsert(context: QueryContext) {
         const parent = super.$beforeInsert(context);
 
-        if (!this[field]) {
-          this[field] = generateGuid.call(this);
+        if (!this[field as keyof Anon]) {
+          (this[field as keyof Anon] as unknown) = generateGuid.call(this);
         }
         return parent;
         // return Promise.resolve(parent)
