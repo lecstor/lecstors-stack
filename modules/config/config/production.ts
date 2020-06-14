@@ -7,37 +7,45 @@ export const config: RecursivePartial<Config> = {
     connection: {
       database: "lecstor_prod",
       user: "lecstor_prod",
-      password: "fooBar_prod"
+      password: "fooBar_prod",
     },
     pool: {
       min: 2,
-      max: 10
-    }
+      max: 10,
+    },
   },
   notifications: {
-    sendEmailVerification: true
+    sendEmailVerification: true,
   },
   gateway: {
     cors: {
-      origin: ["http://ezyapp.com"]
+      origin: ["http://ezyapp.com"],
     },
     graphql: {
-      debug: false
+      debug: false,
     },
     session: {
       secret: "duhenfyt48vbfelsdokjrw93",
-      secure: true
+      secure: true,
     },
     url: {
-      internal: "http://gateway:3000"
-    }
+      internal: "http://gateway:3000",
+    },
   },
   reactApp: {
     gateway: "internal",
     host: "0.0.0.0",
     port: 4321,
     url: {
-      external: "http://ezyapp.com"
-    }
-  }
+      external: "http://ezyapp.com",
+    },
+  },
+  materialUi: {
+    gateway: "internal",
+    host: "0.0.0.0",
+    port: 4322,
+    url: {
+      external: "http://ezyapp.com",
+    },
+  },
 };

@@ -5,13 +5,13 @@ export const config: Config = {
     facebook: {
       appId: "",
       appSecret: "",
-      callbackUrl: ""
+      callbackUrl: "",
     },
     twitter: {
       consumerKey: "",
       consumerSecret: "",
-      callbackUrl: ""
-    }
+      callbackUrl: "",
+    },
   },
   knex: {
     // database connection
@@ -20,53 +20,53 @@ export const config: Config = {
       host: "postgres",
       database: "",
       user: "",
-      password: ""
+      password: "",
     },
     pool: {
       min: 1,
-      max: 1
+      max: 1,
     },
     migrations: {
       directory: "db/migrations",
-      tableName: "knex_migrations"
+      tableName: "knex_migrations",
     },
     seeds: {
-      directory: "db/seeds/development"
-    }
+      directory: "db/seeds/development",
+    },
   },
   notifications: {
     sendEmailVerification: false,
     sendgrid: {
-      apiKey: ""
-    }
+      apiKey: "",
+    },
   },
   gateway: {
     cors: {
       origin: [],
-      credentials: true
+      credentials: true,
     },
     graphql: {
       cors: false,
       debug: true,
-      path: "/graphql"
+      path: "/graphql",
     },
     session: {
       cookie: {
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        httpOnly: true
+        httpOnly: true,
       },
       resave: false,
       saveUninitialized: false,
       secret: "",
-      secure: false
+      secure: false,
     },
     trustProxy: 1, // https://expressjs.com/en/guide/behind-proxies.html
     host: "gateway",
     port: 3000,
     url: {
       internal: "http://gateway:3000",
-      external: ""
-    }
+      external: "",
+    },
   },
   reactApp: {
     gateway: "internal",
@@ -74,7 +74,16 @@ export const config: Config = {
     port: 4321,
     url: {
       external: "",
-      internal: ""
-    }
-  }
+      internal: "",
+    },
+  },
+  materialUi: {
+    gateway: "internal",
+    host: "0.0.0.0",
+    port: 4322,
+    url: {
+      external: "",
+      internal: "",
+    },
+  },
 };

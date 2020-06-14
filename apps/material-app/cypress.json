@@ -1,0 +1,5 @@
+{
+  "video": false,
+  "baseUrl": "http://localhost:4322",
+  "pluginsFile": "../../node_modules/@cypress/code-coverage/plugins"
+}

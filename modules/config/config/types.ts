@@ -59,4 +59,13 @@ export type Config = {
       external: string;
     };
   };
+  materialUi: {
+    gateway: "internal" | "external";
+    host: string;
+    port: number;
+    url: {
+      internal: string;
+      external: string;
+    };
+  };
 };

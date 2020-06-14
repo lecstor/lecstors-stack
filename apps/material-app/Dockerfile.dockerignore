@@ -1,0 +1,12 @@
+*
+!.yarn
+!.yarnrc
+!docker/
+!apps/material-app
+!modules/config
+!modules/privileges
+!nginx.conf
+!package.json
+!tsconfig.json
+!yarn.lock
+**/node_modules/**/*

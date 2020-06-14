@@ -6,13 +6,26 @@ services:
     volumes:
       - ./services/gateway:/usr/src/services/gateway
       - ./modules/config:/usr/src/modules/config
+      - ./modules/privileges:/usr/src/modules/privileges
   react-app:
     ports: 
       - ${REACT_APP_PORT-4321:4321}
+    environment:
+      - BABEL_ENV=coverage
     volumes:
-      - ./apps/react-app:/usr/src/apps/react-app
-      - ./modules/react-ui:/usr/src/modules/react-ui
+    - ./apps/react-app:/usr/src/apps/react-app
+    - ./modules/react-ui:/usr/src/modules/react-ui
+    - ./modules/config:/usr/src/modules/config
+    - ./modules/privileges:/usr/src/modules/privileges
+  material-app:
+    ports: 
+      - ${REACT_APP_PORT-4322:4322}
+    environment:
+      - BABEL_ENV=coverage
+    volumes:
+      - ./apps/material-app:/usr/src/apps/material-app
       - ./modules/config:/usr/src/modules/config
+      - ./modules/privileges:/usr/src/modules/privileges
   postgres:
     environment:
       POSTGRES_PASSWORD: fooBar
@@ -34,6 +47,7 @@ services:
     environment:
       # pass base url with internal docker app url
       - CYPRESS_baseUrl=http://react-app:4321
+      # - CYPRESS_baseUrl=http://material-app:4322
       # - CYPRESS_baseUrl=http://host.docker.internal:4321
       # - DEBUG=cypress:*
       # - CI=0
