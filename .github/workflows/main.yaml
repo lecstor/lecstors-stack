@@ -22,7 +22,7 @@ jobs:
       - name: set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14.x'
 
       # - uses: actions/cache@v1
       #   id: yarn-offline-mirror # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
@@ -36,25 +36,20 @@ jobs:
         run: |
           yarn policies set-version
           yarn install --frozen-lockfile
-          yarn workspace @lecstor/react-ui build
           yarn workspace @lecstor/config build
+          yarn workspace @lecstor/privileges build
           yarn lecs-build
-
-      - name: '"unit" tests'
-        run: |
-          yarn workspace @lecstor/react-ui run test
-          yarn workspace @lecstor/react-app run test
 
       - name: bring up the app
         run: |
           yarn lecs dc up -p -t gateway
-          yarn lecs dc up -p -t react-app
+          yarn lecs dc up -p -t material-app
           ./docker/wait-for.sh localhost:80
 
       - name: e2e tests
         env:
           CYPRESS_baseUrl: http://localhost
-        run: yarn lecs cypress run
+        run: yarn lecs material-app cypress run
 
       - name: Dump docker logs on failure
         if: failure()
@@ -73,6 +68,6 @@ jobs:
       #   uses: cypress-io/github-action@v1
       #   with:
       #     install: false
-      #     start: "yarn lecs dc up -p react-app"
+      #     start: "yarn lecs dc up -p material-app"
       #     working-directory: tools/cypress
       #     wait-on: 'http://localhost:80'
