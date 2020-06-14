@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    // "declarationDir": "./dist",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "outDir": "dist",
+    "target": "es6",
+    "esModuleInterop": true,
+    "types": ["node", "jest"],
+  },
+  "exclude": ["node_modules", "dist"]
+}
+

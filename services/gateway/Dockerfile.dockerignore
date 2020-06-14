@@ -3,6 +3,7 @@
 !.yarnrc
 !docker/
 !modules/config
+!modules/privileges
 !package.json
 !services/gateway
 !tsconfig.json

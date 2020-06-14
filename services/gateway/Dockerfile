@@ -9,6 +9,7 @@ WORKDIR /usr/src
 RUN apk --no-cache add --virtual builds-deps build-base python
 
 COPY modules/config modules/config
+COPY modules/privileges modules/privileges
 COPY services/gateway services/gateway
 COPY .yarn .yarn
 COPY ["package.json", "yarn.lock", ".yarnrc", "./"]
@@ -42,6 +43,7 @@ WORKDIR /usr/src
 
 RUN yarn workspace @lecstor/gateway build
 RUN yarn workspace @lecstor/config build
+RUN yarn workspace @lecstor/privileges build
 RUN yarn workspace @lecstor/gateway remove typescript ts-node ts-node-dev --frozen-lockfile --production 
 
 #---
@@ -61,6 +63,9 @@ COPY --from=prodbuild /usr/src/services/gateway/dist services/gateway
 
 COPY --from=prodbuild /usr/src/modules/config/package.json modules/config/package.json
 COPY --from=prodbuild /usr/src/modules/config/dist modules/config/dist
+
+COPY --from=prodbuild /usr/src/modules/privileges/package.json modules/privileges/package.json
+COPY --from=prodbuild /usr/src/modules/privileges/dist modules/privileges/dist
 
 COPY --from=prodbuild /usr/src/node_modules node_modules
 
