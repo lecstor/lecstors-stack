@@ -27,4 +27,5 @@ RUN echo  " node version:    $(node -v) \n" \
 
 COPY docker/wait-for.sh .
 
-ENTRYPOINT ["../wait-for.sh", "react-app:4321", "--", "npx", "cypress", "run"]
+# ENTRYPOINT ["../wait-for.sh", "react-app:4321", "--", "npx", "cypress", "run"]
+ENTRYPOINT ["../wait-for.sh", "material-app:4322", "--", "npx", "cypress", "run"]
