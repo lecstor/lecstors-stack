@@ -71,7 +71,7 @@ describe("Graphql", () => {
         const { query } = createTestClient(server);
 
         const FIND_USER = gql`
-          query user($userId: String) {
+          query user($userId: String!) {
             user(userId: $userId) {
               id
             }
@@ -121,8 +121,8 @@ describe("Graphql", () => {
 
         const CREATE_USER = gql`
           mutation createUser(
-            $firstname: String
-            $surname: String
+            $firstname: String!
+            $surname: String!
             $email: String!
             $groupId: String!
           ) {

@@ -2,10 +2,10 @@ import { gql } from "apollo-server-express";
 
 const user = gql`
   type Email {
-    email: String
-    verified: Boolean
-    userId: String
-    verificationTokens: [EmailVerificationToken]
+    email: String!
+    verified: Boolean!
+    userId: String!
+    verificationTokens: [EmailVerificationToken!]!
   }
 
   type EmailVerificationToken {
@@ -20,20 +20,20 @@ const user = gql`
     firstname: String
     surname: String
     email: String
-    emails: [Email]
+    emails: [Email!]!
     credentials: [Credentials]
   }
 
   extend type Query {
     currentUser: User
-    user(userId: String): User
-    tokens(email: String): [EmailVerificationToken]
+    user(userId: String!): User
+    tokens(email: String!): [EmailVerificationToken!]!
   }
 
   extend type Mutation {
     createUser(
-      firstname: String
-      surname: String
+      firstname: String!
+      surname: String!
       email: String!
       groupId: String!
     ): User

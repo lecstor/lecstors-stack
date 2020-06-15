@@ -6,7 +6,7 @@ import Resource from "../../../db/models/base/resource.model";
 
 import { Context as Ctx } from "../context";
 
-export function isAuthenticated(_p: unknown, _a: unknown, { authUser }: Ctx) {
+export function isAuthenticated({ authUser }: Ctx) {
   if (authUser) return skip;
   throw new AuthenticationError("not authenticated");
 }

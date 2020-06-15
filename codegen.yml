@@ -1,0 +1,19 @@
+overwrite: true
+require:
+  - ts-node/register/transpile-only
+schema: services/gateway/src/api/graphql/schema/index.ts
+generates:
+  services/gateway/src/types-codegen.ts:
+    config:
+      contextType: ./api/graphql/context#Context
+      noSchemaStitching: true
+      mapperTypeSuffix: Model
+      useIndexSignature: true
+      mappers:
+        Email: ./db/models/user/email.model#default
+        User: ./db/models/user/user.model#default
+    plugins:
+      - add: "// DO NOT EDIT - automatically generated with graphql-code-generator"
+      - add: '/* eslint-disable */'
+      - "typescript"
+      - "typescript-resolvers"

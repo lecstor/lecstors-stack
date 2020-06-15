@@ -5,7 +5,8 @@ import objection from "objection";
 import { privilegesKeys as PRIV } from "@lecstor/privileges";
 
 import { Context as Ctx } from "../context";
-import { combineResolvers } from "../utils/combineResolvers";
+
+import { MutationResolvers, QueryResolvers } from "../../../types-codegen";
 
 import {
   addGroupMember,
@@ -23,18 +24,28 @@ type GroupTreesArgs = {
   fields: string[];
 };
 
+// https://github.com/microsoft/TypeScript/issues/16069#issuecomment-519281216
+function hasValue<T>(value: T | undefined | null | void): value is T {
+  return value !== undefined && value !== null;
+}
+
 async function groupsTrees({ groupIds, authUser, fields }: GroupTreesArgs) {
   const trees = await Promise.all(
-    groupIds.map(async (groupId: string) => {
-      const childGroups = await getChildren(groupId, fields);
-      if (
-        await authUser.hasResourcePrivilege(childGroups[0], PRIV.viewResources)
-      ) {
-        return childGroups;
-      }
-    })
+    groupIds
+      .map(async (groupId: string) => {
+        const childGroups = await getChildren(groupId, fields);
+        if (
+          await authUser.hasResourcePrivilege(
+            childGroups[0],
+            PRIV.viewResources
+          )
+        ) {
+          return childGroups;
+        }
+      })
+      .filter(hasValue)
   );
-  return trees;
+  return trees.filter(hasValue);
 }
 
 function getFieldNode(info: Info) {
@@ -69,51 +80,41 @@ function setSelections<M extends objection.Model>(
   }
 }
 
-type QGroupTreesArgs = { groupIds: string[] };
-type QMembersArgs = { groupId: string };
-
 type AddMemberArgs = { groupId: string; userId: string };
 
-export default {
-  Query: {
-    group: combineResolvers<QMembersArgs>(
-      isAuthenticated,
-      async (_p: unknown, args: QMembersArgs, ctx: Ctx, info: Info) => {
-        const { groupId } = args;
-        const queryBuilder = getGroup(groupId);
-        setSelections<Group>(queryBuilder, info);
-        const group = await queryBuilder.debug();
-        return group;
-      }
-    ),
-    groupsTrees: combineResolvers<QGroupTreesArgs>(
-      isAuthenticated,
-      (_p: unknown, args: QGroupTreesArgs, ctx: Ctx, info: Info) => {
-        const parsedInfo = parseResolveInfo(info);
-        const [{ groupIds }, { authUser }] = [args, ctx];
-
-        return groupsTrees({
-          groupIds,
-          authUser,
-          fields: parsedInfo
-            ? Object.keys(parsedInfo.fieldsByTypeName.Group)
-            : [],
-        });
-      }
-    ),
+const Query: QueryResolvers = {
+  group: async (_p, args, ctx, info) => {
+    isAuthenticated(ctx);
+    const { groupId } = args;
+    const queryBuilder = getGroup(groupId);
+    setSelections<Group>(queryBuilder, info);
+    const group = await queryBuilder.debug();
+    return group;
   },
-  Mutation: {
-    addMember: combineResolvers<AddMemberArgs>(
-      isAuthenticated,
-      async (_p: unknown, args: AddMemberArgs, ctx: Ctx) => {
-        const { groupId, userId } = args;
-        ensureResourcePrivilege(
-          ctx.authUser,
-          await getGroup(groupId),
-          PRIV.addMember
-        );
-        return addGroupMember({ groupId, userId });
-      }
-    ),
+  groupsTrees: async (_p, args, ctx, info) => {
+    isAuthenticated(ctx);
+    const parsedInfo = parseResolveInfo(info);
+    const [{ groupIds }, { authUser }] = [args, ctx];
+
+    return groupsTrees({
+      groupIds,
+      authUser,
+      fields: parsedInfo ? Object.keys(parsedInfo.fieldsByTypeName.Group) : [],
+    });
   },
 };
+
+const Mutation: MutationResolvers = {
+  addMember: async (_p: unknown, args: AddMemberArgs, ctx: Ctx) => {
+    isAuthenticated(ctx);
+    const { groupId, userId } = args;
+    ensureResourcePrivilege(
+      ctx.authUser,
+      await getGroup(groupId),
+      PRIV.addMember
+    );
+    return addGroupMember({ groupId, userId });
+  },
+};
+
+export default { Query, Mutation };

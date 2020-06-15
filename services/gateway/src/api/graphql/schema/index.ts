@@ -1,4 +1,3 @@
-import { gql } from "apollo-server-express";
 // import { makeExecutableSchema, mergeSchemas } from "graphql-tools";
 import { makeExecutableSchema } from "graphql-tools";
 import { GraphQLSchema } from "graphql";
@@ -9,22 +8,9 @@ import { GraphQLSchema } from "graphql";
 import resolvers from "../resolvers";
 
 import auth from "./auth";
+import base from "./base";
 import group from "./group";
 import user from "./user";
-
-const base = gql`
-  type Query {
-    _: Boolean
-  }
-
-  type Mutation {
-    _: Boolean
-  }
-
-  type Subscription {
-    _: Boolean
-  }
-`;
 
 const schema: GraphQLSchema = makeExecutableSchema({
   typeDefs: [base, auth, group, user],

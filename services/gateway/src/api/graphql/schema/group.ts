@@ -16,12 +16,12 @@ const group = gql`
   }
 
   extend type Query {
-    group(groupId: String): Group
-    groupsTrees(groupIds: [String]): [[Group]]
+    group(groupId: String!): Group!
+    groupsTrees(groupIds: [String!]!): [[Group!]!]!
   }
 
   extend type Mutation {
-    addMember(groupId: String, userId: String): Int
+    addMember(groupId: String!, userId: String!): Int
   }
 `;
 

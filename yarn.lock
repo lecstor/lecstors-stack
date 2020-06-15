@@ -1558,7 +1558,15 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@graphql-codegen/cli@^1.7.0":
+"@graphql-codegen/add@^1.15.3":
+  version "1.15.3"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-1.15.3.tgz#932d74e6c302f5642b814091fbe7992f5b7c9d2d"
+  integrity sha512-3aFxP7V19KNclxWGbVSJEBMfKaI3k6+Xbf+UcglE+Ml2UT4U83U2pJ91c7O7Dh4yC4JndBeN9Hok+TcGMa4AaQ==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "1.15.3"
+    tslib "~2.0.0"
+
+"@graphql-codegen/cli@1.15.3", "@graphql-codegen/cli@^1.7.0":
   version "1.15.3"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-1.15.3.tgz#633d23c1ed5ffb32aceebabc768914a2595c87be"
   integrity sha512-nq/ypeK6pIiH+9V6r7mTie5W6JUXLQHevwrp1mBTRhVwiXWTi9i67qOm+Twl61go+logRakG6dbTzCe9OP2J5Q==
@@ -1633,7 +1641,19 @@
     tslib "~2.0.0"
     upper-case "2.0.1"
 
-"@graphql-codegen/typescript@^1.7.0":
+"@graphql-codegen/typescript-resolvers@1.15.3":
+  version "1.15.3"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-resolvers/-/typescript-resolvers-1.15.3.tgz#e1e284493471e95a114d129f44c10af4c9838d0d"
+  integrity sha512-MK9c1FTFA9XXDvJuy+BVCuGnFwpx6uEP/vk02Z7I6JnyPiiotpqhO5zP4Qw8Ab5EjoxIP6FHPEQ5558qywY2mg==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "1.15.3"
+    "@graphql-codegen/typescript" "1.15.3"
+    "@graphql-codegen/visitor-plugin-common" "1.15.3"
+    "@graphql-tools/utils" "^6.0.0"
+    auto-bind "~4.0.0"
+    tslib "~2.0.0"
+
+"@graphql-codegen/typescript@1.15.3", "@graphql-codegen/typescript@^1.7.0":
   version "1.15.3"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-1.15.3.tgz#3067ae374c7cc45a17ff30ed12eb8399af78ad93"
   integrity sha512-/GahatkqqVjvXIUx7hayBVliLs+TKW2TwhUuf8yB2egkvxnAI7qYlEEEplKgNqwEI7yVGgK7O7vLKtzKAZ51+Q==
