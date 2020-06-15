@@ -26,25 +26,25 @@
 
 // capture coverage which would be lost by cy.visit() call.
 // https://github.com/cypress-io/cypress/issues/346#issuecomment-365220178
-Cypress.Commands.overwrite("visit", (originalFn, url, options) => {
-  cy.window().then(win => {
-    // if application code has been instrumented, the app iframe "window" has an object
-    const applicationSourceCoverage = win.__coverage__;
+// Cypress.Commands.overwrite("visit", (originalFn, url, options) => {
+//   cy.window().then((win) => {
+//     // if application code has been instrumented, the app iframe "window" has an object
+//     const applicationSourceCoverage = win.__coverage__;
 
-    if (applicationSourceCoverage) {
-      cy.task("combineCoverage", JSON.stringify(applicationSourceCoverage));
-    }
-    originalFn(url, options);
-  });
-});
+//     if (applicationSourceCoverage) {
+//       cy.task("combineCoverage", JSON.stringify(applicationSourceCoverage));
+//     }
+//     originalFn(url, options);
+//   });
+// });
 
 Cypress.Commands.add("unregisterUser", () => {
   cy.request({
     url: "/api/auth/unregister",
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
   cy.visit("/");
 });
@@ -58,9 +58,9 @@ Cypress.Commands.add(
       url: "/api/auth/register",
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: { email, firstname, surname }
+      body: { email, firstname, surname },
     });
     cy.visit("/");
   }
@@ -71,9 +71,9 @@ Cypress.Commands.add("loginUser", ({ username, password }) => {
     url: "/api/auth/login",
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: { username, password }
+    body: { username, password },
   });
   cy.visit("/");
 });
@@ -83,9 +83,9 @@ Cypress.Commands.add("setCredentials", ({ username, password }) => {
     url: "/api/auth/set-credentials",
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: { username, password }
+    body: { username, password },
   });
   cy.visit("/");
 });
@@ -93,19 +93,19 @@ Cypress.Commands.add("setCredentials", ({ username, password }) => {
 Cypress.Commands.add("logoutUser", () => {
   cy.request({
     url: "/api/auth/logout",
-    method: "POST"
+    method: "POST",
   });
   cy.visit("/");
 });
 
-Cypress.Commands.add("deleteUser", email => {
+Cypress.Commands.add("deleteUser", (email) => {
   cy.request({
     url: "/api/auth/delete-user",
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: { email }
+    body: { email },
   });
   cy.visit("/");
 });
@@ -123,13 +123,13 @@ Cypress.Commands.add(
 
 Cypress.Commands.add("verifyEmail", ({ email }) => {
   cy.request("/api/auth/email-verify-tokens", {
-    email
+    email,
   })
-    .should(response => {
+    .should((response) => {
       expect(response.body.tokens).to.exist;
       expect(response.body.tokens.length).to.eql(1);
     })
-    .then(response => {
+    .then((response) => {
       cy.visit(`/verify-email/${response.body.tokens[0].id}`);
     });
 });
