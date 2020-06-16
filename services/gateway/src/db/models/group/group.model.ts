@@ -1,6 +1,6 @@
 import Objection, { Model, RelationMappings } from "objection";
 
-import Resource from "../base/resource.model";
+import BaseModel from "../base/base.model";
 
 import { stringToPrivilegesMap, ownerPrivileges } from "@lecstor/privileges";
 
@@ -10,13 +10,9 @@ import GroupMember from "./member.model";
 
 export type GroupType = "organisation" | "team" | "resource";
 
-const reverse = (str: string) =>
-  str
-    .split("")
-    .reverse()
-    .join("");
+const reverse = (str: string) => str.split("").reverse().join("");
 
-export default class Group extends Resource {
+export default class Group extends BaseModel {
   readonly id!: string;
   name?: string;
   description?: string;
@@ -37,8 +33,8 @@ export default class Group extends Resource {
       name: { type: "string" },
       description: { type: "string" },
       isPrimary: { type: "boolean" },
-      privileges: { type: "string" }
-    }
+      privileges: { type: "string" },
+    },
   };
 
   $parseDatabaseJson(json: Objection.Pojo) {
@@ -72,16 +68,16 @@ export default class Group extends Resource {
       modelClass: Group,
       join: {
         from: "groups.groupId",
-        to: "groups.id"
-      }
+        to: "groups.id",
+      },
     },
     primaryGroup: {
       relation: Model.BelongsToOneRelation,
       modelClass: Group,
       join: {
         from: "groups.primaryGroupId",
-        to: "groups.id"
-      }
+        to: "groups.id",
+      },
     },
     members: {
       relation: Model.ManyToManyRelation,
@@ -91,11 +87,11 @@ export default class Group extends Resource {
         through: {
           modelClass: GroupMember,
           from: "group_members.groupId",
-          to: "group_members.userId"
+          to: "group_members.userId",
         },
-        to: "users.id"
-      }
-    }
+        to: "users.id",
+      },
+    },
   });
 
   addMember(user: User) {
