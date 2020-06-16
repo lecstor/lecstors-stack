@@ -11,13 +11,13 @@ import Group from "../../../db/models/group/group.model";
 import User from "../../../db/models/user/user.model";
 
 import {
-  ensureResourcePrivilege,
+  ensureGroupPrivilege,
   ensureUserPrivilege,
   isAuthenticated,
 } from "./authorization";
 
 jest.mock("./authorization", () => ({
-  ensureResourcePrivilege: jest.fn(),
+  ensureGroupPrivilege: jest.fn(),
   ensureUserPrivilege: jest.fn(),
   isAuthenticated: jest.fn(),
 }));
@@ -31,8 +31,8 @@ jest.mock("../../../db/group", () => ({
   getGroup: jest.fn(),
 }));
 
-const mockEnsureResourcePrivilege = ensureResourcePrivilege as jest.Mock<
-  ReturnType<typeof ensureResourcePrivilege>
+const mockEnsureGroupPrivilege = ensureGroupPrivilege as jest.Mock<
+  ReturnType<typeof ensureGroupPrivilege>
 >;
 const mockEnsureUserPrivilege = ensureUserPrivilege as jest.Mock<
   ReturnType<typeof ensureUserPrivilege>
@@ -159,9 +159,9 @@ describe("Graphql", () => {
           },
         });
         expect(mockIsAuthenticated).toHaveBeenCalled();
-        expect(mockEnsureResourcePrivilege).toHaveBeenCalledWith(
+        expect(mockEnsureGroupPrivilege).toHaveBeenCalledWith(
           authUser,
-          Group.fromJson({ id: groupId }),
+          groupId,
           "createUser"
         );
       });

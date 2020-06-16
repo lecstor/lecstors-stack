@@ -1,4 +1,3 @@
-import { getGroup } from "../../../db/group";
 import { createUserInGroup, getUser } from "../../../db/user";
 import {
   MutationResolvers,
@@ -7,7 +6,7 @@ import {
 } from "../../../types-codegen";
 
 import {
-  ensureResourcePrivilege,
+  ensureGroupPrivilege,
   ensureUserPrivilege,
   isAuthenticated,
 } from "./authorization";
@@ -40,11 +39,7 @@ const Mutation: MutationResolvers = {
   createUser: async (_p, args, ctx) => {
     isAuthenticated(ctx);
     const { groupId, ...user } = args;
-    ensureResourcePrivilege(
-      ctx.authUser,
-      await getGroup(groupId),
-      "createUser"
-    );
+    ensureGroupPrivilege(ctx.authUser, groupId, "createUser");
     return createUserInGroup({ groupId, user });
   },
 };

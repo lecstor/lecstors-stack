@@ -15,7 +15,7 @@ import {
   Group,
 } from "../../../db/group";
 
-import { isAuthenticated, ensureResourcePrivilege } from "./authorization";
+import { isAuthenticated, ensureGroupPrivilege } from "./authorization";
 import User from "../../../db/models/user/user.model";
 
 type GroupTreesArgs = {
@@ -31,19 +31,13 @@ function hasValue<T>(value: T | undefined | null | void): value is T {
 
 async function groupsTrees({ groupIds, authUser, fields }: GroupTreesArgs) {
   const trees = await Promise.all(
-    groupIds
-      .map(async (groupId: string) => {
-        const childGroups = await getChildren(groupId, fields);
-        if (
-          await authUser.hasResourcePrivilege(
-            childGroups[0],
-            PRIV.viewResources
-          )
-        ) {
-          return childGroups;
-        }
-      })
-      .filter(hasValue)
+    groupIds.map((groupId: string) =>
+      authUser
+        .hasGroupChildrenPrivilege(groupId, PRIV.viewResources)
+        .then((result) => {
+          if (result) return getChildren(groupId, fields);
+        })
+    )
   );
   return trees.filter(hasValue);
 }
@@ -86,6 +80,7 @@ const Query: QueryResolvers = {
   group: async (_p, args, ctx, info) => {
     isAuthenticated(ctx);
     const { groupId } = args;
+    ensureGroupPrivilege(ctx.authUser, groupId, PRIV.viewGroup);
     const queryBuilder = getGroup(groupId);
     setSelections<Group>(queryBuilder, info);
     const group = await queryBuilder.debug();
@@ -108,11 +103,7 @@ const Mutation: MutationResolvers = {
   addMember: async (_p: unknown, args: AddMemberArgs, ctx: Ctx) => {
     isAuthenticated(ctx);
     const { groupId, userId } = args;
-    ensureResourcePrivilege(
-      ctx.authUser,
-      await getGroup(groupId),
-      PRIV.addMember
-    );
+    ensureGroupPrivilege(ctx.authUser, groupId, PRIV.addMember);
     return addGroupMember({ groupId, userId });
   },
 };

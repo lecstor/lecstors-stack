@@ -11,6 +11,28 @@ export function isAuthenticated({ authUser }: Ctx) {
   throw new AuthenticationError("not authenticated");
 }
 
+export async function ensureGroupPrivilege(
+  authUser: User,
+  groupId: string,
+  privilege: string,
+  message = "does not have access"
+) {
+  if (!(await authUser.hasGroupPrivilege(groupId, privilege))) {
+    throw new ForbiddenError(message);
+  }
+}
+
+export async function ensureGroupChildrenPrivilege(
+  authUser: User,
+  groupId: string,
+  privilege: string,
+  message = "does not have access"
+) {
+  if (!(await authUser.hasGroupChildrenPrivilege(groupId, privilege))) {
+    throw new ForbiddenError(message);
+  }
+}
+
 export async function ensureResourcePrivilege(
   authUser: User,
   resource: Resource,

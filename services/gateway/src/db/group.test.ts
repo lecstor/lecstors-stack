@@ -6,7 +6,8 @@ import User from "./models/user/user.model";
 import {
   addGroupMember,
   createGroup,
-  hasResourcePrivilege,
+  hasGroupPrivilege,
+  hasGroupChildrenPrivilege,
   whereAllPrivileges,
   whereSomePrivileges,
   Group,
@@ -93,114 +94,118 @@ describe("DB", () => {
     });
 
     describe("Privileges", () => {
-      describe("hasResourcePrivilege", () => {
-        const memberEmail = `jason+member-${cuid()}@lecstor.com`;
-        const ownerEmail = `jason+owner-${cuid()}@lecstor.com`;
-        let primaryGroup1: Group;
-        let membersGroup: Group;
-        let owner: User;
-        let member: User;
-        let childMembersGroup: Group;
-        let grandchildMembersGroup: Group;
-        let group2a: Group;
-        let group2b: Group;
-        let groups: Group[];
+      const memberEmail = `jason+member-${cuid()}@lecstor.com`;
+      const ownerEmail = `jason+owner-${cuid()}@lecstor.com`;
+      let primaryGroup: Group;
+      let membersGroup: Group;
+      let owner: User;
+      let member: User;
+      let childMembersGroup: Group;
+      let grandchildMembersGroup: Group;
+      let groups: Group[];
 
-        beforeAll(async () => {
-          primaryGroup1 = await createGroup("primary 1", { isPrimary: true });
+      beforeAll(async () => {
+        primaryGroup = await createGroup("primary 1", { isPrimary: true });
 
-          owner = await createUserInGroup({
-            groupId: primaryGroup1.id,
-            user: { email: ownerEmail },
-          });
-
-          membersGroup = await createGroup("1 a", {
-            groupId: primaryGroup1.id,
-            privileges: { addGroupMember: true },
-          });
-
-          member = await createUserInGroup({
-            groupId: membersGroup.id,
-            user: { email: memberEmail },
-          });
-
-          childMembersGroup = await createGroup("1 b", {
-            groupId: membersGroup.id,
-          });
-
-          grandchildMembersGroup = await createGroup("1 c", {
-            groupId: childMembersGroup.id,
-          });
-
-          const primaryGroup2 = await createGroup("primary 2", {
-            isPrimary: true,
-          });
-          group2a = await createGroup("2 a", { groupId: primaryGroup2.id });
-
-          group2b = await createGroup("2 c", { groupId: group2a.id });
-
-          groups = [
-            primaryGroup1,
-            membersGroup,
-            childMembersGroup,
-            grandchildMembersGroup,
-          ];
+        owner = await createUserInGroup({
+          groupId: primaryGroup.id,
+          user: { email: ownerEmail },
         });
 
+        membersGroup = await createGroup("1 a", {
+          groupId: primaryGroup.id,
+          privileges: { addGroupMember: true },
+        });
+
+        member = await createUserInGroup({
+          groupId: membersGroup.id,
+          user: { email: memberEmail },
+        });
+
+        childMembersGroup = await createGroup("1 b", {
+          groupId: membersGroup.id,
+        });
+
+        grandchildMembersGroup = await createGroup("1 c", {
+          groupId: childMembersGroup.id,
+        });
+
+        groups = [
+          primaryGroup,
+          membersGroup,
+          childMembersGroup,
+          grandchildMembersGroup,
+        ];
+      });
+
+      describe("hasGroupPrivilege", () => {
         test("owner has privilege on all groups", async () => {
-          for (const resource of groups) {
+          for (const group of groups) {
             expect(
-              await hasResourcePrivilege({
-                user: owner,
+              await hasGroupPrivilege({
+                authUser: owner,
                 privilege: "addGroupMember",
-                resource,
+                groupId: group.id,
+              })
+            ).toBeTruthy();
+            expect(
+              await hasGroupChildrenPrivilege({
+                authUser: owner,
+                privilege: "addGroupMember",
+                groupId: group.id,
               })
             ).toBeTruthy();
           }
         });
 
         test("member does not have privilege on primary or member's group", async () => {
-          for (const resource of [primaryGroup1, membersGroup]) {
+          for (const group of [primaryGroup, membersGroup]) {
             expect(
-              await hasResourcePrivilege({
-                user: member,
+              await hasGroupPrivilege({
+                authUser: member,
                 privilege: "addGroupMember",
-                resource,
+                groupId: group.id,
               })
             ).toBeFalsy();
           }
         });
 
+        test("member does not have privilege on children of primary group", async () => {
+          expect(
+            await hasGroupChildrenPrivilege({
+              authUser: member,
+              privilege: "addGroupMember",
+              groupId: primaryGroup.id,
+            })
+          ).toBeFalsy();
+        });
+
         test("member has privilege on child and grandchild of member's group", async () => {
-          for (const resource of [childMembersGroup, grandchildMembersGroup]) {
+          for (const group of [childMembersGroup, grandchildMembersGroup]) {
             expect(
-              await hasResourcePrivilege({
-                user: member,
+              await hasGroupPrivilege({
+                authUser: member,
                 privilege: "addGroupMember",
-                resource,
+                groupId: group.id,
               })
             ).toBeTruthy();
           }
         });
 
-        // test("hasResourcePrivilege 3", async () => {
-        //   expect(
-        //     await hasResourceGroupPrivilege2({
-        //       user: member,
-        //       privilege: "addGroupMember",
-        //       resourceGroupIds: [membersGroup.id, childMembersGroup.id]
-        //     })
-        //   ).toBeTruthy();
-        // });
-
-        test("hasResourcePrivilege 4", async () => {
-          expect(
-            await hasResourcePrivilege({
-              user: member,
-              privilege: "addGroupMember",
-              resource: group2b,
-            })
-          ).toBeFalsy();
+        test("member has privilege on children of member's group and their children", async () => {
+          for (const group of [
+            membersGroup,
+            childMembersGroup,
+            grandchildMembersGroup,
+          ]) {
+            expect(
+              await hasGroupChildrenPrivilege({
+                authUser: member,
+                privilege: "addGroupMember",
+                groupId: group.id,
+              })
+            ).toBeTruthy();
+          }
         });
       });
 

@@ -11,7 +11,7 @@ import {
   getEmailVerifyTokens,
   setCredentials,
   verifyEmail,
-  verifyPassword
+  verifyPassword,
 } from "./user";
 
 describe("DB", () => {
@@ -46,7 +46,7 @@ describe("DB", () => {
 
         const result = await createUserInGroup({
           groupId: group.id,
-          user: { email }
+          user: { email },
         });
         expect(result.emails[0].email).toEqual(email);
       });
@@ -71,7 +71,7 @@ describe("DB", () => {
         const result = await setCredentials({
           userId: user.id,
           username,
-          password
+          password,
         });
         expect(result.providerId).toEqual(username);
         expect(result.userId).toEqual(user.id);
@@ -92,7 +92,7 @@ describe("DB", () => {
 
       test("fail", async () => {
         const result = verifyEmail({
-          token: "387ef478-66a3-4cb3-82e5-a42eaed6be0b"
+          token: "387ef478-66a3-4cb3-82e5-a42eaed6be0b",
         });
         await expect(result).rejects.toEqual(
           fillError(new Error(), verificationTokenNotFound())
@@ -110,7 +110,7 @@ describe("DB", () => {
         await setCredentials({
           userId: user.id,
           username,
-          password
+          password,
         });
         await expect(verifyPassword(username, password)).resolves.toEqual(true);
       });
@@ -122,7 +122,7 @@ describe("DB", () => {
         await setCredentials({
           userId: user.id,
           username,
-          password
+          password,
         });
         await expect(verifyPassword(username, "wrong")).resolves.toEqual(false);
       });

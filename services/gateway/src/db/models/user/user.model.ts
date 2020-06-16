@@ -8,7 +8,12 @@ import Group from "../group/group.model";
 import GroupMember from "../group/member.model";
 
 import Email from "./email.model";
-import { hasResourcePrivilege, hasUserPrivilege } from "../../group";
+import {
+  hasResourcePrivilege,
+  hasGroupPrivilege,
+  hasGroupChildrenPrivilege,
+  hasUserPrivilege,
+} from "../../group";
 
 export default class User extends BaseModel {
   readonly id!: string;
@@ -29,16 +34,24 @@ export default class User extends BaseModel {
     properties: {
       id: { type: "string" },
       firstname: { type: "string", minLength: 1, maxLength: 100 },
-      surname: { type: "string", minLength: 1, maxLength: 100 }
-    }
+      surname: { type: "string", minLength: 1, maxLength: 100 },
+    },
   };
 
   async loadEmails() {
     this.emails = await this.$relatedQuery("emails");
   }
 
+  hasGroupPrivilege(groupId: string, privilege: string) {
+    return hasGroupPrivilege({ authUser: this, privilege, groupId });
+  }
+
+  hasGroupChildrenPrivilege(groupId: string, privilege: string) {
+    return hasGroupChildrenPrivilege({ authUser: this, privilege, groupId });
+  }
+
   hasResourcePrivilege(resource: Resource, privilege: string) {
-    return hasResourcePrivilege({ user: this, privilege, resource });
+    return hasResourcePrivilege({ authUser: this, privilege, resource });
   }
 
   hasUserPrivilege(user: User, privilege: string) {
@@ -50,9 +63,7 @@ export default class User extends BaseModel {
   }
 
   static addGroup(userId: string, groupId: string) {
-    return Group.relatedQuery("groups")
-      .for(userId)
-      .relate(groupId);
+    return Group.relatedQuery("groups").for(userId).relate(groupId);
   }
 
   static relationMappings: RelationMappings = {
@@ -61,24 +72,24 @@ export default class User extends BaseModel {
       modelClass: Credentials,
       join: {
         from: "users.id",
-        to: "credentials.userId"
-      }
+        to: "credentials.userId",
+      },
     },
     emails: {
       relation: Model.HasManyRelation,
       modelClass: Email,
       join: {
         from: "users.id",
-        to: "emails.userId"
-      }
+        to: "emails.userId",
+      },
     },
     groupMemberships: {
       relation: Model.HasManyRelation,
       modelClass: GroupMember,
       join: {
         from: "users.id",
-        to: "group_members.userId"
-      }
+        to: "group_members.userId",
+      },
     },
     groups: {
       relation: Model.ManyToManyRelation,
@@ -88,10 +99,10 @@ export default class User extends BaseModel {
         through: {
           modelClass: "group/member.model",
           from: "group_members.userId",
-          to: "group_members.groupId"
+          to: "group_members.groupId",
         },
-        to: "groups.id"
-      }
-    }
+        to: "groups.id",
+      },
+    },
   };
 }
