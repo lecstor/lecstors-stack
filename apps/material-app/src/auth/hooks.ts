@@ -21,7 +21,7 @@ export function useDeleteAccount() {
 export function useLogIn() {
   const { fetchUser } = useAuth();
   return (credentials: Credentials) =>
-    authApi.logIn(credentials).then(res => (res.error ? res : fetchUser()));
+    authApi.logIn(credentials).then((res) => (res.error ? res : fetchUser()));
 }
 
 export function useLogOut() {
@@ -35,7 +35,9 @@ export function useLogOut() {
 export function useRegister() {
   const { fetchUser } = useAuth();
   return (details: UserDetails) =>
-    authApi.registerUser(details).then(res => (res.error ? res : fetchUser()));
+    authApi
+      .registerUser(details)
+      .then((res) => (res.error ? res : fetchUser()));
 }
 
 export function useSetCredentials() {
@@ -45,5 +47,5 @@ export function useSetCredentials() {
 export function useVerifyEmail() {
   const { fetchUser } = useAuth();
   return (token: string) =>
-    authApi.verifyEmail(token).then(res => (res.error ? res : fetchUser()));
+    authApi.verifyEmail(token).then((res) => (res.error ? res : fetchUser()));
 }

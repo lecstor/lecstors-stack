@@ -11,15 +11,13 @@ import {
   FormLayout,
   Heading,
   Layout,
-  SignInIcon
+  SignInIcon,
 } from "@lecstor/react-ui";
 
 import FormText from "../components/form-text";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Required"),
+  email: Yup.string().email("Invalid email address").required("Required"),
   firstname: Yup.string()
     .min(2, "Must be longer than 2 characters")
     .max(
@@ -29,7 +27,7 @@ const validationSchema = Yup.object().shape({
   surname: Yup.string()
     .min(2, "Must be longer than 2 characters")
     .max(100, "Sorry, but can you provide a shorter version or your surname?")
-    .required("Required")
+    .required("Required"),
 });
 
 type FormData = {
@@ -43,11 +41,11 @@ const Register = () => {
   const [res, setRes] = useState();
   const { register, handleSubmit, errors } = useForm<FormData>({
     mode: "onBlur",
-    validationSchema
+    validationSchema,
   });
 
-  const onSubmit = values => {
-    apiRegister(values).then(err => {
+  const onSubmit = (values) => {
+    apiRegister(values).then((err) => {
       if (err) {
         setRes(err);
       }

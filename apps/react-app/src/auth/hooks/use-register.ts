@@ -5,7 +5,7 @@ import useAuth from "./use-auth";
 function useRegister() {
   const { setAuth } = useAuth();
   return (details: UserDetails) =>
-    registerUser(details).then(res => {
+    registerUser(details).then((res) => {
       if (res.error) {
         return res;
       } else {

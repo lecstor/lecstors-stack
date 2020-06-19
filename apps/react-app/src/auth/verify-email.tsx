@@ -16,7 +16,7 @@ const VerifyEmail = () => {
   const { auth } = useAuth();
 
   useEffect(() => {
-    verifyEmail(token).then(res => {
+    verifyEmail(token).then((res) => {
       if (res?.error) {
         setError(error);
       } else {

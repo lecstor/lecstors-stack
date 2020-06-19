@@ -5,7 +5,7 @@ import useAuth from "./use-auth";
 function useLogIn() {
   const { setAuth } = useAuth();
   return (credentials: Credentials) =>
-    logIn(credentials).then(res => {
+    logIn(credentials).then((res) => {
       if (res.error) {
         return res;
       } else {

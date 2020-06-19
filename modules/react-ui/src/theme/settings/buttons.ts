@@ -24,36 +24,36 @@ const buttons: ButtonModes = {
     bottom: blue.dark1,
     top: blue.primary,
     hTop: blue.primary,
-    hBottom: blue.dark2
+    hBottom: blue.dark2,
   },
   danger: {
     label: white.light2,
     bottom: red.dark1,
     top: red.primary,
     hTop: red.primary,
-    hBottom: red.dark2
+    hBottom: red.dark2,
   },
   caution: {
     label: white.light2,
     bottom: orange.dark1,
     top: orange.primary,
     hTop: orange.primary,
-    hBottom: orange.dark2
+    hBottom: orange.dark2,
   },
   success: {
     label: white.light2,
     bottom: green.dark1,
     top: green.primary,
     hTop: green.primary,
-    hBottom: green.dark2
+    hBottom: green.dark2,
   },
   secondary: {
     label: black.dark1,
     bottom: white.light2,
     top: white.light1,
     hTop: white.light1,
-    hBottom: white.primary
-  }
+    hBottom: white.primary,
+  },
 };
 
 export default buttons;

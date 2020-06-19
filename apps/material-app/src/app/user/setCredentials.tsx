@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
     .required("Required"),
   password: Yup.string()
     .min(2, "Must be longer than 2 characters")
-    .max(100, "Sorry, but can you provide a shorter version of your password")
+    .max(100, "Sorry, but can you provide a shorter version of your password"),
 });
 
 type FormData = {
@@ -29,7 +29,7 @@ type FormData = {
 const Form = ({ onSubmit }: { onSubmit: OnSubmit<FormData> }) => {
   const { register, handleSubmit, errors } = useForm<FormData>({
     mode: "onBlur",
-    validationSchema
+    validationSchema,
   });
 
   return (

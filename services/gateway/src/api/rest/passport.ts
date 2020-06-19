@@ -7,7 +7,7 @@ import {
   asAuthUser,
   getUser,
   getUserByUsername,
-  verifyPassword
+  verifyPassword,
 } from "../../db/user";
 
 // const LocalStrategy = require("passport-local").Strategy;
@@ -20,8 +20,8 @@ type RestError = Error & {
 
 passport.use(
   // "local-login",
-  new LocalStrategy(function(username: string, password: string, done) {
-    verifyPassword(username, password).then(ok => {
+  new LocalStrategy(function (username: string, password: string, done) {
+    verifyPassword(username, password).then((ok) => {
       if (ok === undefined) {
         const [message, code, info] = userNotFound({ username });
         const error: RestError = new Error(message);
@@ -29,7 +29,9 @@ passport.use(
         error.info = info;
         done(error);
       } else if (ok) {
-        asAuthUser(getUserByUsername(username)).then(user => done(null, user));
+        asAuthUser(getUserByUsername(username)).then((user) =>
+          done(null, user)
+        );
       } else {
         const [message, code, info] = wrongPassword({ username });
         const error: RestError = new Error(message);
@@ -41,14 +43,14 @@ passport.use(
   })
 );
 
-passport.serializeUser(function(user: User, done) {
+passport.serializeUser(function (user: User, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(async function(id: string, done) {
+passport.deserializeUser(async function (id: string, done) {
   const user = await asAuthUser(getUser(id))
     .debug()
-    .catch(err => {
+    .catch((err) => {
       console.error(
         "There was an error accessing the records of" + " user with id: " + id
       );

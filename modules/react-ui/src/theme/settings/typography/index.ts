@@ -8,11 +8,11 @@ import variants from "./font-styles";
 
 function addVariants(fontSizes: ScreenTypographySizes) {
   const withVariants = { ...fontSizes };
-  Object.keys(variants).forEach(variant => {
+  Object.keys(variants).forEach((variant) => {
     const { size, fontWeight } = variants[variant];
     withVariants[variant as keyof ScreenTypographySizes] = {
       ...fontSizes[size],
-      fontWeight
+      fontWeight,
     };
   });
   return withVariants as ScreenTypography;
@@ -21,7 +21,7 @@ function addVariants(fontSizes: ScreenTypographySizes) {
 const typography = {
   small: addVariants(smallScreenTypographyTheme),
   medium: addVariants(mediumScreenTypographyTheme),
-  large: addVariants(largeScreenTypographyTheme)
+  large: addVariants(largeScreenTypographyTheme),
 };
 
 export default typography;

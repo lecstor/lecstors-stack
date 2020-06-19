@@ -34,7 +34,7 @@ const sessionOptions: SessionOptions = {
   ...config.session,
   store: new (sessionStore(session))(),
   genid: () => uuidV4(),
-  cookie: config.session.cookie
+  cookie: config.session.cookie,
 };
 
 if (config.trustProxy) {
@@ -75,12 +75,12 @@ const server = new ApolloServer({
   // validationRules: [depthLimit(7)],
   context: getContext,
 
-  formatError: error => {
+  formatError: (error) => {
     if (config.graphql.debug) {
       console.log("Error", JSON.stringify(error));
     }
     return error;
-  }
+  },
 
   // formatResponse: (response: GraphQLResponse) => {
   //   if (config.graphql.debug) {
@@ -93,7 +93,7 @@ const server = new ApolloServer({
 server.applyMiddleware({
   app,
   path: config.graphql.path,
-  cors: config.graphql.cors
+  cors: config.graphql.cors,
 });
 
 const httpServer = createServer(app);

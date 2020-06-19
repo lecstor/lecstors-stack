@@ -7,7 +7,7 @@ export default function connectObjection(appSession: typeof session) {
       super(options);
     }
 
-    get = async function(id: string, fn: Function) {
+    get = async function (id: string, fn: Function) {
       const session = await Sessions.query().findById(id);
       if (session) {
         const { userId, data } = session;
@@ -16,7 +16,7 @@ export default function connectObjection(appSession: typeof session) {
       return fn();
     };
 
-    set = async function(
+    set = async function (
       id: string,
       session: Record<string, any>,
       fn?: (error?: any) => void
@@ -32,10 +32,10 @@ export default function connectObjection(appSession: typeof session) {
       return Sessions.query()
         .insert({ id, userId, data })
         .then(() => fn?.())
-        .catch(err => fn?.(err));
+        .catch((err) => fn?.(err));
     };
 
-    destroy = async function(id: string, fn?: (error?: any) => void) {
+    destroy = async function (id: string, fn?: (error?: any) => void) {
       await Sessions.query().deleteById(id);
       fn?.();
     };

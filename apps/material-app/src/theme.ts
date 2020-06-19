@@ -14,15 +14,15 @@ import teal from "@material-ui/core/colors/teal";
 export const theme = createMuiTheme({
   palette: {
     primary: {
-      main: deepPurple[400]
+      main: deepPurple[400],
     },
     secondary: {
-      main: teal[400]
-    }
+      main: teal[400],
+    },
   },
   props: {
     MuiButton: {
-      variant: "contained"
-    }
-  }
+      variant: "contained",
+    },
+  },
 });

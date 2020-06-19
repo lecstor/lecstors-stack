@@ -26,8 +26,8 @@ export default class Credentials extends BaseModel {
       modelClass: User,
       join: {
         from: "credentials.userId",
-        to: "users.id"
-      }
-    }
+        to: "users.id",
+      },
+    },
   });
 }

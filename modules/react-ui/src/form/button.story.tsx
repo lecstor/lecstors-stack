@@ -11,7 +11,7 @@ import { SignInIcon } from "../icons";
 
 export default {
   title: "Form/Button",
-  component: Button
+  component: Button,
 };
 
 const Table = styled.table`
@@ -24,13 +24,13 @@ const sizes: Array<keyof ScreenTypographySizes> = [
   "small",
   "regular",
   "medium",
-  "large"
+  "large",
 ];
 
 const Buttons = ({ mode }: { mode: keyof ButtonModes }) => (
   <Table>
     <tbody>
-      {sizes.map(size => (
+      {sizes.map((size) => (
         <tr key={size}>
           <td>
             <Button size={size} mode={mode}>

@@ -6,8 +6,8 @@ export function registerUser(details: UserDetails) {
   return fetch("/api/auth/register", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(details)
-  }).then(res => res.json());
+    body: JSON.stringify(details),
+  }).then((res) => res.json());
 }

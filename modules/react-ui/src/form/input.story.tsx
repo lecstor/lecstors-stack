@@ -9,7 +9,7 @@ import Hamburger from "../layout/hamburger";
 
 export default {
   title: "Form/Input",
-  component: Input
+  component: Input,
 };
 
 export const alone = () => <Input type="text" />;

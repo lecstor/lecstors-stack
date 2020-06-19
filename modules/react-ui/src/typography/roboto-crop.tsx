@@ -5,7 +5,7 @@ const robotoCrop = makeTextCrop({
   topCrop: 10,
   bottomCrop: 11,
   cropFontSize: 32,
-  cropLineHeight: 1.4
+  cropLineHeight: 1.4,
 });
 
 export default robotoCrop;

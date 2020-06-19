@@ -2,7 +2,7 @@ import {
   Provider,
   createClient as createUrqlClient,
   dedupExchange,
-  fetchExchange
+  fetchExchange,
 } from "urql";
 import { devtoolsExchange } from "@urql/devtools";
 import { cacheExchange } from "@urql/exchange-graphcache";
@@ -16,14 +16,14 @@ export const createClient = () =>
       devtoolsExchange,
       dedupExchange,
       cacheExchange({}),
-      fetchExchange
+      fetchExchange,
     ],
     // exchanges: [schemaExchange(newMockSchema())]
     // exchanges: [...defaultExchanges, debugExchange],
     fetchOptions: {
       mode: "cors", // no-cors, cors, *same-origin
-      credentials: "include" // include, same-origin
-    }
+      credentials: "include", // include, same-origin
+    },
   });
 
 export { Provider };

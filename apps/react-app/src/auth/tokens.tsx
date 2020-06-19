@@ -10,7 +10,7 @@ const Tokens = () => {
 
   const [res] = useQuery({
     query: getTokens,
-    variables: { email: auth.user.emails[0] }
+    variables: { email: auth.user.emails[0] },
   });
 
   if (res.fetching) return null;

@@ -21,8 +21,8 @@ export default class EmailVerificationToken extends BaseModel {
     properties: {
       id: { type: "uuid" },
       emailId: { type: "uuid" },
-      status: { type: "string" }
-    }
+      status: { type: "string" },
+    },
   };
 
   static relationMappings = (): RelationMappings => ({
@@ -31,8 +31,8 @@ export default class EmailVerificationToken extends BaseModel {
       modelClass: Email,
       join: {
         from: "email_verification_tokens.emailId",
-        to: "emails.id"
-      }
-    }
+        to: "emails.id",
+      },
+    },
   });
 }

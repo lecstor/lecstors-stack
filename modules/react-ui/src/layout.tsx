@@ -10,9 +10,9 @@ type Props = {
 };
 
 const Layout = styled.div<Props>`
-  ${p => (p.pad ? `padding: ${p.pad.replace(/([\d.]+)/g, "$1rem")}` : "")}
-  ${p => p.height && `height: ${p.height};`}
-  ${p => p.width && `width: ${p.width};`}
+  ${(p) => (p.pad ? `padding: ${p.pad.replace(/([\d.]+)/g, "$1rem")}` : "")}
+  ${(p) => p.height && `height: ${p.height};`}
+  ${(p) => p.width && `width: ${p.width};`}
 
   ${({ mode }) =>
     mode === "hamburger" &&

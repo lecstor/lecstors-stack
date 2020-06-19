@@ -19,18 +19,18 @@ const Swatch = styled.div<{ color: string; variant: keyof Color }>`
 `;
 
 export default {
-  title: "Theme/Colours"
+  title: "Theme/Colours",
 };
 
 export const base = () => {
   return (
     <Layout pad="1">
-      {Object.keys(colors).map(color => (
+      {Object.keys(colors).map((color) => (
         <Caption key={color}>
           <Swatch key={`${color}`} color="white" variant="primary">
             {color}
           </Swatch>
-          {Object.keys(colors[color]).map(variant => (
+          {Object.keys(colors[color]).map((variant) => (
             <Swatch
               key={`${color}-${variant}`}
               color={color}

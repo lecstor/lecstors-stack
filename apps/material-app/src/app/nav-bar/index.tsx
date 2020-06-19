@@ -21,7 +21,7 @@ const Title = styled(Typography).attrs({ variant: "h6" })`
 
 const UserName = styled(Typography).attrs({
   component: "span",
-  fontSize: "1.2rem"
+  fontSize: "1.2rem",
 })``;
 
 const NavBar = () => {

@@ -8,7 +8,7 @@ const services = fs.readdirSync("./services");
 
 const commands: Commands = {};
 
-services.forEach(service => {
+services.forEach((service) => {
   if (/^\./.test(service)) return;
 
   commands[service] = {
@@ -29,12 +29,12 @@ services.forEach(service => {
             await execute(`yarn workspace @lecstor/${service} start`, args);
           }
         },
-        help
+        help,
       },
       test: {
         description: `Test ${service}`,
         options: [
-          "-c --coverage {boolean} - generate a coverage report [default false]"
+          "-c --coverage {boolean} - generate a coverage report [default false]",
         ],
         action: async ({ input }) => {
           const { coverage } = input.args;
@@ -44,9 +44,9 @@ services.forEach(service => {
             }`
           );
         },
-        help
-      }
-    }
+        help,
+      },
+    },
   };
 });
 

@@ -22,8 +22,8 @@ export default class Session extends Model {
       modelClass: User,
       join: {
         from: "sessions.userId",
-        to: "users.id"
-      }
-    }
+        to: "users.id",
+      },
+    },
   };
 }

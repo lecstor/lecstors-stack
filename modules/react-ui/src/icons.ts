@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { FaCheck, FaPlus, FaSignInAlt, FaTimes, FaTrash } from "react-icons/fa";
 
 const icon = (Icon: IconType) => styled(Icon).attrs({
-  className: "icon"
+  className: "icon",
 })`
   vertical-align: middle;
 `;

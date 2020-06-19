@@ -13,7 +13,7 @@ const MainMenu = () => {
   >(null);
   const open = Boolean(anchorEl);
 
-  const handleMenu: ReactEventHandler = event => {
+  const handleMenu: ReactEventHandler = (event) => {
     setAnchorEl(event.currentTarget);
   };
 

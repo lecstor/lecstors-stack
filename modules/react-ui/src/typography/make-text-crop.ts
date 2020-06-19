@@ -8,11 +8,11 @@ const makeTextCrop = ({
   topCrop = 6,
   bottomCrop = 8,
   cropFontSize = 32,
-  cropLineHeight = 1.2
+  cropLineHeight = 1.2,
 }) => ({
   lineHeight = cropLineHeight,
   topAdjustment = 0,
-  bottomAdjustment = 0
+  bottomAdjustment = 0,
 } = {}) => {
   const dynamicTopCrop =
     (topCrop + (lineHeight - cropLineHeight) * (cropFontSize / 2)) /

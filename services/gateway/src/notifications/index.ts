@@ -27,7 +27,7 @@ export async function userCreated(user: User) {
         from: "Jason Galea <jason@lecstor.com>",
         subject: "Welcome to Lecstor!",
         // text: "and easy to do anywhere, even with Node.js",
-        html: `<a href="${verificationUrl}">Click to verify your email</a>`
+        html: `<a href="${verificationUrl}">Click to verify your email</a>`,
       });
     } else {
       console.log(`Verify email at: ${verificationUrl}`);

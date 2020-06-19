@@ -10,7 +10,7 @@ const anonymousAuth = { loggedIn: false, user: placeholderUser };
 export const authContext = createContext<AuthContext>({
   auth: anonymousAuth,
   setAuth: () => undefined,
-  fetchUser: () => undefined
+  fetchUser: () => undefined,
 });
 
 const { Provider } = authContext;
@@ -18,14 +18,14 @@ const { Provider } = authContext;
 const AuthProvider: FC = ({ children }) => {
   const [auth, setAuthState] = useState<Auth>({
     loggedIn: false,
-    user: placeholderUser
+    user: placeholderUser,
   });
 
   const setAuth = (auth: Auth | null) =>
     setAuthState(auth === null ? anonymousAuth : auth);
 
   const fetchUser = () => {
-    fetchAuthUser().then(auth =>
+    fetchAuthUser().then((auth) =>
       setAuth({ loggedIn: Boolean(auth.user.id), ...auth })
     );
   };

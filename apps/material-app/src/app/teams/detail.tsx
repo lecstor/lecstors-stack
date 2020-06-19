@@ -12,7 +12,7 @@ export function GroupDetail({ groupId }: { groupId: string }) {
     <div>
       Privileges:
       <ul>
-        {Object.values(group.privileges).map(p => (
+        {Object.values(group.privileges).map((p) => (
           <li key={p.id}>{p.name}</li>
         ))}
       </ul>
@@ -20,7 +20,7 @@ export function GroupDetail({ groupId }: { groupId: string }) {
         <div>
           Members:
           <ul>
-            {group.members.map(m => (
+            {group.members.map((m) => (
               <li key={m.id}>
                 {m.firstname} {m.surname} ({m.email})
               </li>

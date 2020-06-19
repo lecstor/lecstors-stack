@@ -13,7 +13,7 @@ export type AuthContext = {
 
 export const authContext = createContext<AuthContext>({
   auth: {},
-  setAuth: () => undefined
+  setAuth: () => undefined,
 });
 
 const { Provider } = authContext;
@@ -22,7 +22,7 @@ const AuthProvider: FC = ({ children }) => {
   const [auth, setAuth] = useState<AuthContext["auth"]>();
 
   useEffect(() => {
-    fetchAuthUser().then(auth => setAuth(auth));
+    fetchAuthUser().then((auth) => setAuth(auth));
   }, []);
 
   return <Provider value={{ auth, setAuth }}>{children}</Provider>;

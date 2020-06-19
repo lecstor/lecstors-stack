@@ -1,6 +1,6 @@
 import {
   Provider,
-  createClient as createUrqlClient
+  createClient as createUrqlClient,
   // debugExchange,
   // defaultExchanges
 } from "urql";
@@ -14,8 +14,8 @@ export const createClient = () =>
     // exchanges: [...defaultExchanges, debugExchange],
     fetchOptions: {
       mode: "cors", // no-cors, cors, *same-origin
-      credentials: "include" // include, same-origin
-    }
+      credentials: "include", // include, same-origin
+    },
   });
 
 export { Provider };

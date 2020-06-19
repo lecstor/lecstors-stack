@@ -34,7 +34,7 @@ const promisifiedAuthenticate = (
 
 const promisifiedLogin = (req: Request, user: Express.User, options: any) =>
   new Promise((resolve, reject) =>
-    req.login(user, options, err => {
+    req.login(user, options, (err) => {
       if (err) reject(err);
       else resolve();
     })
@@ -50,8 +50,8 @@ export function getContext({ req, res }: { req: Request; res: Response }) {
       isUnauthenticated,
       login: (user: Express.User, options: any) =>
         promisifiedLogin(req, user, options),
-      logout: () => req.logout()
+      logout: () => req.logout(),
     },
-    authUser: req.user
+    authUser: req.user,
   };
 }

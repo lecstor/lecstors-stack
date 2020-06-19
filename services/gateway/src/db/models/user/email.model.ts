@@ -25,8 +25,8 @@ export default class Email extends BaseModel {
       id: { type: "uuid" },
       userId: { type: "uuid" },
       verified: { type: "boolean" },
-      email: { type: "string", minLength: 5, maxLength: 254 }
-    }
+      email: { type: "string", minLength: 5, maxLength: 254 },
+    },
   };
 
   static relationMappings = (): RelationMappings => ({
@@ -35,16 +35,16 @@ export default class Email extends BaseModel {
       modelClass: "user/user.model",
       join: {
         from: "emails.userId",
-        to: "users.id"
-      }
+        to: "users.id",
+      },
     },
     verificationTokens: {
       relation: Model.HasManyRelation,
       modelClass: VerificationToken,
       join: {
         from: "emails.id",
-        to: "email_verification_tokens.emailId"
-      }
-    }
+        to: "email_verification_tokens.emailId",
+      },
+    },
   });
 }

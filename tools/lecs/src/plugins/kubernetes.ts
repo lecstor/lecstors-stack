@@ -15,7 +15,7 @@ const commands: Commands = {
             `kubectl apply -n "${input.args.namespace}" -R -f kubernetes/production`,
             input.args
           );
-        }
+        },
       },
       create: {
         commands: {
@@ -28,9 +28,9 @@ const commands: Commands = {
                 input.args
               );
             },
-            help
-          }
-        }
+            help,
+          },
+        },
       },
       generate: {
         description: "Generate config using Kompose",
@@ -39,10 +39,10 @@ const commands: Commands = {
             "BUILD_ENV=production TAG=production kompose convert -o kubernetes/production/kompose",
             input.args
           );
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 };
 
 export default function plugin() {

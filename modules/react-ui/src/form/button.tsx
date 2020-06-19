@@ -6,7 +6,7 @@ import { ButtonModes } from "../theme/settings/buttons";
 import {
   Button as ButtonType,
   ScreenSize,
-  ScreenTypography
+  ScreenTypography,
 } from "../theme/theme-types";
 import { textCss } from "../typography/text";
 
@@ -48,14 +48,14 @@ const createMode = (
   { shadow = true }: { shadow?: boolean } = {}
 ) => css`
   ${shadow &&
-    css`
-      transition-duration: 0.2s;
-      transition-timing-function: ease-out;
-      text-shadow: 1px 1px 0px ${({ theme }) => theme.colors.black.shadow};
-      .icon {
-        filter: url(#drop-shadow);
-      }
-    `}
+  css`
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+    text-shadow: 1px 1px 0px ${({ theme }) => theme.colors.black.shadow};
+    .icon {
+      filter: url(#drop-shadow);
+    }
+  `}
 
   &:active {
     ${Label} {
@@ -76,7 +76,7 @@ const modes = {
   danger: createMode("danger"),
   caution: createMode("caution"),
   success: createMode("success"),
-  secondary: createMode("secondary", { shadow: false })
+  secondary: createMode("secondary", { shadow: false }),
 };
 
 const modeCss = ({ mode = "primary" }: { mode?: Mode }) => modes[mode];
@@ -91,7 +91,7 @@ const Component: FC<ButtonProps> = ({
     {mode !== "secondary" && <DropShadowSvgFilter />}
     <button {...props}>
       <Label>
-        {React.Children.map(children, child => {
+        {React.Children.map(children, (child) => {
           if (typeof child === "string") {
             return <span>{child}</span>;
           }
@@ -127,7 +127,7 @@ const Button = styled(Component)<ButtonProps>`
   border-radius: 0.25em;
   -webkit-appearance: none;
 
-  ${p => modeCss(p)}
+  ${(p) => modeCss(p)}
 `;
 
 export default Button;

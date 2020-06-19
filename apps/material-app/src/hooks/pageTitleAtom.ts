@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 const pageTitle = atom<string | null>({
   key: "pageTitle",
-  default: ""
+  default: "",
 });
 
 export default pageTitle;

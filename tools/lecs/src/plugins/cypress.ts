@@ -12,7 +12,7 @@ const commands: Commands = {
         action: async ({ input }) => {
           console.log("open cypress");
           await execute("yarn workspace @lecstor/cypress run open", input.args);
-        }
+        },
       },
       run: {
         description: "Run Cypress locally (or optionally in Docker)",
@@ -30,10 +30,10 @@ const commands: Commands = {
             );
           }
         },
-        help
-      }
-    }
-  }
+        help,
+      },
+    },
+  },
 };
 
 export default function plugin() {

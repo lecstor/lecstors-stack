@@ -11,7 +11,7 @@ const commands: Commands = {
         description: "Build the config module",
         action: async ({ input }) => {
           await execute(`yarn workspace @lecstor/config run build`, input.args);
-        }
+        },
       },
       dump: {
         description: "Dump config to the console",
@@ -25,10 +25,10 @@ const commands: Commands = {
             args
           );
         },
-        help
-      }
-    }
-  }
+        help,
+      },
+    },
+  },
 };
 
 export default function plugin() {

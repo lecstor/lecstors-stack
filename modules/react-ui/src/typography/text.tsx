@@ -15,7 +15,7 @@ type GetCssOptions = {
 export const textCss = ({
   theme,
   font = "body",
-  screenSize = "responsive"
+  screenSize = "responsive",
 }: GetCssOptions) => {
   let screenTheme = theme.typography[screenSize];
   if (!screenTheme) {
@@ -48,7 +48,7 @@ export const Div = styled.div<DivProps>`
   color: ${({ theme, color = theme.colors.black.dark1 }) => color};
 `;
 
-export const P: FC<DivProps> = props => <Div as="p" {...props} />;
+export const P: FC<DivProps> = (props) => <Div as="p" {...props} />;
 
 const Hn = styled(Div)`
   margin-block-start: 0;
@@ -74,14 +74,14 @@ export const H5: FC<DivProps> = ({ font = "heading5", ...props }) => (
 export const Heading = H1;
 export const SubHeading = H2;
 
-export const Body: FC<{ screenSize?: ScreenSize }> = props => (
+export const Body: FC<{ screenSize?: ScreenSize }> = (props) => (
   <Div {...props} font="body" />
 );
 
-export const BodySmall: FC<{ screenSize?: ScreenSize }> = props => (
+export const BodySmall: FC<{ screenSize?: ScreenSize }> = (props) => (
   <Div {...props} font="bodySmall" />
 );
 
-export const Caption: FC<{ screenSize?: ScreenSize }> = props => (
+export const Caption: FC<{ screenSize?: ScreenSize }> = (props) => (
   <Div {...props} font="caption" />
 );

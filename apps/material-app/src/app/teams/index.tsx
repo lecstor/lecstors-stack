@@ -52,7 +52,7 @@ const GroupTreeNode = ({ groupTree }: GroupTreeNodeProps) => {
         </Box>
         {groupTree.children.length ? (
           <Box>
-            {groupTree.children.map(gt => (
+            {groupTree.children.map((gt) => (
               <GroupTreeNode key={gt.id} groupTree={gt} />
             ))}
           </Box>
@@ -84,14 +84,14 @@ const Teams = () => {
         value={group}
         onChange={handleChange}
       >
-        {auth.user?.groups.map(g => (
+        {auth.user?.groups.map((g) => (
           <MenuItem key={g.id} value={g.id}>
             {g.isPrimary ? g.name : `${g.primaryGroup.name} - ${g.name}`}
           </MenuItem>
         ))}
       </Select>
       {groupsTrees
-        ? groupsTrees.map(gt =>
+        ? groupsTrees.map((gt) =>
             gt ? (
               <Box key={gt.id} p={1}>
                 <GroupTreeNode groupTree={gt} />

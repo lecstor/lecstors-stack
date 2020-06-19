@@ -31,7 +31,7 @@ const Table = styled.table`
 `;
 
 export default {
-  title: "Typography"
+  title: "Typography",
   // component: Text
 };
 
@@ -49,7 +49,7 @@ export const Text = () => (
             </tr>
           </thead>
           <tbody>
-            {["1", "2", "3", "4", "5"].map(level => {
+            {["1", "2", "3", "4", "5"].map((level) => {
               const font = `heading${level}` as keyof ScreenTypography;
               return (
                 <tr key={level}>

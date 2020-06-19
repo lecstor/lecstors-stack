@@ -14,7 +14,7 @@ const standardRange = (color: string) => ({
   light1: lighten(0.1, color),
   primary: color,
   dark1: darken(0.1, color),
-  dark2: darken(0.2, color)
+  dark2: darken(0.2, color),
 });
 
 const colors: { [color: string]: Color } = {
@@ -26,8 +26,8 @@ const colors: { [color: string]: Color } = {
   white: standardRange(white),
   black: {
     ...standardRange(black),
-    shadow: "rgba(0, 0, 0, 0.3)"
-  }
+    shadow: "rgba(0, 0, 0, 0.3)",
+  },
 };
 
 export default colors;

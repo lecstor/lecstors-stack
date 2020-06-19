@@ -15,7 +15,7 @@ const ProfileMenu = () => {
   >(null);
   const open = Boolean(anchorEl);
 
-  const handleMenu: ReactEventHandler = event => {
+  const handleMenu: ReactEventHandler = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -39,12 +39,12 @@ const ProfileMenu = () => {
         anchorEl={anchorEl}
         anchorOrigin={{
           vertical: "top",
-          horizontal: "right"
+          horizontal: "right",
         }}
         keepMounted
         transformOrigin={{
           vertical: "top",
-          horizontal: "right"
+          horizontal: "right",
         }}
         open={open}
         onClose={handleClose}

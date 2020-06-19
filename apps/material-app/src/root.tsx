@@ -10,7 +10,7 @@ import loadable from "@loadable/component";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {
   ThemeProvider as MuiThemeProvider,
-  StylesProvider
+  StylesProvider,
 } from "@material-ui/core/styles";
 // https://material-ui.com/guides/interoperability/#controlling-priority-3
 

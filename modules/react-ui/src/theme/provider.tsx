@@ -16,7 +16,7 @@ export interface ThemeProviderProps<T extends object, U extends object = T> {
 
 export const ThemeProvider = ({
   children,
-  theme: themeOverrides = {}
+  theme: themeOverrides = {},
 }: ThemeProviderProps<any, any>) => {
   const smallScreenMaxSize =
     themeOverrides?.screenSizes?.medium || screenSizes.medium;
@@ -35,12 +35,12 @@ export const ThemeProvider = ({
   const defaultTheme: DefaultTheme = {
     typography: {
       ...typography,
-      responsive: typography[screenSize]
+      responsive: typography[screenSize],
     },
     buttons,
     colors,
     screenSizes,
-    screenSize
+    screenSize,
   };
 
   const theme = deepmerge(defaultTheme, themeOverrides);

@@ -10,7 +10,7 @@ const EXCHANGE = "default";
 const publishChannel = connection.createChannel({
   json: true,
   setup: (channel: ConfirmChannel) =>
-    channel.assertExchange(EXCHANGE, "topic", { durable: true })
+    channel.assertExchange(EXCHANGE, "topic", { durable: true }),
 });
 
 type PublishArgs = {
@@ -22,10 +22,10 @@ type PublishArgs = {
 export async function publish({
   exchange = "default",
   key,
-  message
+  message,
 }: PublishArgs) {
   console.log("pubsub: publish %s: '%s'", key, message);
-  publishChannel.publish(exchange, key, message).catch(err => {
+  publishChannel.publish(exchange, key, message).catch((err) => {
     console.log("Message was rejected:", err.stack);
     publishChannel.close();
     connection.close();
@@ -41,7 +41,7 @@ type ListenArgs<Message> = {
 export async function listen<Message>({
   exchange = "default",
   keys,
-  fn
+  fn,
 }: ListenArgs<Message>) {
   return connection
     .createChannel({
@@ -51,7 +51,7 @@ export async function listen<Message>({
           channel.assertQueue("", { exclusive: true, autoDelete: true }),
           channel.assertExchange(exchange, "topic"),
           channel.prefetch(1),
-          ...keys.map(key => channel.bindQueue("", exchange, key)),
+          ...keys.map((key) => channel.bindQueue("", exchange, key)),
           channel.consume(
             "",
             (message: ConsumeMessage | null) => {
@@ -66,8 +66,8 @@ export async function listen<Message>({
               }
             },
             { noAck: true }
-          )
-        ])
+          ),
+        ]),
     })
     .waitForConnect()
     .then(() => console.log("Listening for messages"));

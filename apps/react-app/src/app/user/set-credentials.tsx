@@ -8,7 +8,7 @@ import {
   ButtonLayout,
   FormLayout,
   Heading,
-  Layout
+  Layout,
 } from "@lecstor/react-ui";
 
 import FormText from "../../components/form-text";
@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
     .required("Required"),
   password: Yup.string()
     .min(2, "Must be longer than 2 characters")
-    .max(100, "Sorry, but can you provide a shorter version of your password")
+    .max(100, "Sorry, but can you provide a shorter version of your password"),
 });
 
 type FormData = {
@@ -32,7 +32,7 @@ type FormData = {
 const Form = ({ onSubmit }) => {
   const { register, handleSubmit, errors } = useForm<FormData>({
     mode: "onBlur",
-    validationSchema
+    validationSchema,
   });
 
   return (
@@ -78,7 +78,7 @@ const SetCredentials = () => {
   );
   const apiSetCreds = useSetCreds();
 
-  const onSubmit = values => apiSetCreds(values).then(setRes);
+  const onSubmit = (values) => apiSetCreds(values).then(setRes);
 
   return (
     <Layout pad="1">

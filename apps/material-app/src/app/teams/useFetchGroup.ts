@@ -28,7 +28,7 @@ export const fetchGroupGql = gql`
 export function useFetchGroup({ groupId }: { groupId: string }) {
   const [res] = useQuery<Response>({
     query: fetchGroupGql,
-    variables: { groupId }
+    variables: { groupId },
   });
   const group = res.data?.group;
   return {
@@ -37,9 +37,9 @@ export function useFetchGroup({ groupId }: { groupId: string }) {
           ...group,
           privileges: group.privileges
             ? stringToPrivilegesMap(group.privileges)
-            : {}
+            : {},
         }
       : undefined,
-    ...res
+    ...res,
   };
 }
