@@ -2,6 +2,8 @@ import { Model } from "objection";
 import cuid from "cuid";
 
 import { createUser, createUserInGroup } from "./user";
+import { createTodo } from "./todo";
+import Todo from "./models/todo/todo.model";
 import User from "./models/user/user.model";
 import {
   addGroupMember,
@@ -11,6 +13,7 @@ import {
   getWithParents,
   userHasGroupPrivilege,
   userHasGroupChildrenPrivilege,
+  userHasResourcePrivilege,
   whereAllPrivileges,
   whereSomePrivileges,
   Group,
@@ -529,6 +532,7 @@ describe("DB", () => {
         let manager2: User;
         let resourcesGroup: Group;
         let groups: Group[];
+        let todo: Todo;
 
         beforeAll(async () => {
           primaryGroup = await createGroup("Organisation", { isPrimary: true });
@@ -563,6 +567,11 @@ describe("DB", () => {
           });
           await addGroupParent(resourcesGroup.id, managers2Group.id);
 
+          todo = await createTodo({
+            name: "Feed the dog",
+            groupId: resourcesGroup.id,
+          });
+
           groups = [
             primaryGroup,
             managers1Group,
@@ -588,6 +597,16 @@ describe("DB", () => {
               })
             ).toBeTruthy();
           }
+        });
+
+        test("owner has privilege on all resources", async () => {
+          expect(
+            await userHasResourcePrivilege({
+              authUser: owner,
+              privilege: "addGroupMember",
+              resource: todo,
+            })
+          ).toBeTruthy();
         });
 
         test("manager1 does not have privilege on primary group or manager groups", async () => {
@@ -617,6 +636,13 @@ describe("DB", () => {
               groupId: resourcesGroup.id,
             })
           ).toBeTruthy();
+          expect(
+            await userHasResourcePrivilege({
+              authUser: manager1,
+              privilege: "addGroupMember",
+              resource: todo,
+            })
+          ).toBeTruthy();
         });
 
         test("manager1 does not have removeGroupMember privilege on resources group", async () => {
@@ -625,6 +651,13 @@ describe("DB", () => {
               authUser: manager1,
               privilege: "removeGroupMember",
               groupId: resourcesGroup.id,
+            })
+          ).toBeFalsy();
+          expect(
+            await userHasResourcePrivilege({
+              authUser: manager1,
+              privilege: "removeGroupMember",
+              resource: todo,
             })
           ).toBeFalsy();
         });
@@ -656,17 +689,28 @@ describe("DB", () => {
               groupId: resourcesGroup.id,
             })
           ).toBeTruthy();
+          expect(
+            await userHasResourcePrivilege({
+              authUser: manager2,
+              privilege: "removeGroupMember",
+              resource: todo,
+            })
+          ).toBeTruthy();
         });
 
         test("manager2 does not have addGroupMember privilege on resources group", async () => {
-          console.log(
-            "manager2 does not have addGroupMember privilege on resources group"
-          );
           expect(
             await userHasGroupPrivilege({
               authUser: manager2,
               privilege: "addGroupMember",
               groupId: resourcesGroup.id,
+            })
+          ).toBeFalsy();
+          expect(
+            await userHasResourcePrivilege({
+              authUser: manager2,
+              privilege: "addGroupMember",
+              resource: todo,
             })
           ).toBeFalsy();
         });
