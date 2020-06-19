@@ -1,5 +1,5 @@
 import session, { SessionOptions } from "express-session";
-import Sessions from "./db/models/auth/session.model";
+import Session from "./db/models/auth/session.model";
 
 export default function connectObjection(appSession: typeof session) {
   class ObjectionStore extends appSession.Store {
@@ -7,13 +7,16 @@ export default function connectObjection(appSession: typeof session) {
       super(options);
     }
 
-    get = async function (id: string, fn: Function) {
-      const session = await Sessions.query().findById(id);
+    get = async function (
+      id: string,
+      fn: (err: any, session?: Session["data"] | null | undefined) => void
+    ) {
+      const session = await Session.query().findById(id);
       if (session) {
-        const { userId, data } = session;
-        return fn(null, { ...data, userId });
+        const { data } = session;
+        return fn(null, data);
       }
-      return fn();
+      return fn(null);
     };
 
     set = async function (
@@ -21,22 +24,19 @@ export default function connectObjection(appSession: typeof session) {
       session: Record<string, any>,
       fn?: (error?: any) => void
     ) {
-      const { userId, ...data } = session;
-      const updated = await Sessions.query()
-        .findById(id)
-        .patch({ userId, data });
+      const updated = await Session.query().findById(id).patch(session);
       if (updated) {
         return fn?.();
       }
 
-      return Sessions.query()
-        .insert({ id, userId, data })
+      return Session.query()
+        .insert({ id, ...session })
         .then(() => fn?.())
         .catch((err) => fn?.(err));
     };
 
     destroy = async function (id: string, fn?: (error?: any) => void) {
-      await Sessions.query().deleteById(id);
+      await Session.query().deleteById(id);
       fn?.();
     };
 

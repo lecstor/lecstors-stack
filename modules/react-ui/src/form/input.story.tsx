@@ -5,8 +5,6 @@ import FieldLayout from "./field-layout";
 
 import { Div } from "../typography/text";
 
-import Hamburger from "../layout/hamburger";
-
 export default {
   title: "Form/Input",
   component: Input,

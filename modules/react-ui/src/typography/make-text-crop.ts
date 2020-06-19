@@ -1,8 +1,6 @@
 // http://text-crop.eightshapes.com/?typeface-selection=google-font&typeface=Roboto&custom-typeface-name=Helvetica&custom-typeface-url=&custom-typeface-weight=400&custom-typeface-style=normal&weight-and-style=100&size=32&line-height=1.2&top-crop=6&bottom-crop=8
 // https://github.com/LJEsp/study-text-crop
 
-import { css } from "styled-components";
-
 const makeTextCrop = ({
   fontFamily = "Roboto, sans-serif",
   topCrop = 6,

@@ -6,9 +6,11 @@ import jsonSchema from "./session.schema.json";
 
 export default class Session extends Model {
   readonly id!: string;
-  userId?: string;
   data!: {
-    [key: string]: any;
+    cookie: Express.SessionCookieData;
+    passport: {
+      user: string;
+    };
   };
 
   static tableName = "sessions";

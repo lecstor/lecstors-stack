@@ -2,8 +2,16 @@ import React, { FC, createContext, useEffect, useState } from "react";
 
 import { fetchAuthUser } from "../api/auth/fetch-auth-user";
 
+type Group = {
+  id: string;
+  isPrimary?: boolean;
+  name: string;
+  privileges: string;
+  type: string;
+};
+
 export type Auth = {
-  user?: { id: string; firstname: string; surname: string; emails: any[] };
+  user?: { id: string; firstname: string; surname: string; groups: Group[] };
 };
 
 export type AuthContext = {

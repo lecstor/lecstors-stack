@@ -9,7 +9,9 @@ import colors from "./settings/colors";
 import screenSizes from "./settings/screen-sizes";
 import { ScreenSize } from "./theme-types";
 
-export interface ThemeProviderProps<T extends object, U extends object = T> {
+type Obj = Record<string, unknown>;
+
+export interface ThemeProviderProps<T extends Obj, U extends Obj = T> {
   children?: React.ReactChild; // only one child is allowed, goes through React.Children.only
   theme?: T | ((theme: U) => T);
 }
