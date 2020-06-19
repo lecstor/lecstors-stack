@@ -71,28 +71,22 @@ export async function getWithChildren(id: idOrIds, fields: Fields = ["*"]) {
 
 export async function getParents(id: idOrIds, fields: Fields = ["*"]) {
   const ids = Array.isArray(id) ? id : [id];
-  return (
-    Group.query()
-      .withRecursive("parents", (qb) => {
-        qb.select(["groupId", "parentId"])
-          .from("group_parent_join")
-          .whereIn("groupId", ids)
-          .unionAll((qb2) => {
-            qb2
-              .select([
-                "group_parent_join.groupId",
-                "group_parent_join.parentId",
-              ])
-              .from("group_parent_join")
-              .join("parents", "group_parent_join.groupId", "parents.parentId");
-          }, true);
-      })
-      .select(...fields.map((f) => `groups.${f}`))
-      .from("groups")
-      // .withGraphFetched("groups")
-      .join("parents", "parents.parentId", "groups.id")
-      .debug()
-  );
+  return Group.query()
+    .withRecursive("parents", (qb) => {
+      qb.select(["groupId", "parentId"])
+        .from("group_parent_join")
+        .whereIn("groupId", ids)
+        .unionAll((qb2) => {
+          qb2
+            .select(["group_parent_join.groupId", "group_parent_join.parentId"])
+            .from("group_parent_join")
+            .join("parents", "group_parent_join.groupId", "parents.parentId");
+        }, true);
+    })
+    .select(...fields.map((f) => `groups.${f}`))
+    .from("groups")
+    .join("parents", "parents.parentId", "groups.id")
+    .debug();
 }
 
 export async function getWithParents(id: idOrIds, fields: Fields = ["*"]) {
@@ -176,7 +170,7 @@ export async function createGroup(name: string, newGroup: NewGroupInput) {
         isPrimary: Boolean(isPrimary || forcedIsPrimary),
         privileges,
         type: type || defaultType,
-        groups: parentId ? [{ id: parentId }] : [],
+        parents: parentId ? [{ id: parentId }] : [],
       },
       { relate: true }
     );
@@ -184,7 +178,7 @@ export async function createGroup(name: string, newGroup: NewGroupInput) {
 }
 
 export async function addGroupParent(groupId: string, parentId: string) {
-  return Group.relatedQuery("groups").for(groupId).relate(parentId);
+  return Group.relatedQuery("parents").for(groupId).relate(parentId);
 }
 
 export async function getPrivileges(id: string) {
@@ -228,7 +222,7 @@ async function userGroupsHaveGroupPrivilege(
   userGroupIds: string[],
   privilege: string
 ) {
-  const groups = await Group.fetchGraph(groupAndParents, "groups(selectId)", {
+  const groups = await Group.fetchGraph(groupAndParents, "parents(selectId)", {
     skipFetched: true,
   }).modifiers({ selectId: (builder) => builder.select("groups.id") });
 
@@ -237,7 +231,7 @@ async function userGroupsHaveGroupPrivilege(
   for (const parentGroup of groups.reverse()) {
     if (
       userGroupIds.includes(parentGroup.id) ||
-      parentGroup.groups.find((p) => memberGroupTree[p.id])
+      parentGroup.parents.find((p) => memberGroupTree[p.id])
     ) {
       if (parentGroup.privilegesMap[privilege]) {
         return true;

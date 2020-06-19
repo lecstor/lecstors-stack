@@ -16,7 +16,7 @@ export default class Group extends BaseModel {
   readonly id!: string;
   name?: string;
   description?: string;
-  groups!: Group[];
+  parents!: Group[];
   primaryGroupId?: string;
   isPrimary?: boolean;
   privileges?: string;
@@ -62,7 +62,7 @@ export default class Group extends BaseModel {
   }
 
   static relationMappings = (): RelationMappings => ({
-    groups: {
+    parents: {
       relation: Model.ManyToManyRelation,
       modelClass: "group/group.model",
       join: {

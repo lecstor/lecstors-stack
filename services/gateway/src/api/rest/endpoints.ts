@@ -11,7 +11,7 @@ import {
   deleteUser,
   devDeleteUser,
   getEmailVerifyTokens,
-  verifyEmail
+  verifyEmail,
 } from "../../db/user";
 import { userCreated } from "../../pubsub";
 
@@ -25,11 +25,11 @@ routes.post("/register", async (req, res, next) => {
 
     const org = await createGroup("Organisation", {
       type: "organisation",
-      isPrimary: true
+      isPrimary: true,
     });
     await Promise.all([
       addGroupMember({ groupId: org.id, userId: user.id }),
-      createGroup("Team 1", { groupId: org.id, primaryGroupId: org.id })
+      createGroup("Team 1", { parentId: org.id, primaryGroupId: org.id }),
     ]);
 
     // const p1 = addGroupMember({ groupId: org.id, userId: user.id });
@@ -44,7 +44,7 @@ routes.post("/register", async (req, res, next) => {
     // const p4 = addGroupMember({ groupId: p3.id, userId: user.id });
     // await Promise.all([p1, p4]);
 
-    req.logIn(user, err => {
+    req.logIn(user, (err) => {
       if (err) {
         return next(err);
       }
@@ -60,7 +60,7 @@ routes.post("/verify-email", async (req, res, next) => {
   try {
     const user = await verifyEmail({ token });
     if (user) {
-      req.logIn(user, err => {
+      req.logIn(user, (err) => {
         if (err) {
           return next(err);
         }
@@ -78,7 +78,7 @@ routes.post("/set-credentials", async (req, res, next) => {
     await setCredentials({
       userId: req.user.id,
       username,
-      password
+      password,
     });
     res.send({ ok: true });
   } catch (err) {
@@ -94,7 +94,7 @@ routes.post("/login", (req, res, next) => {
     if (!user) {
       return next(fillError(new Error(), userNotFound()));
     }
-    req.logIn(user, err => {
+    req.logIn(user, (err) => {
       if (err) {
         return next(err);
       }
@@ -133,7 +133,7 @@ if (["development", "test"].includes(process.env.NODE_ENV || "")) {
         return tokens;
       },
       {
-        retries: 5
+        retries: 5,
       }
     );
     res.send({ tokens });
