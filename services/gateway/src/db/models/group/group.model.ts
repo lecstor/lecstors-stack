@@ -16,7 +16,7 @@ export default class Group extends BaseModel {
   readonly id!: string;
   name?: string;
   description?: string;
-  groupId?: string;
+  groups!: Group[];
   primaryGroupId?: string;
   isPrimary?: boolean;
   privileges?: string;
@@ -28,7 +28,6 @@ export default class Group extends BaseModel {
     type: "object",
     properties: {
       id: { type: "string" },
-      groupId: { type: "string" },
       primaryGroupId: { type: "string" },
       name: { type: "string" },
       description: { type: "string" },
@@ -39,7 +38,7 @@ export default class Group extends BaseModel {
 
   $parseDatabaseJson(json: Objection.Pojo) {
     json = super.$parseDatabaseJson(json);
-    if (json["privileges"] !== undefined) {
+    if (json["privileges"] != undefined) {
       json["privileges"] = reverse(json["privileges"]);
     }
     return json;
@@ -63,11 +62,16 @@ export default class Group extends BaseModel {
   }
 
   static relationMappings = (): RelationMappings => ({
-    group: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: Group,
+    groups: {
+      relation: Model.ManyToManyRelation,
+      modelClass: "group/group.model",
       join: {
-        from: "groups.groupId",
+        from: "groups.id",
+        through: {
+          modelClass: "group/group_parent.model",
+          from: "group_parent_join.groupId",
+          to: "group_parent_join.parentId",
+        },
         to: "groups.id",
       },
     },

@@ -30,48 +30,80 @@ export function getGroup(groupId: string) {
 type idOrIds = string | string[];
 type Fields = string[];
 
-export async function getWithChildren(id: idOrIds, fields: Fields = ["*"]) {
-  return Group.query()
-    .withRecursive("children", (qb) => {
-      qb.select("groups.*")
-        .from("groups")
-        .where({ id })
-        .unionAll((qb2) => {
-          qb2
-            .select("groups.*")
-            .from("groups")
-            .join("children", "children.id", "groups.groupId");
-        }, true);
-    })
-    .select(...(fields?.length ? fields : ["*"]))
-    .from("children");
+function uniqueGroups(groups: Group[]) {
+  const hasOne: { [id: string]: boolean } = {};
+  return groups.filter((g) => {
+    if (hasOne[g.id]) return false;
+    hasOne[g.id] = true;
+    return true;
+  });
 }
 
 export async function getChildren(id: idOrIds, fields: Fields = ["*"]) {
-  const withChildren = await getWithChildren(id, fields);
-  return withChildren.filter((g) => !id.includes(g.id));
-}
-
-export async function getWithParents(id: idOrIds, fields: Fields = ["*"]) {
+  const ids = Array.isArray(id) ? id : [id];
   return Group.query()
-    .withRecursive("parents", (qb) => {
-      qb.select("groups.*")
-        .from("groups")
-        .where({ id })
+    .withRecursive("children", (qb) => {
+      qb.select(["groupId", "parentId"])
+        .from("group_parent_join")
+        .whereIn("parentId", ids)
         .unionAll((qb2) => {
           qb2
-            .select("groups.*")
-            .from("groups")
-            .join("parents", "parents.groupId", "groups.id");
+            .select(["group_parent_join.groupId", "group_parent_join.parentId"])
+            .from("group_parent_join")
+            .join("children", "group_parent_join.parentId", "children.groupId");
         }, true);
     })
-    .select(...(fields?.length ? fields : ["*"]))
-    .from("parents");
+    .select(...fields.map((f) => `groups.${f}`))
+    .from("groups")
+    .join("children", "children.groupId", "groups.id");
+}
+
+export async function getWithChildren(id: idOrIds, fields: Fields = ["*"]) {
+  const ids = Array.isArray(id) ? id : [id];
+  const [groups, children] = await Promise.all([
+    Group.query()
+      .whereIn("id", ids)
+      .select(...fields.map((f) => `groups.${f}`)),
+    getChildren(id, fields),
+  ]);
+  return uniqueGroups([...groups, ...children]);
 }
 
 export async function getParents(id: idOrIds, fields: Fields = ["*"]) {
-  const withParents = await getWithParents(id, fields);
-  return withParents.filter((g) => !id.includes(g.id));
+  const ids = Array.isArray(id) ? id : [id];
+  return (
+    Group.query()
+      .withRecursive("parents", (qb) => {
+        qb.select(["groupId", "parentId"])
+          .from("group_parent_join")
+          .whereIn("groupId", ids)
+          .unionAll((qb2) => {
+            qb2
+              .select([
+                "group_parent_join.groupId",
+                "group_parent_join.parentId",
+              ])
+              .from("group_parent_join")
+              .join("parents", "group_parent_join.groupId", "parents.parentId");
+          }, true);
+      })
+      .select(...fields.map((f) => `groups.${f}`))
+      .from("groups")
+      // .withGraphFetched("groups")
+      .join("parents", "parents.parentId", "groups.id")
+      .debug()
+  );
+}
+
+export async function getWithParents(id: idOrIds, fields: Fields = ["*"]) {
+  const ids = Array.isArray(id) ? id : [id];
+  const [groups, parents] = await Promise.all([
+    Group.query()
+      .whereIn("id", ids)
+      .select(...fields.map((f) => `groups.${f}`)),
+    getParents(id, fields),
+  ]);
+  return uniqueGroups([...groups, ...parents]);
 }
 
 export async function getPrimaryGroup(groupId: string) {
@@ -92,20 +124,20 @@ type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
 type NewGroup = {
   id?: string;
   description?: string;
-  groupId?: string;
+  parentId?: string;
   primaryGroupId?: string;
   privileges?: PrivilegesMapInput;
   isPrimary?: boolean;
   type?: GroupType;
 };
 
-type NewGroupInput = RequireAtLeastOne<NewGroup, "groupId" | "isPrimary">;
+type NewGroupInput = RequireAtLeastOne<NewGroup, "parentId" | "isPrimary">;
 
 export async function createGroup(name: string, newGroup: NewGroupInput) {
   const {
     id,
     description,
-    groupId,
+    parentId,
     primaryGroupId,
     isPrimary,
     privileges: privilegesMap = {},
@@ -116,13 +148,15 @@ export async function createGroup(name: string, newGroup: NewGroupInput) {
   let derivedPrimaryGroupId: string | undefined;
   let forcedIsPrimary = false;
 
-  if (groupId) {
+  if (parentId) {
     if (!primaryGroupId) {
-      derivedPrimaryGroupId = (await getPrimaryGroup(groupId))?.id;
+      derivedPrimaryGroupId = (await getPrimaryGroup(parentId))?.id;
     }
   } else {
     if (!isPrimary) {
-      throw new Error("groupId or isPrimary must be set when creating a group");
+      throw new Error(
+        "parentId or isPrimary must be set when creating a group"
+      );
     }
     forcedIsPrimary = true;
     defaultType = "organisation";
@@ -133,23 +167,30 @@ export async function createGroup(name: string, newGroup: NewGroupInput) {
   );
 
   return Group.transaction(async (trx) => {
-    return Group.query(trx).insertGraph({
-      id,
-      name,
-      description,
-      groupId,
-      primaryGroupId: primaryGroupId || derivedPrimaryGroupId,
-      isPrimary: Boolean(isPrimary || forcedIsPrimary),
-      privileges,
-      type: type || defaultType,
-    });
+    return Group.query(trx).insertGraph(
+      {
+        id,
+        name,
+        description,
+        primaryGroupId: primaryGroupId || derivedPrimaryGroupId,
+        isPrimary: Boolean(isPrimary || forcedIsPrimary),
+        privileges,
+        type: type || defaultType,
+        groups: parentId ? [{ id: parentId }] : [],
+      },
+      { relate: true }
+    );
   });
+}
+
+export async function addGroupParent(groupId: string, parentId: string) {
+  return Group.relatedQuery("groups").for(groupId).relate(parentId);
 }
 
 export async function getPrivileges(id: string) {
   const groups = await getWithParents(id, [
     "privileges",
-    "primary",
+    "isPrimary",
   ]).then((groups) => groups.reverse());
   const primary = groups.find((g) => g.isPrimary);
   if (primary) {
@@ -182,63 +223,31 @@ export function whereAllPrivileges(privs: PrivilegesMapInput) {
   return Group.query().where(query);
 }
 
-function findGroupPrivilege(
-  targetGroups: Group[],
+async function userGroupsHaveGroupPrivilege(
+  groupAndParents: Group[],
   userGroupIds: string[],
   privilege: string
 ) {
-  let isMember = false;
-  // recurse down the resource's group tree
-  for (const parentGroup of targetGroups.reverse()) {
-    if (!isMember && userGroupIds.includes(parentGroup.id)) {
-      isMember = true;
-    }
-    if (isMember && parentGroup.privilegesMap[privilege]) {
-      return true;
+  const groups = await Group.fetchGraph(groupAndParents, "groups(selectId)", {
+    skipFetched: true,
+  }).modifiers({ selectId: (builder) => builder.select("groups.id") });
+
+  const memberGroupTree: { [groupId: string]: boolean } = {};
+
+  for (const parentGroup of groups.reverse()) {
+    if (
+      userGroupIds.includes(parentGroup.id) ||
+      parentGroup.groups.find((p) => memberGroupTree[p.id])
+    ) {
+      if (parentGroup.privilegesMap[privilege]) {
+        return true;
+      }
+      memberGroupTree[parentGroup.id] = true;
     }
   }
 
   return false;
 }
-
-// type HasResourcePrivilegeArgs = {
-//   user: User;
-//   resource: Resource;
-//   privilege: string;
-// };
-
-// /*
-// To have a resource privilege a user must be a member of a group which is a parent
-// of the resource and have that privilege or is a parent to another parent of the
-// resource with that privilege.
-// */
-// export async function hasResourcePrivilege({
-//   user,
-//   resource,
-//   privilege,
-// }: HasResourcePrivilegeArgs) {
-//   const userGroupIds = user.groups.map((g) => g.id);
-
-//   if (!resource.groupId) {
-//     // maybe it's a primary group
-//     if (!(resource instanceof Group)) {
-//       throw new Error("Resource is invalid as it does not belong to a group");
-//     }
-//     if (!resource.isPrimary) {
-//       throw new Error(
-//         "Group is invalid as it is not a primary group and does not have a parent group"
-//       );
-//     }
-//     if (userGroupIds.includes(resource.id)) {
-//       // user is a member of a primary group
-//       return resource.privilegesMap[privilege];
-//     }
-//     return false;
-//   }
-
-//   const resourceParentGroups = await getWithParents(resource.groupId);
-//   return findGroupPrivilege(resourceParentGroups, userGroupIds, privilege);
-// }
 
 type HasGroupPrivilegeArgs = {
   authUser: User;
@@ -255,7 +264,7 @@ type HasGroupPrivilegeArgs = {
  *  If the group is not a primary group then the user will need to be a member of one of
  *  it's parent groups with the privilege set.
  */
-export async function hasGroupPrivilege({
+export async function userHasGroupPrivilege({
   authUser,
   groupId,
   privilege,
@@ -264,10 +273,10 @@ export async function hasGroupPrivilege({
   const groups = await getWithParents(groupId);
   const group = groups.find((g) => groupId === g.id);
   if (group?.isPrimary) {
-    return findGroupPrivilege(groups, userGroupIds, privilege);
+    return userGroupsHaveGroupPrivilege(groups, userGroupIds, privilege);
   }
   const parents = groups.filter((g) => groupId !== g.id);
-  return findGroupPrivilege(parents, userGroupIds, privilege);
+  return userGroupsHaveGroupPrivilege(parents, userGroupIds, privilege);
 }
 
 type HasGroupChildrenPrivilegeArgs = {
@@ -282,14 +291,18 @@ type HasGroupChildrenPrivilegeArgs = {
  *  The user will need to be a member of that group, or one of it's parent groups, with the
  *  privilege set.
  */
-export async function hasGroupChildrenPrivilege({
+export async function userHasGroupChildrenPrivilege({
   authUser,
   groupId,
   privilege,
 }: HasGroupChildrenPrivilegeArgs) {
   const authUserGroupIds = authUser.groups.map((g) => g.id);
   const parentGroups = await getWithParents(groupId);
-  return findGroupPrivilege(parentGroups, authUserGroupIds, privilege);
+  return userGroupsHaveGroupPrivilege(
+    parentGroups,
+    authUserGroupIds,
+    privilege
+  );
 }
 
 type HasResourcePrivilegeArgs = {
@@ -305,13 +318,13 @@ type HasResourcePrivilegeArgs = {
  *  The user will need to be a member of that group, or one of it's parent groups,
  *  with the privilege set.
  */
-export async function hasResourcePrivilege({
+export async function userHasResourcePrivilege({
   authUser,
   resource,
   privilege,
 }: HasResourcePrivilegeArgs) {
   const { groupId } = resource;
-  return hasGroupChildrenPrivilege({ authUser, groupId, privilege });
+  return userHasGroupChildrenPrivilege({ authUser, groupId, privilege });
 }
 
 type HasUserPrivilegeArgs = {
@@ -327,7 +340,7 @@ type HasUserPrivilegeArgs = {
  *  The user will need to be a member of that group, or one of it's parent groups, with
  *  the privilege set.
  */
-export async function hasUserPrivilege({
+export async function userHasUserPrivilege({
   authUser,
   user,
   privilege,
@@ -335,7 +348,7 @@ export async function hasUserPrivilege({
   const userGroupIds = user.groups.map((g) => g.id);
 
   for (const groupId of userGroupIds) {
-    if (hasGroupChildrenPrivilege({ authUser, groupId, privilege })) {
+    if (userHasGroupChildrenPrivilege({ authUser, groupId, privilege })) {
       return true;
     }
   }

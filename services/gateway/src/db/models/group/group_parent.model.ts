@@ -3,26 +3,25 @@ import { Model, RelationMappings } from "objection";
 import BaseModel from "../base/base.model";
 
 import Group from "./group.model";
-import User from "../user/user.model";
 
-export default class Member extends BaseModel {
+export default class GroupParent extends BaseModel {
   readonly id!: string;
   groupId!: string;
-  userId!: string;
+  parentId!: string;
 
-  user!: User;
+  parent!: Group;
   group!: Group;
 
-  static tableName = "group_members";
+  static tableName = "group_parent_join";
 
   static jsonSchema = {
     type: "object",
-    required: ["groupId", "userId"],
+    required: ["groupId", "parentId"],
 
     properties: {
       id: { type: "uuid" },
       groupId: { type: "uuid" },
-      userId: { type: "uuid" },
+      parentId: { type: "uuid" },
     },
   };
 
@@ -31,16 +30,16 @@ export default class Member extends BaseModel {
       relation: Model.BelongsToOneRelation,
       modelClass: Group,
       join: {
-        from: "group_members.groupId",
+        from: "group_parent_join.groupId",
         to: "groups.id",
       },
     },
-    user: {
+    parent: {
       relation: Model.BelongsToOneRelation,
-      modelClass: User,
+      modelClass: Group,
       join: {
-        from: "group_members.userId",
-        to: "users.id",
+        from: "group_parent_join.parentId",
+        to: "groups.id",
       },
     },
   });

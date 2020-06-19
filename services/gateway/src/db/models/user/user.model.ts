@@ -9,10 +9,10 @@ import GroupMember from "../group/member.model";
 
 import Email from "./email.model";
 import {
-  hasResourcePrivilege,
-  hasGroupPrivilege,
-  hasGroupChildrenPrivilege,
-  hasUserPrivilege,
+  userHasResourcePrivilege,
+  userHasGroupPrivilege,
+  userHasGroupChildrenPrivilege,
+  userHasUserPrivilege,
 } from "../../group";
 
 export default class User extends BaseModel {
@@ -43,19 +43,23 @@ export default class User extends BaseModel {
   }
 
   hasGroupPrivilege(groupId: string, privilege: string) {
-    return hasGroupPrivilege({ authUser: this, privilege, groupId });
+    return userHasGroupPrivilege({ authUser: this, privilege, groupId });
   }
 
   hasGroupChildrenPrivilege(groupId: string, privilege: string) {
-    return hasGroupChildrenPrivilege({ authUser: this, privilege, groupId });
+    return userHasGroupChildrenPrivilege({
+      authUser: this,
+      privilege,
+      groupId,
+    });
   }
 
   hasResourcePrivilege(resource: Resource, privilege: string) {
-    return hasResourcePrivilege({ authUser: this, privilege, resource });
+    return userHasResourcePrivilege({ authUser: this, privilege, resource });
   }
 
   hasUserPrivilege(user: User, privilege: string) {
-    return hasUserPrivilege({ authUser: this, privilege, user });
+    return userHasUserPrivilege({ authUser: this, privilege, user });
   }
 
   addGroup(group: Group) {
@@ -69,7 +73,7 @@ export default class User extends BaseModel {
   static relationMappings: RelationMappings = {
     credentials: {
       relation: Model.HasManyRelation,
-      modelClass: Credentials,
+      modelClass: "auth/credentials.model",
       join: {
         from: "users.id",
         to: "credentials.userId",
@@ -77,7 +81,7 @@ export default class User extends BaseModel {
     },
     emails: {
       relation: Model.HasManyRelation,
-      modelClass: Email,
+      modelClass: "user/email.model",
       join: {
         from: "users.id",
         to: "emails.userId",
@@ -85,7 +89,7 @@ export default class User extends BaseModel {
     },
     groupMemberships: {
       relation: Model.HasManyRelation,
-      modelClass: GroupMember,
+      modelClass: "group/member.model",
       join: {
         from: "users.id",
         to: "group_members.userId",

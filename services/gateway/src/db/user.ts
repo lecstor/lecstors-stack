@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import {
   SingleQueryBuilder,
   QueryBuilderType,
-  UniqueViolationError
+  UniqueViolationError,
 } from "objection";
 
 import { fillError, emailExists, verificationTokenNotFound } from "../errors";
@@ -19,7 +19,7 @@ export { User };
 export async function setCredentials({
   userId,
   username,
-  password
+  password,
 }: {
   userId: string;
   username: string;
@@ -32,7 +32,7 @@ export async function setCredentials({
     providerId: username,
     secret: passwordHash,
     userId,
-    strategy: "local"
+    strategy: "local",
   });
 }
 
@@ -60,11 +60,11 @@ export type NewUser = {
 
 export async function createUser(newUser: NewUser) {
   const { firstname, surname, email } = newUser;
-  const user = await User.transaction(async trx => {
+  const user = await User.transaction(async (trx) => {
     return User.query(trx)
       .allowGraph("[emails]")
       .insertGraph({ firstname, surname, emails: [{ email }] })
-      .catch(err => {
+      .catch((err) => {
         if (
           err instanceof UniqueViolationError &&
           err.constraint === "emails_email_unique"
@@ -83,7 +83,7 @@ type CreateUserInGroup = { groupId: string; user: NewUser };
 
 export async function createUserInGroup({
   groupId,
-  user
+  user,
 }: CreateUserInGroup): Promise<User> {
   const newUser = await createUser(user);
   await addGroupMember({ groupId, userId: newUser.id });
@@ -110,7 +110,7 @@ export function getUserByUsername(username: string) {
 }
 
 export async function verifyEmail({ token }: { token: string }) {
-  return User.transaction(async trx => {
+  return User.transaction(async (trx) => {
     const tokenRec = await EmailVerificationToken.query(trx)
       .findById(token)
       .withGraphFetched("email.user");
@@ -133,14 +133,14 @@ export async function verifyEmail({ token }: { token: string }) {
 }
 
 export async function deleteUser(userId: string) {
-  return User.transaction(async trx => {
+  return User.transaction(async (trx) => {
     await User.query(trx).deleteById(userId);
     return { user: null };
   });
 }
 
 export async function devDeleteUser(email: string) {
-  return User.transaction(async trx => {
+  return User.transaction(async (trx) => {
     const emailRecord = await Email.query()
       .findOne({ email })
       .withGraphFetched("user");
