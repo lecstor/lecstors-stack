@@ -4,7 +4,7 @@ exports.up = function (knex: Knex) {
   return knex.schema.createTable("email_verification_tokens", (table) => {
     table.uuid("id").primary();
     table
-      .uuid("emailId")
+      .uuid("email_id")
       .references("emails.id")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");

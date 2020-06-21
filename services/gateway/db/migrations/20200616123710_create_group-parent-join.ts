@@ -3,8 +3,8 @@ import * as Knex from "knex";
 exports.up = function (knex: Knex) {
   return knex.schema.createTable("group_parent_join", (table) => {
     table.uuid("id").primary();
-    table.uuid("groupId").references("groups.id");
-    table.uuid("parentId").references("groups.id");
+    table.uuid("group_id").references("groups.id");
+    table.uuid("parent_id").references("groups.id");
   });
 };
 

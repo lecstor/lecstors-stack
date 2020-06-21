@@ -9,7 +9,7 @@ import { fillError, emailExists, verificationTokenNotFound } from "../errors";
 
 import Credentials from "./models/auth/credentials.model";
 import Email from "./models/user/email.model";
-import EmailVerificationToken from "./models/user/email-verification-token.model";
+import EmailVerificationToken from "./models/user/emailVerificationToken.model";
 import User from "./models/user/user.model";
 
 import { addGroupMember } from "./group";

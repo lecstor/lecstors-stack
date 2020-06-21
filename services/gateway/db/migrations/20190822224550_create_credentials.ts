@@ -4,12 +4,12 @@ exports.up = function (knex: Knex) {
   return knex.schema.createTable("credentials", (table) => {
     table.uuid("id").primary();
 
-    table.string("providerId").unique(); // provider id/username/token
+    table.string("provider_id").unique(); // provider id/username/token
     table.string("secret"); // password/2fa secret
     table.string("strategy"); // "local" | "fb" | "tw"
-    table.unique(["userId", "strategy"]);
+    table.unique(["user_id", "strategy"]);
     table
-      .uuid("userId")
+      .uuid("user_id")
       .references("users.id")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");

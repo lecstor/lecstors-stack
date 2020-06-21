@@ -12,7 +12,7 @@ export default class GroupParent extends BaseModel {
   parent!: Group;
   group!: Group;
 
-  static tableName = "group_parent_join";
+  static tableName = "groupParentJoin";
 
   static jsonSchema = {
     type: "object",
@@ -30,7 +30,7 @@ export default class GroupParent extends BaseModel {
       relation: Model.BelongsToOneRelation,
       modelClass: Group,
       join: {
-        from: "group_parent_join.groupId",
+        from: "groupParentJoin.groupId",
         to: "groups.id",
       },
     },
@@ -38,7 +38,7 @@ export default class GroupParent extends BaseModel {
       relation: Model.BelongsToOneRelation,
       modelClass: Group,
       join: {
-        from: "group_parent_join.parentId",
+        from: "groupParentJoin.parentId",
         to: "groups.id",
       },
     },

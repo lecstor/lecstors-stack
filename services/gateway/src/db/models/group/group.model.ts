@@ -68,9 +68,9 @@ export default class Group extends BaseModel {
       join: {
         from: "groups.id",
         through: {
-          modelClass: "group/group_parent.model",
-          from: "group_parent_join.groupId",
-          to: "group_parent_join.parentId",
+          modelClass: "group/groupParent.model",
+          from: "groupParentJoin.groupId",
+          to: "groupParentJoin.parentId",
         },
         to: "groups.id",
       },
@@ -90,8 +90,8 @@ export default class Group extends BaseModel {
         from: "groups.id",
         through: {
           modelClass: GroupMember,
-          from: "group_members.groupId",
-          to: "group_members.userId",
+          from: "groupMembers.groupId",
+          to: "groupMembers.userId",
         },
         to: "users.id",
       },

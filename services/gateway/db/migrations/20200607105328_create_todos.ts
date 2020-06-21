@@ -5,7 +5,7 @@ exports.up = function (knex: Knex) {
     table.uuid("id").primary();
     table.string("name");
     table.string("description");
-    table.uuid("groupId").references("groups.id").onDelete("CASCADE");
+    table.uuid("group_id").references("groups.id").onDelete("CASCADE");
   });
 };
 

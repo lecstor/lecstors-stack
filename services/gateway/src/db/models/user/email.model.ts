@@ -3,7 +3,7 @@ import { Model, RelationMappings } from "objection";
 import BaseModel from "../base/base.model";
 
 import User from "./user.model";
-import VerificationToken from "./email-verification-token.model";
+import VerificationToken from "./emailVerificationToken.model";
 
 export default class Email extends BaseModel {
   readonly id!: string;
@@ -43,7 +43,7 @@ export default class Email extends BaseModel {
       modelClass: VerificationToken,
       join: {
         from: "emails.id",
-        to: "email_verification_tokens.emailId",
+        to: "emailVerificationTokens.emailId",
       },
     },
   });

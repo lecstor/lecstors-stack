@@ -6,8 +6,8 @@ exports.up = function (knex: Knex) {
     table.string("name");
     table.string("description");
     table.string("type");
-    table.boolean("isPrimary").defaultTo(false);
-    table.uuid("primaryGroupId").references("groups.id").onDelete("CASCADE");
+    table.boolean("is_primary").defaultTo(false);
+    table.uuid("primary_group_id").references("groups.id").onDelete("CASCADE");
     table.specificType("privileges", "bit varying(32)");
   });
 };

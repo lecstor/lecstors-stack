@@ -6,7 +6,7 @@ exports.up = function (knex: Knex) {
     table.string("email").unique();
     table.boolean("verified").defaultTo(false);
     table
-      .uuid("userId")
+      .uuid("user_id")
       .references("users.id")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");

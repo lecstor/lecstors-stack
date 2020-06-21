@@ -43,19 +43,26 @@ export async function getChildren(id: idOrIds, fields: Fields = ["*"]) {
   const ids = Array.isArray(id) ? id : [id];
   return Group.query()
     .withRecursive("children", (qb) => {
-      qb.select(["groupId", "parentId"])
+      qb.select(["group_id", "parent_id"])
         .from("group_parent_join")
-        .whereIn("parentId", ids)
+        .whereIn("parent_id", ids)
         .unionAll((qb2) => {
           qb2
-            .select(["group_parent_join.groupId", "group_parent_join.parentId"])
+            .select([
+              "group_parent_join.group_id",
+              "group_parent_join.parent_id",
+            ])
             .from("group_parent_join")
-            .join("children", "group_parent_join.parentId", "children.groupId");
+            .join(
+              "children",
+              "group_parent_join.parent_id",
+              "children.group_id"
+            );
         }, true);
     })
     .select(...fields.map((f) => `groups.${f}`))
     .from("groups")
-    .join("children", "children.groupId", "groups.id");
+    .join("children", "children.group_id", "groups.id");
 }
 
 export async function getWithChildren(id: idOrIds, fields: Fields = ["*"]) {
@@ -73,19 +80,22 @@ export async function getParents(id: idOrIds, fields: Fields = ["*"]) {
   const ids = Array.isArray(id) ? id : [id];
   return Group.query()
     .withRecursive("parents", (qb) => {
-      qb.select(["groupId", "parentId"])
+      qb.select(["group_id", "parent_id"])
         .from("group_parent_join")
-        .whereIn("groupId", ids)
+        .whereIn("group_id", ids)
         .unionAll((qb2) => {
           qb2
-            .select(["group_parent_join.groupId", "group_parent_join.parentId"])
+            .select([
+              "group_parent_join.group_id",
+              "group_parent_join.parent_id",
+            ])
             .from("group_parent_join")
-            .join("parents", "group_parent_join.groupId", "parents.parentId");
+            .join("parents", "group_parent_join.group_id", "parents.parent_id");
         }, true);
     })
     .select(...fields.map((f) => `groups.${f}`))
     .from("groups")
-    .join("parents", "parents.parentId", "groups.id")
+    .join("parents", "parents.parent_id", "groups.id")
     .debug();
 }
 
@@ -184,7 +194,7 @@ export async function addGroupParent(groupId: string, parentId: string) {
 export async function getPrivileges(id: string) {
   const groups = await getWithParents(id, [
     "privileges",
-    "isPrimary",
+    "is_primary",
   ]).then((groups) => groups.reverse());
   const primary = groups.find((g) => g.isPrimary);
   if (primary) {

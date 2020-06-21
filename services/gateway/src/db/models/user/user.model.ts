@@ -92,7 +92,7 @@ export default class User extends BaseModel {
       modelClass: "group/member.model",
       join: {
         from: "users.id",
-        to: "group_members.userId",
+        to: "groupMembers.userId",
       },
     },
     groups: {
@@ -102,8 +102,8 @@ export default class User extends BaseModel {
         from: "users.id",
         through: {
           modelClass: "group/member.model",
-          from: "group_members.userId",
-          to: "group_members.groupId",
+          from: "groupMembers.userId",
+          to: "groupMembers.groupId",
         },
         to: "groups.id",
       },

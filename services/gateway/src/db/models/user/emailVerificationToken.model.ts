@@ -11,7 +11,7 @@ export default class EmailVerificationToken extends BaseModel {
 
   email?: Email;
 
-  static tableName = "email_verification_tokens";
+  static tableName = "emailVerificationTokens";
 
   // validation schema
   static jsonSchema = {
@@ -30,7 +30,7 @@ export default class EmailVerificationToken extends BaseModel {
       relation: Model.BelongsToOneRelation,
       modelClass: Email,
       join: {
-        from: "email_verification_tokens.emailId",
+        from: "emailVerificationTokens.emailId",
         to: "emails.id",
       },
     },
