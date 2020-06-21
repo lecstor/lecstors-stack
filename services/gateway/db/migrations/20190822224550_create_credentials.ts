@@ -1,7 +1,7 @@
 import * as Knex from "knex";
 
-exports.up = function(knex: Knex) {
-  return knex.schema.createTable("credentials", table => {
+exports.up = function (knex: Knex) {
+  return knex.schema.createTable("credentials", (table) => {
     table.uuid("id").primary();
 
     table.string("providerId").unique(); // provider id/username/token
@@ -27,7 +27,7 @@ exports.up = function(knex: Knex) {
   });
 };
 
-exports.down = async function(knex: Knex) {
+exports.down = async function (knex: Knex) {
   // await knex.schema.raw(`
   //   ALTER TABLE "credentials" DROP CONSTRAINT "strategy_type";
   // `);
