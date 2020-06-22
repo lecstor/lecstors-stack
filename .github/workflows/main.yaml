@@ -46,6 +46,9 @@ jobs:
           yarn lecs dc up -p -t material-app
           ./docker/wait-for.sh localhost:80
 
+      - name: Check running containers
+        run: docker ps
+        
       - name: e2e tests
         env:
           CYPRESS_baseUrl: http://localhost
