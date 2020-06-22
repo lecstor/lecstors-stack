@@ -48,10 +48,10 @@ jobs:
 
       - name: Check running containers
         run: docker ps
-        
+
       - name: e2e tests
         env:
-          CYPRESS_baseUrl: http://localhost
+          CYPRESS_baseUrl: http://localhost:80
         run: yarn lecs material-app cypress run
 
       - name: Dump docker logs on failure
