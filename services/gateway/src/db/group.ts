@@ -44,18 +44,18 @@ export async function getChildren(id: idOrIds, fields: Fields = ["*"]) {
   return Group.query()
     .withRecursive("children", (qb) => {
       qb.select(["group_id", "parent_id"])
-        .from("group_parent_join")
+        .from("map_group_parent")
         .whereIn("parent_id", ids)
         .unionAll((qb2) => {
           qb2
             .select([
-              "group_parent_join.group_id",
-              "group_parent_join.parent_id",
+              "map_group_parent.group_id",
+              "map_group_parent.parent_id",
             ])
-            .from("group_parent_join")
+            .from("map_group_parent")
             .join(
               "children",
-              "group_parent_join.parent_id",
+              "map_group_parent.parent_id",
               "children.group_id"
             );
         }, true);
@@ -81,16 +81,16 @@ export async function getParents(id: idOrIds, fields: Fields = ["*"]) {
   return Group.query()
     .withRecursive("parents", (qb) => {
       qb.select(["group_id", "parent_id"])
-        .from("group_parent_join")
+        .from("map_group_parent")
         .whereIn("group_id", ids)
         .unionAll((qb2) => {
           qb2
             .select([
-              "group_parent_join.group_id",
-              "group_parent_join.parent_id",
+              "map_group_parent.group_id",
+              "map_group_parent.parent_id",
             ])
-            .from("group_parent_join")
-            .join("parents", "group_parent_join.group_id", "parents.parent_id");
+            .from("map_group_parent")
+            .join("parents", "map_group_parent.group_id", "parents.parent_id");
         }, true);
     })
     .select(...fields.map((f) => `groups.${f}`))

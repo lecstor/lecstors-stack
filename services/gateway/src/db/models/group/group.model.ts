@@ -69,8 +69,8 @@ export default class Group extends BaseModel {
         from: "groups.id",
         through: {
           modelClass: "group/groupParent.model",
-          from: "groupParentJoin.groupId",
-          to: "groupParentJoin.parentId",
+          from: "mapGroupParent.groupId",
+          to: "mapGroupParent.parentId",
         },
         to: "groups.id",
       },
@@ -90,8 +90,8 @@ export default class Group extends BaseModel {
         from: "groups.id",
         through: {
           modelClass: GroupMember,
-          from: "groupMembers.groupId",
-          to: "groupMembers.userId",
+          from: "mapGroupMember.groupId",
+          to: "mapGroupMember.userId",
         },
         to: "users.id",
       },

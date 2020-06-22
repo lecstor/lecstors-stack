@@ -23,7 +23,7 @@ export default class User extends BaseModel {
   credentials!: Credentials[];
   emails!: Email[];
   groups!: Group[];
-  groupMemberships!: GroupMember[];
+  mapGroupMemberhips!: GroupMember[];
 
   static tableName = "users";
 
@@ -87,12 +87,12 @@ export default class User extends BaseModel {
         to: "emails.userId",
       },
     },
-    groupMemberships: {
+    mapGroupMemberhips: {
       relation: Model.HasManyRelation,
       modelClass: "group/member.model",
       join: {
         from: "users.id",
-        to: "groupMembers.userId",
+        to: "mapGroupMember.userId",
       },
     },
     groups: {
@@ -102,8 +102,8 @@ export default class User extends BaseModel {
         from: "users.id",
         through: {
           modelClass: "group/member.model",
-          from: "groupMembers.userId",
-          to: "groupMembers.groupId",
+          from: "mapGroupMember.userId",
+          to: "mapGroupMember.groupId",
         },
         to: "groups.id",
       },

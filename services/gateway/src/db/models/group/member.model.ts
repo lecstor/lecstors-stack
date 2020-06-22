@@ -13,7 +13,7 @@ export default class Member extends BaseModel {
   user!: User;
   group!: Group;
 
-  static tableName = "groupMembers";
+  static tableName = "mapGroupMember";
 
   static jsonSchema = {
     type: "object",
@@ -31,7 +31,7 @@ export default class Member extends BaseModel {
       relation: Model.BelongsToOneRelation,
       modelClass: Group,
       join: {
-        from: "groupMembers.groupId",
+        from: "mapGroupMember.groupId",
         to: "groups.id",
       },
     },
@@ -39,7 +39,7 @@ export default class Member extends BaseModel {
       relation: Model.BelongsToOneRelation,
       modelClass: User,
       join: {
-        from: "groupMembers.userId",
+        from: "mapGroupMember.userId",
         to: "users.id",
       },
     },
