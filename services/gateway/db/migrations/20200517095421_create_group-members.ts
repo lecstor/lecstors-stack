@@ -3,8 +3,8 @@ import * as Knex from "knex";
 exports.up = function (knex: Knex) {
   return knex.schema.createTable("group_members", (table) => {
     table.uuid("id").primary();
-    table.uuid("group_id").references("groups.id");
-    table.uuid("user_id").references("users.id");
+    table.uuid("group_id").references("groups.id").onDelete("CASCADE");
+    table.uuid("user_id").references("users.id").onDelete("CASCADE");
   });
 };
 

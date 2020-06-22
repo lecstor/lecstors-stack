@@ -24,13 +24,15 @@ export default function connectObjection(appSession: typeof session) {
       session: Record<string, any>,
       fn?: (error?: any) => void
     ) {
-      const updated = await Session.query().findById(id).patch(session);
+      const updated = await Session.query()
+        .findById(id)
+        .patch({ data: session } as Session);
       if (updated) {
         return fn?.();
       }
 
       return Session.query()
-        .insert({ id, ...session })
+        .insert({ id, data: session as Session["data"] })
         .then(() => fn?.())
         .catch((err) => fn?.(err));
     };

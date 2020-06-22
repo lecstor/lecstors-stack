@@ -3,3 +3,4 @@ dist/
 .cache/
 .nyc_output/
 build-stats.json
+cypress/screenshots/
