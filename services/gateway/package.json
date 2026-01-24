@@ -63,7 +63,7 @@
     "graphql-tools": "^6.0.9",
     "jest": "^26.0.1",
     "knex": "^0.21.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.23",
     "morgan": "^1.9.1",
     "objection": "2.2.0",
     "objection-graphql": "^0.4.5",
