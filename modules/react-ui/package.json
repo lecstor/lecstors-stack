@@ -57,7 +57,7 @@
     "react-icons": "^3.8.0",
     "react-is": "^16.13.0",
     "react-responsive": "^8.0.1",
-    "rollup": "^2.16.1",
+    "rollup": "^2.80.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^6.1.0",
     "rollup-plugin-typescript2": "^0.27.1",
